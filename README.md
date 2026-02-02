@@ -2,7 +2,7 @@
 
 > **"Profundizando en la intimidad con Dios"**
 
-¡Bienvenido a **Florilegio de la Fe**! 🌟 Este es un rincón digital diseñado para el alma inquieta y el corazón sediento de intimidad con Dios. No es solo un sitio web; es (un *florilegio*) de tesoros bíblicos, históricos y espirituales en una web moderna.
+¡Bienvenido a **Florilegio de la Fe**! 🌟 Este es un rincón digital diseñado para el alma inquieta y el corazón sediento de intimidad con Dios. No es solo un sitio web; es un florilegio (Del lat. flos, flōris 'flor' y legĕre 'escoger'. Colección de trozos selectos de materias literarias) de tesoros bíblicos, históricos y espirituales en una web moderna.
 
 ---
 
