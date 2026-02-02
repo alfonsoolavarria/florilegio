@@ -1,0 +1,377 @@
+/* Florilegio de la Fe - Custom Design System */
+
+:root {
+    --color-primary: #2757fd;
+    --color-bg-ivory: #E9DDD2;
+    --font-serif: 'PT Serif', Georgia, 'Times New Roman', serif;
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: #fff;
+    color: #333;
+    font-family: var(--font-sans);
+}
+
+/* Header & Logo */
+.uc-header {
+    background-color: transparent !important;
+}
+
+.uc-top-navbar {
+    background-color: #f7f3ed !important;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Article Content - Academic Feel */
+.theology-content {
+    font-family: var(--font-serif);
+    line-height: 1.8;
+    color: #2c2c2c;
+    letter-spacing: 0.01em;
+}
+
+.theology-content p {
+    margin-bottom: 1.5rem;
+}
+
+.theology-content h1, 
+.theology-content h2, 
+.theology-content h3, 
+.theology-content h4 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+/* Dark Mode Overrides */
+.dark body {
+    color: #e0e0e0;
+}
+
+.dark .theology-content {
+    color: #e0e0e0;
+}
+
+.dark .theology-content h1, 
+.dark .theology-content h2, 
+.dark .theology-content h3, 
+.dark .theology-content h4 {
+    color: #f5f5f5;
+}
+
+/* Custom Overrides from Original index.html inline style */
+.max-w-lg {
+    max-width: 1500px !important;
+}
+
+.fil1 {
+    fill: var(--color-bg-ivory) !important;
+}
+
+/* Navbar Customization */
+.uc-navbar-nav > li > a {
+    text-transform: none;
+    font-weight: 500;
+}
+
+/* Sticky Header Refinements */
+.sticky-logo {
+    display: none !important;
+    transition: opacity 0.3s ease;
+}
+
+.uc-navbar-sticky .uc-center-navbar {
+    display: none !important;
+}
+
+.uc-navbar-sticky .uc-top-navbar {
+    background-color: rgba(247, 243, 237, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid #000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.dark .uc-navbar-sticky .uc-top-navbar {
+    background-color: rgba(0, 0, 0, 0.95) !important;
+    border-bottom: 2px solid #fff;
+}
+
+/* Ensure sticky logo is visible when sticky */
+.uc-navbar-sticky .uc-top-navbar .sticky-logo {
+    display: block !important;
+    animation: fadeIn 0.3s ease-in-out;
+    margin-right: 15px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Category Grid */
+.category-card {
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 12px;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    border-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.category-icon {
+    font-size: 2rem;
+    color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
+    margin-bottom: 1rem;
+}
+
+/* Latest Articles Grid */
+.post-card-horizontal {
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+}
+
+.post-card-horizontal:last-child {
+    border-bottom: none;
+}
+
+/* Newsletter Customization */
+.newsletter-section {
+    border: 1px solid rgba(0,0,0,0.05);
+    background-image: radial-gradient(circle at 100% 100%, rgba(39, 87, 253, 0.05) 0%, transparent 50%);
+}
+
+/* Slider Navigation Refinements - Fixed Centering & Size */
+.swiper-parent .panel {
+    position: relative;
+    padding: 0 40px; /* Reduced to give more space to articles */
+}
+
+.slider-btn {
+    position: absolute;
+    top: 40%;
+    width: 48px !important;
+    height: 48px !important;
+    background-color: #ffffff !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 100 !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    transition: all 0.2s ease !important;
+    color: #000 !important;
+}
+
+.slider-btn.swiper-prev {
+    left: -20px !important; /* Move OUTSIDE the padding zone to not steal space */
+}
+
+.slider-btn.swiper-next {
+    right: -20px !important; /* Move OUTSIDE the padding zone to not steal space */
+}
+
+.slider-btn:hover {
+    background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
+    color: #fff !important;
+    border-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
+    transform: scale(1.1);
+}
+
+.slider-btn i {
+    font-size: 1.5rem !important;
+    display: block !important;
+}
+
+.dark .slider-btn {
+    background-color: #1a1a1a !important;
+    color: #fff !important;
+    border-color: rgba(255,255,255,0.1) !important;
+}
+
+/* Hero Brand Section & Decorative Divider */
+.hero-brand-section {
+    position: relative;
+    background-color: #f7f3ed !important; /* Slightly darker ivory for better contrast */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    padding-bottom: 8rem !important; /* increased space for organic transition */
+    border-bottom: none;
+    overflow: visible; /* Allow ornament to bleed out */
+}
+
+.hero-brand-section p {
+    font-family: 'PT Serif', serif;
+}
+
+/* Logo Entrance Animation - Safari Compatible */
+.hero-brand-section .uc-logo {
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+    display: inline-block;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+
+.hero-brand-section .uc-logo img,
+.hero-brand-section .uc-logo svg {
+    -webkit-animation: logoEntranceFlip 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: logoEntranceFlip 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+@-webkit-keyframes logoEntranceFlip {
+    0% {
+        -webkit-transform: rotateX(-90deg) translateY(20px);
+        opacity: 0;
+    }
+    60% {
+        -webkit-transform: rotateX(20deg) translateY(0);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes logoEntranceFlip {
+    0% {
+        transform: rotateX(-90deg) translateY(20px);
+        opacity: 0;
+    }
+    60% {
+        transform: rotateX(20deg) translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+.decorative-divider {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: white;
+    /* Torn paper effect using inline SVG mask-like path */
+    mask-image: url("data:image/svg+xml,%3Csvg width='1000' height='100' viewBox='0 0 1000 100' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 100 L1000 100 L1000 20 C950 25 900 15 850 20 C800 25 750 35 700 30 C650 25 600 15 550 20 C500 25 450 35 400 30 C350 25 300 15 250 20 C200 25 150 35 100 30 C50 25 0 15 0 20 Z' fill='black'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='1000' height='100' viewBox='0 0 1000 100' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 100 L1000 100 L1000 20 C950 25 900 15 850 20 C800 25 750 35 700 30 C650 25 600 15 550 20 C500 25 450 35 400 30 C350 25 300 15 250 20 C200 25 150 35 100 30 C50 25 0 15 0 20 Z' fill='black'/%3E%3C/svg%3E");
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    z-index: 5;
+    transition: all 0.4s ease;
+}
+
+/* Botanical Illustration Ornament */
+.hero-brand-section::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    right: 10%;
+    width: 250px;
+    height: 250px;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%232c2c2c' stroke-width='1.5' stroke-linecap='round' opacity='0.15'%3E%3Cpath d='M100 180 C100 140 80 120 60 100 M100 180 C100 140 120 120 140 100 M100 150 C100 110 70 90 50 70 M100 150 C100 110 130 90 150 70'/%3E%3Ccircle cx='60' cy='100' r='5'/%3E%3Ccircle cx='140' cy='100' r='5'/%3E%3Ccircle cx='50' cy='70' r='4'/%3E%3Ccircle cx='150' cy='70' r='4'/%3E%3Cpath d='M100 180 L100 50 M100 50 C100 30 80 20 100 10 C120 20 100 30 100 50'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 6;
+    pointer-events: none;
+}
+
+/* Redefined Botanical Background Instead of Pattern */
+.hero-brand-section::before {
+    content: none; /* Removed the previous diagonal pattern */
+}
+
+.dark .decorative-divider {
+    background: #0d0d0d;
+}
+
+.dark .hero-brand-section::after {
+    stroke: #ffffff;
+    opacity: 0.1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round' opacity='0.1'%3E%3Cpath d='M100 180 C100 140 80 120 60 100 M100 180 C100 140 120 120 140 100 M100 150 C100 110 70 90 50 70 M100 150 C100 110 130 90 150 70'/%3E%3Ccircle cx='60' cy='100' r='5'/%3E%3Ccircle cx='140' cy='100' r='5'/%3E%3Ccircle cx='50' cy='70' r='4'/%3E%3Ccircle cx='150' cy='70' r='4'/%3E%3Cpath d='M100 180 L100 50 M100 50 C100 30 80 20 100 10 C120 20 100 30 100 50'/%3E%3C/g%3E%3C/svg%3E");
+}
+/* Suble decoration line instead of the blue one */
+.hero-brand-section::after {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: var(--color-primary);
+    opacity: 0.2;
+    border-radius: 2px;
+}
+
+
+/* Expanding Search Bar */
+.expanding-search-form {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.expanding-search-form .search-input {
+    width: 0;
+    padding: 0;
+    border: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+    background: rgba(0,0,0,0.05);
+}
+
+.expanding-search-form .search-submit {
+    opacity: 0;
+    width: 0;
+    padding: 0;
+    border: none;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.expanding-search-form.active {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 4px 8px;
+    border-radius: 20px;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.expanding-search-form.active .search-input {
+    width: 250px;
+    padding: 0 10px;
+    opacity: 1;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 20px;
+}
+
+.expanding-search-form.active .search-submit {
+    opacity: 1;
+    width: auto;
+    padding: 2px 12px;
+    background: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+}
+
+.expanding-search-form .search-toggle {
+    cursor: pointer;
+}

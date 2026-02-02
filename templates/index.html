@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Section: Hero Brand -->
+<div class="hero-brand-section panel overflow-hidden bg-gray-25 dark:bg-gray-900">
+    <div class="container py-6 lg:py-9">
+        <div class="row justify-center text-center">
+            <div class="col-12 col-md-8"> 
+                <div class="uc-logo text-gray-900 dark:text-white">
+                    <a href="/">
+                        <img class="text-dark dark:text-white mx-auto" style="max-width:650px; width: 100%;" src="{% static 'images/fin.svg' %}" alt="Florilegio de la Fe" data-uc-svg>
+                    </a>
+                </div>
+                <p class="mt-4 fs-5 text-gray-600 dark:text-gray-400 italic">"Profundizando en la intimidad con Dios"</p>
+            </div>
+        </div>
+    </div>
+    <div class="decorative-divider"></div>
+</div>
+
+<!-- Section start: Featured Slider -->
+<div class="slider-panel panel overflow-hidden swiper-parent" style="margin-top: 2%; padding-top: 40px;">
+    <div class="container text-center mb-4">
+        <h2 class="h3 fw-bold">Destacados</h2>
+    </div>
+    <div class="container max-w-lg">
+        <div class="panel w-100">
+            <div class="swiper swiper-main swiper-active-visibility h-100" data-uc-swiper="items: 1.25; active: 2; gap: 8; center: true; center-bounds: true; disable-class: d-none;" data-uc-swiper-s="items: 2;" data-uc-swiper-l="items: 3; gap: 32;">
+                <div class="swiper-wrapper">
+                    {% for article in featured_articles %}
+                    <div class="swiper-slide">
+                        <article class="post type-post panel uc-transition-toggle vstack gap-2 lg:gap-3">
+                            <figure class="featured-image m-0 ratio ratio-1x1 overflow-hidden bg-gray-25 dark:bg-gray-800">
+                                <img class="media-cover image uc-transition-scale-up uc-transition-opaque" src="{{ article.image.url }}" alt="{{ article.title }}">
+                                <a href="{% url 'article_detail' article.slug %}" class="position-cover"></a>
+                            </figure>
+                            <div class="post-header panel vstack justify-center items-center gap-narrow text-center max-w-3/4 mx-auto">
+                                <div class="post-category hstack gap-narrow justify-center fw-normal">
+                                    <a class="fs-7 text-uppercase text-black dark:text-white text-opacity-50 hover:text-opacity-100 duration-150 text-none" href="#">{{ article.category }}</a>
+                                </div>
+                                <h3 class="h5 m-0">
+                                    <a class="text-none" href="{% url 'article_detail' article.slug %}">{{ article.title }}</a>
+                                </h3>
+                                <a href="{% url 'article_detail' article.slug %}" class="link fs-7 text-uppercase text-none mt-1 pb-narrow p-0 border-bottom dark:text-white">
+                                    <span>Leer más</span>
+                                </a>
+                            </div>
+                        </article>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="swiper-pagination position-relative mt-4"></div>
+            </div>
+
+            <!-- Enhanced Navigation Buttons -->
+            <div class="swiper-nav-buttons d-none lg:d-flex">
+                <button class="slider-btn swiper-prev"><i class="unicon-chevron-left"></i></button>
+                <button class="slider-btn swiper-next"><i class="unicon-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section 2: Categories Grid -->
+<div class="category-grid-section py-6 lg:py-9">
+    <div class="container max-w-lg">
+        <div class="section-header text-center mb-6">
+            <h2 class="h3 fw-bold">Explora por Temas</h2>
+            <p class="text-gray-600">Encuentra contenido especializado en las áreas clave de la fe.</p>
+        </div>
+        <div class="row child-cols-12 sm:child-cols-6 lg:child-cols-3 g-4">
+            {% for cat in categories %}
+            <div>
+                <a href="#" class="category-card panel vstack items-center justify-center p-4 lg:p-6 text-none bg-white dark:bg-gray-900">
+                    <div class="category-icon">
+                        <i class="{{ cat.icon }}"></i>
+                    </div>
+                    <h4 class="h5 mb-1">{{ cat.name }}</h4>
+                    <span class="fs-7 opacity-50">{{ cat.count }} Artículos</span>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Section 3: Latest Articles & Newsletter -->
+<div class="latest-articles-section py-6 lg:py-9 bg-gray-25 dark:bg-gray-100 dark:bg-opacity-5">
+    <div class="container max-w-lg">
+        <div class="row g-6 lg:g-9">
+            <!-- Main Content: Latest Articles -->
+            <div class="col-12 lg:col-8">
+                <div class="section-header mb-6">
+                    <h2 class="h3 fw-bold">Últimas Publicaciones</h2>
+                </div>
+                <div class="latest-grid vstack gap-4 lg:gap-6">
+                    {% for article in latest_articles %}
+                    <article class="post-card-horizontal hstack items-start gap-4">
+                        <figure class="featured-image m-0 w-150px sm:w-250px ratio ratio-4x3 rounded-3 overflow-hidden bg-gray-200">
+                            <img class="media-cover" src="{{ article.image.url }}" alt="{{ article.title }}">
+                            <a href="{% url 'article_detail' article.slug %}" class="position-cover"></a>
+                        </figure>
+                        <div class="post-body vstack gap-1">
+                            <span class="fs-7 text-primary text-uppercase fw-medium">{{ article.category }}</span>
+                            <h3 class="h4 m-0"><a href="{% url 'article_detail' article.slug %}" class="text-none">{{ article.title }}</a></h3>
+                            <p class="fs-6 d-none sm:d-block text-gray-600 dark:text-gray-400">Breve descripción del artículo para atraer al lector...</p>
+                            <a href="{% url 'article_detail' article.slug %}" class="uc-link mt-1 dark:text-white">Leer más</a>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Sidebar: Newsletter & More -->
+            <div class="col-12 lg:col-4">
+                <aside class="vstack gap-6 sticky-top" style="top: 100px;">
+                    <div class="panel p-4 bg-primary text-white rounded-xl">
+                        <h3 class="h4 mb-2 text-white">¿Te gusta lo que lees?</h3>
+                        <p class="mb-4">Suscríbete para recibir notificaciones de nuevos artículos teológicos e históricos.</p>
+                        <form action="#">
+                            <input type="email" class="form-control mb-2" placeholder="Tu correo">
+                            <button class="btn btn-white w-100">Suscribirse</button>
+                        </form>
+                    </div>
+                    
+                    <div class="panel">
+                        <h4 class="h5 mb-3">Síguenos</h4>
+                        <div class="hstack gap-2">
+                             <a href="#" class="btn btn-icon btn-sm rounded-circle border"><i class="unicon-logo-facebook"></i></a>
+                             <a href="#" class="btn btn-icon btn-sm rounded-circle border"><i class="unicon-logo-instagram"></i></a>
+                             <a href="#" class="btn btn-icon btn-sm rounded-circle border"><i class="unicon-logo-youtube"></i></a>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+    {% include "head.html" %}
+
+    <style>
+        .max-w-lg {
+            max-width: 1500px !important;
+        }
+        .fil1{
+            fill: #E9DDD2 !important;
+        }
+    </style>
+
+    <body class="uni-body panel bg-white text-gray-900 dark:bg-black dark:text-gray-200 overflow-x-hidden">
+        
+        {% include "navbar.html" %}
+
+        <!-- Wrapper start -->
+        <div id="wrapper" class="wrap overflow-hidden-x">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <!-- Wrapper end -->
+
+        {% include "footer.html" %}
+
+        {% include "scripts.html" %}
+
+        <!-- Bottom Actions Sticky -->
+        <div class="backtotop-wrap position-fixed bottom-0 end-0 z-99 m-2 vstack">
+            <div class="darkmode-trigger d-none cstack w-40px h-40px rounded-circle text-none bg-gray-100 dark:bg-gray-700 dark:text-white" data-darkmode-toggle="">
+                <label class="switch">
+                    <span class="sr-only">Dark mode toggle</span>
+                    <input type="checkbox">
+                    <span class="slider fs-5"></span>
+                </label>
+            </div>
+            <a class="btn btn-sm bg-primary text-white w-40px h-40px rounded-circle" href="to_top" data-uc-backtotop>
+                <i class="icon-2 unicon-chevron-up"></i>
+            </a>
+        </div>
+
+    </body>
+</html>
