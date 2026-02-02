@@ -2,13 +2,13 @@
 
 > **"Profundizando en la intimidad con Dios"**
 
-¡Bienvenido a **Florilegio de la Fe**! 🌟 Este es un rincón digital diseñado para el alma inquieta y el corazón sediento de Verdad. No es solo un sitio web; es una antología (un *florilegio*) de tesoros teológicos, históricos y espirituales, tratados con el mimo de un manuscrito antiguo y la agilidad de la web moderna.
+¡Bienvenido a **Florilegio de la Fe**! 🌟 Este es un rincón digital diseñado para el alma inquieta y el corazón sediento de intimidad con Dios. No es solo un sitio web; es (un *florilegio*) de tesoros bíblicos, históricos y espirituales en una web moderna.
 
 ---
 
 ## ✨ ¿Cuál es la idea?
 
-Florilegio nace de la pasión por rescatar la belleza de la tradición cristiana y traerla al presente con estilo. Queremos que cada lectura sea una experiencia de paz y descubrimiento. Aquí exploramos:
+Florilegio nace de la pasión por rescatar la intimidad con Dios. Queremos que cada lectura sea una experiencia de cercanía con el Señor. Aquí exploramos:
 
 *   📖 **La Palabra de Dios:** El mapa de nuestra existencia.
 *   ⛪ **Historia de la Iglesia:** Crónicas de fe que nos conectan con nuestras raíces.
@@ -18,7 +18,7 @@ Florilegio nace de la pasión por rescatar la belleza de la tradición cristiana
 
 ## 🎨 Un Diseño con "Alma"
 
-Hemos puesto tanto amor en los bits como en las palabras. Este sitio está pensado para deleitar la vista:
+Hemos puesto tanto amor en los bits como en las palabras:
 
 *   **Efecto "Paper-Edge":** Un divisor orgánico que imita el borde de un papel antiguo, rompiendo la frialdad digital.
 *   **Logo Dinámico:** Una bienvenida con estilo vertical-flip cada vez que entras al home.
@@ -37,16 +37,6 @@ Bajo este aspecto artesanal, hay tecnología de punta:
 
 ---
 
-## 🛠️ Guía Rápida para Desarrolladores
-
-Si quieres meterle mano al código (¡bienvenido!):
-
-1.  **Clona el repo:** `git clone https://github.com/alfonsoolavarria/florilegio.git`
-2.  **Rama de acción:** Estamos trabajando fuerte en la rama `develop`.
-3.  **Ambiente:** Prepárate un café ☕, configura tu entorno de Django y ¡listo!
-
----
-
 Hecho con ❤️ por [Alfonso Olavarria](https://github.com/alfonsoolavarria) y su copiloto de IA. 
 
-*"La fe busca el entendimiento, pero también la belleza."*
+*"Él es más satisfecho en nosotros, cuando nosotros estamos más satisfechos en Él."*
