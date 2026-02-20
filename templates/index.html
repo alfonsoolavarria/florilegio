@@ -72,7 +72,7 @@
         <div class="row child-cols-12 sm:child-cols-6 lg:child-cols-3 g-4">
             {% for cat in categories %}
             <div>
-                <a href="#" class="category-card panel vstack items-center justify-center p-4 lg:p-6 text-none bg-white dark:bg-gray-900">
+                <a href="{% url 'article_list' %}?categoria={{ cat.id }}" class="category-card panel vstack items-center justify-center p-4 lg:p-6 text-none bg-white dark:bg-gray-900">
                     <div class="category-icon">
                         <i class="{{ cat.icon }}"></i>
                     </div>
@@ -114,7 +114,7 @@
             
             <!-- Sidebar: Newsletter & More -->
             <div class="col-12 lg:col-4">
-                <aside class="vstack gap-6 sticky-top" style="top: 100px;">
+                <aside class="vstack gap-6 sticky-top z-2" style="top: 120px;">
                     <div class="panel p-4 bg-primary text-white rounded-xl">
                         <h3 class="h4 mb-2 text-white">¿Te gusta lo que lees?</h3>
                         <p class="mb-4">Suscríbete para recibir notificaciones de nuevos artículos teológicos e históricos.</p>

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="uc-section panel overflow-hidden px-2 mt-9">
+    <div class="container max-w-lg">
+        <div class="uc-section-header text-center mb-6 lg:mb-9">
+            <h1 class="h2 lg:h1 fw-bold mb-4">Términos y Condiciones</h1>
+            <p class="text-gray-600 dark:text-gray-400">Última actualización: {% now "j \d\e F \d\e Y" %}</p>
+        </div>
+        
+        <div class="uc-section-body theology-content">
+            <h3>1. Aceptación de los Términos</h3>
+            <p>Al acceder y utilizar este sitio web, usted acepta cumplir y estar sujeto a los siguientes términos y condiciones de uso.</p>
+            
+            <h3>2. Uso del Contenido</h3>
+            <p>Todo el contenido teológico, artículos y materiales publicados en Florilegio de la Fe son propiedad intelectual del sitio, a menos que se indique lo contrario. Usted puede leer y compartir el contenido para uso personal y espiritual, pero no está permitida su edición y reproducción comercial sin consentimiento previo.</p>
+            
+            <h3>3. Exención de Responsabilidad</h3>
+            <p>El contenido de este sitio es estrictamente para fines informativos, educativos y de edificación espiritual. Usted es responsable de cómo usar el contenido e información presentada.</p>
+            
+            <h3>4. Publicidad de Terceros</h3>
+            <p>Utilizamos empresas de publicidad de terceros para servir anuncios cuando visita nuestro sitio web. Estas empresas pueden utilizar información sobre sus visitas a este y otros sitios web con el fin de proporcionar anuncios sobre bienes y servicios de su interés.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

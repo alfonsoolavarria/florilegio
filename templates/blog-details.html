@@ -2,6 +2,11 @@
 {% load static %}
 
 {% block content %}
+<!-- Reading Progress Bar -->
+<div class="reading-progress-container">
+    <div class="reading-progress-bar" id="readingProgress"></div>
+</div>
+
 <div class="breadcrumbs panel z-1 py-2 bg-gray-25 dark:bg-gray-100 dark:bg-opacity-5 dark:text-white">
     <div class="container max-w-xl">
         <ul class="breadcrumb nav-x justify-center gap-1 fs-7 sm:fs-6 m-0">
@@ -36,14 +41,38 @@
     </div>
     <div class="panel mt-4 lg:mt-6 xl:mt-9">
         <div class="container">
-            <div class="content-wrap row child-col-12 lg:child-cols g-4 lg:g-6">
-                <div class="lg:col-8 uc-first-column mx-auto">
+            <div class="content-wrap row g-4 lg:g-6">
+                <!-- Main Content -->
+                <div class="col-12 lg:col-8">
                     <div class="max-w-lg">
-                        <div class="post-content panel fs-6 md:fs-5 theology-content" data-uc-lightbox="animation: scale">
-                            {{ article.content|safe }}
+                        <div class="post-content panel theology-content readable-content" data-uc-lightbox="animation: scale">
+                            <div style="white-space: pre-line;">{{ article.content|safe }}</div>
                         </div>
                         
-                            <ul class="nav-x gap-narrow text-primary">
+                        {% if article.author %}
+                        <div class="author-box panel bg-gray-50 dark:bg-gray-800 p-4 rounded-3 mt-8 mb-6">
+                            <div class="row items-center g-4 lg:g-5">
+                                <div class="col-12 col-md-auto text-center">
+                                    <img class="author-avatar rounded-circle w-100px h-100px object-cover shadow-sm" 
+                                         src="{{ article.author.image_url|default:'https://via.placeholder.com/150' }}" 
+                                         alt="{{ article.author.name }}">
+                                </div>
+                                <div class="col-12 col-md">
+                                    <div class="author-info">
+                                        <h5 class="fw-bold mb-2">
+                                            {{ article.author.name }} 
+                                            {% if article.author.social_handle %}
+                                            <span class="text-primary fs-6 fw-normal ms-1">({{ article.author.social_handle }})</span>
+                                            {% endif %}
+                                        </h5>
+                                        <p class="m-0 fs-6 text-gray-700 dark:text-gray-300">{{ article.author.bio }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <ul class="nav-x gap-narrow text-primary mt-6 fs-5 md:fs-4">
                                 <li><span class="text-black dark:text-white me-narrow">Etiquetas:</span></li>
                                 {% for tag in article.tags %}
                                 <li><a href="#" class="uc-link gap-0 dark:text-white">{{ tag }}</a>{% if not forloop.last %}, {% endif %}</li>
@@ -51,8 +80,61 @@
                             </ul>
                     </div>
                 </div>
+
+                <!-- Sidebar -->
+                <aside class="col-12 lg:col-4">
+                    <div class="panel vstack gap-4 lg:sticky-top z-2" style="top: 120px;">
+                        {% if related_articles %}
+                        <div class="sidebar-widget">
+                            <h5 class="sidebar-widget-title">Relacionados</h5>
+                            <div class="vstack gap-3">
+                                {% for item in related_articles %}
+                                <a href="/articulo/{{ item.slug }}/" class="related-post-item uc-link dark:text-white">
+                                    <img src="{{ item.image.url }}" class="related-post-img" alt="{{ item.title }}">
+                                    <div class="related-post-info">
+                                        <h6 class="m-0">{{ item.title }}</h6>
+                                        <span class="date">{{ item.created_at|date:"d M, Y" }}</span>
+                                    </div>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="sidebar-widget">
+                            <h5 class="sidebar-widget-title">Categorías</h5>
+                            <ul class="nav-y gap-2 fs-6">
+                                {% for cat in categories %}
+                                <li class="d-flex justify-content-between align-items-center">
+                                    <a href="#" class="uc-link dark:text-white">{{ cat.name }}</a>
+                                    <span class="badge bg-gray-100 text-dark rounded-pill fs-xs px-2">{{ cat.articles.count }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div class="sidebar-widget p-4 rounded-3 bg-primary bg-opacity-5 border border-primary border-opacity-10">
+                            <h5 class="sidebar-widget-title">Newsletter</h5>
+                            <p class="fs-6 mb-3">Recibe lo mejor de Florilegio de la Fe en tu correo.</p>
+                            <form class="vstack gap-2">
+                                <input type="email" class="form-control form-control-sm border-gray-300" placeholder="Tu email...">
+                                <button type="submit" class="btn btn-primary btn-sm w-100">Suscribirme</button>
+                            </form>
+                        </div>
+                    </div>
+                </aside>
             </div>
         </div>
     </div>
 </article>
+
+<script>
+    // Reading Progress Bar
+    window.onscroll = function() {
+        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        let scrolled = (winScroll / height) * 100;
+        document.getElementById("readingProgress").style.width = scrolled + "%";
+    };
+</script>
 {% endblock %}

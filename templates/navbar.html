@@ -14,25 +14,15 @@
                         </div>
                         <ul class="uc-navbar-nav gap-4 fs-custom fw-medium d-none lg:d-flex" style="--uc-nav-height: 48px">
                             <li><a href="/"><i class="icon icon-1 unicon-home mr-1"></i> Inicio</a></li>
-                            <li>
-                                <a href="#"><i class="icon icon-1 unicon-grid mr-1"></i> Explorar <i class="icon icon-1 unicon-chevron-down ml-1"></i></a>
-                                <div class="uc-navbar-dropdown w-200px" data-uc-drop="mode: click; offset: 0;">
-                                    <ul class="uc-nav uc-navbar-dropdown-nav">
-                                        <li><a href="#"><i class="icon icon-1 unicon-book mr-2"></i> Artículos</a></li>
-                                        <li><a href="#"><i class="icon icon-1 unicon-user mr-2"></i> Biografías</a></li>
-                                        <li><a href="#"><i class="icon icon-1 unicon-calendar mr-2"></i> Historia</a></li>
-                                        <li class="uc-nav-divider"></li>
-                                        <li><a href="#"><i class="icon icon-1 unicon-information mr-2"></i> Sobre nosotros</a></li>
-                                        <li><a href="#"><i class="icon icon-1 unicon-email mr-2"></i> Contacto</a></li>
-                                    </ul>
-                                </div>
-                            </li>
+                            <li><a href="{% url 'article_list' %}"><i class="icon icon-1 unicon-book mr-1"></i> Artículos</a></li>
+                            <li><a href="#"><i class="icon icon-1 unicon-edit mr-1"></i> Ensayos</a></li>
+                            <li><a href="{% url 'contact' %}"><i class="icon icon-1 unicon-email mr-1"></i> Contacto</a></li>
                         </ul>
                     </div>
                     <div class="uc-navbar-right gap-2 md:gap-3">
                         <div class="uc-navbar-item">
-                            <form action="#" class="expanding-search-form hstack gap-1">
-                                <input class="search-input form-control form-control-sm" type="search" placeholder="Buscar en Florilegio" name="q">
+                            <form action="{% url 'search' %}" method="GET" class="expanding-search-form hstack gap-1">
+                                <input class="search-input form-control form-control-sm" type="search" placeholder="Buscar en Florilegio" name="q" value="{{ query|default:'' }}">
                                 <button type="submit" class="search-submit btn btn-primary btn-sm px-2">Buscar</button>
                                 <a class="search-toggle cstack text-none text-dark dark:text-white" href="#" onclick="document.querySelector('.expanding-search-form').classList.toggle('active'); return false;">
                                     <i class="icon icon-1 fw-bold unicon-search"></i>

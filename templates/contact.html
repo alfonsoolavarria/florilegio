@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="uc-section panel overflow-hidden px-2 mt-9">
+    <div class="container max-w-lg">
+        <div class="uc-section-header text-center mb-6 lg:mb-9">
+            <h1 class="h2 lg:h1 fw-bold mb-4">Contacto</h1>
+            <p class="text-gray-600 dark:text-gray-400">¿Tienes dudas, sugerencias o quieres ser parte del equipo? <br>Nos encantaría escucharte.</p>
+        </div>
+        
+        <div class="uc-section-body max-w-md mx-auto">
+            <div class="panel border-all p-4 rounded-3 shadow-sm bg-white dark:bg-gray-800">
+                <form action="#" class="vstack gap-3">
+                    <div class="form-group">
+                        <label class="form-label fw-bold">Nombre</label>
+                        <input type="text" class="form-control" placeholder="Tu nombre">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label fw-bold">Correo electrónico</label>
+                        <input type="email" class="form-control" placeholder="ejemplo@correo.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label fw-bold">Mensaje</label>
+                        <textarea class="form-control" rows="5" placeholder="Cuéntanos en qué podemos ayudarte..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full mt-2 duration-150">Enviar Mensaje</button>
+                </form>
+            </div>
+            
+            <div class="mt-6 text-center">
+                <p class="text-gray-600 dark:text-gray-400">También puedes escribirnos directamente a:<br>
+                <span class="fw-bold text-primary">contacto@florilegio.com</span></p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

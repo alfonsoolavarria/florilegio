@@ -21,5 +21,10 @@ from main_florife import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", views.dashboard, name="index"),
+    path("articulos/", views.article_list, name="article_list"),
+    path("buscar/", views.search_view, name="search"),
     path("articulo/<slug:slug>/", views.article_detail, name="article_detail"),
+    path("privacidad/", views.privacy, name="privacy"),
+    path("terminos/", views.terms, name="terms"),
+    path("contacto/", views.contact, name="contact"),
 ]

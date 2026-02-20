@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Section: Header -->
+<div class="hero-brand-section panel overflow-hidden bg-gray-25 dark:bg-gray-900">
+    <div class="container py-4 lg:py-6 text-center">
+        <h1 class="h2 lg:h1 fw-bold text-gray-900 dark:text-white">Resultados de Búsqueda</h1>
+        <p class="mt-2 fs-5 text-gray-600 dark:text-gray-400 italic">
+            Mostrando resultados para: <strong>"{{ query }}"</strong>
+        </p>
+    </div>
+    <div class="decorative-divider"></div>
+</div>
+
+<!-- Section: Results Grid -->
+<div class="article-grid-section py-6 lg:py-9 bg-gray-25 dark:bg-gray-100 dark:bg-opacity-5">
+    <div class="container max-w-lg">
+        <div class="row g-4 lg:g-6">
+            {% for article in page_obj %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <article class="post type-post panel uc-transition-toggle vstack gap-2 lg:gap-3 bg-white dark:bg-gray-900 p-3 rounded-3 shadow-sm h-100">
+                    <figure class="featured-image m-0 ratio ratio-16x9 rounded-2 overflow-hidden bg-gray-25 dark:bg-gray-800">
+                        <img class="media-cover image uc-transition-scale-up uc-transition-opaque" src="{{ article.image.url }}" alt="{{ article.title }}">
+                        <a href="{% url 'article_detail' article.slug %}" class="position-cover"></a>
+                    </figure>
+                    <div class="post-header panel vstack gap-narrow">
+                        <div class="post-category">
+                            <span class="fs-xs text-uppercase fw-bold text-primary">{{ article.category }}</span>
+                        </div>
+                        <h3 class="h5 m-0 lh-base">
+                            <a class="text-none" href="{% url 'article_detail' article.slug %}">{{ article.title }}</a>
+                        </h3>
+                        <p class="fs-7 text-gray-600 dark:text-gray-400 line-clamp-3">Breve descripción del artículo para atraer al lector...</p>
+                        <div class="hstack justify-between items-center mt-auto pt-2 border-top">
+                            <span class="fs-xs opacity-50">{{ article.created_at|date:"d M, Y" }}</span>
+                            <a href="{% url 'article_detail' article.slug %}" class="uc-link fs-xs fw-bold dark:text-white">LEER MÁS</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-9">
+                <i class="unicon-search-alt opacity-20 display-1 mb-4"></i>
+                <h3 class="h4">No se encontraron resultados para "{{ query }}"</h3>
+                <p>Intente con otras palabras clave.</p>
+                <a href="{% url 'article_list' %}" class="btn btn-primary mt-4">Ver todos los artículos</a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="pagination-panel mt-6 lg:mt-9">
+            <nav class="nav-x justify-center gap-1" aria-label="Pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}" class="btn btn-sm btn-icon border rounded-circle"><i class="unicon-chevron-left"></i></a>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="btn btn-sm btn-icon bg-primary text-white rounded-circle shadow-sm">{{ num }}</span>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a href="?q={{ query }}&page={{ num }}" class="btn btn-sm btn-icon border rounded-circle">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a href="?q={{ query }}&page={{ page_obj.next_page_number }}" class="btn btn-sm btn-icon border rounded-circle"><i class="unicon-chevron-right"></i></a>
+                {% endif %}
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

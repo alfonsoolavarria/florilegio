@@ -1,0 +1,25 @@
+REQUISITOS PARA MONETIZAR FLORILEGIO CON GOOGLE ADSENSE
+
+Para que Google apruebe el sitio y los anuncios sean sutiles y efectivos, debemos cumplir con lo siguiente antes de implementar el código:
+
+1. TRÍO LEGAL (Páginas obligatorias en el footer):
+   - Política de Privacidad (menciona el uso de cookies y AdSense).
+   - Términos y Condiciones de uso.
+   - Página de Contacto (con información verídica).
+
+2. CONTENIDO DE CALIDAD:
+   - Tener entre 15 y 20 artículos originales publicados.
+   - Evitar contenido de relleno (Lorem Ipsum) o copiado.
+   - Navegación clara y funcional.
+
+3. DOMINIO PROFESIONAL:
+   - El sitio debe estar en un dominio propio (ej: florilegio.com.ar).
+   - Google rara vez aprueba sitios que funcionan solo con la dirección IP.
+
+4. CONFIGURACIÓN DE ADSENSE:
+   - Crear cuenta en https://www.google.com/adsense/start/
+   - Preparar el archivo 'ads.txt' que Google entregará al registrar el sitio.
+
+PRÓXIMOS PASOS RECOMENDADOS:
+- Crear las plantillas para la Política de Privacidad y Términos.
+- Configurar el filtrado de "Categorías Sensibles" en el panel de AdSense para mantener la seriedad teológica.
