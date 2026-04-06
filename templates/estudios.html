@@ -1,0 +1,304 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Tooltip personalizado */
+    [data-tooltip] {
+        position: relative;
+        cursor: default;
+    }
+    [data-tooltip]::before {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: calc(100% + 10px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(30, 30, 30, 0.92);
+        color: #fff;
+        padding: 7px 12px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        z-index: 9999;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+        letter-spacing: 0.02em;
+    }
+    [data-tooltip]::after {
+        content: '';
+        position: absolute;
+        bottom: calc(100% + 3px);
+        left: 50%;
+        transform: translateX(-50%);
+        border: 7px solid transparent;
+        border-top-color: rgba(30, 30, 30, 0.92);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        z-index: 9999;
+    }
+    [data-tooltip]:hover::before,
+    [data-tooltip]:hover::after {
+        opacity: 1;
+    }
+</style>
+<!-- Section: Header -->
+<div class="hero-brand-section panel overflow-hidden bg-gray-25 dark:bg-gray-900">
+    <div class="container py-2 lg:py-3">
+        <div class="row justify-center text-center">
+            <div class="col-12 col-md-8"> 
+                <h1 class="h2 lg:h1 fw-bold text-gray-900 dark:text-white">Biblia</h1>
+                <p class="mt-2 fs-5 text-gray-600 dark:text-gray-400 italic">
+                    Estudios de las Escrituras
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="decorative-divider"></div>
+</div>
+
+<!-- Section: Categories Selection / Layout -->
+<div class="category-grid-section py-3 lg:py-4 bg-white dark:bg-gray-900">
+    <div class="container-fluid px-4 ps-lg-10">
+        <div class="row">
+            <!-- Columna a la izquierda -->
+            <div class="col-12" style="flex: 0 0 340px; max-width: 330px;">
+                <!-- Panel de Filtros -->
+                <div class="panel p-3 bg-gray-25 dark:bg-gray-800 rounded-3 border">
+                    <h4 class="h5 mb-3 border-bottom pb-2">Opciones de Estudio</h4>
+                    
+                    <form id="bible-study-form" class="vstack gap-3">
+                        <!-- Tipo -->
+                        <div class="form-group">
+                            <label for="tipoSelect" class="form-label fw-bold mb-1 fs-6">Modalidad</label>
+                            <select class="form-select form-select-sm" style="height: 32px; min-height: 32px; padding-top: 2px; padding-bottom: 2px; font-size: 14px;" id="tipoSelect" name="tipo">
+                                <option value="biblia" selected>Biblia</option>
+                                <option value="estudio">Biblia para estudiar</option>
+                            </select>
+                        </div>
+
+                        <!-- Versiones -->
+                        <div class="form-group" id="versionContainer">
+                            <label for="versionSelect" class="form-label fw-bold mb-1 fs-6">Versión</label>
+                            <select class="form-select form-select-sm" style="height: 32px; min-height: 32px; padding-top: 2px; padding-bottom: 2px; font-size: 14px;" id="versionSelect" name="version">
+                                <option value="rva2015">Reina Valera Actualizada 2015</option>
+                                <option value="rv1960">Reina Valera 1960</option>
+                            </select>
+                        </div>
+
+                        <!-- Libro -->
+                        <div class="form-group">
+                            <label for="libroSelect" class="form-label fw-bold mb-1 fs-6">Libro</label>
+                            <select class="form-select form-select-sm" style="height: 32px; min-height: 32px; padding-top: 2px; padding-bottom: 2px; font-size: 14px;" id="libroSelect" name="libro">
+                                <option value="" disabled selected>Seleccione libro...</option>
+                                <optgroup label="Nuevo Testamento">
+                                    {% for libro in libros %}
+                                    <option value="{{ libro.numero }}">{{ libro.nombre }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <div class="row g-2">
+                            <!-- Capítulo -->
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="capituloSelect" class="form-label fw-bold mb-1 fs-6">Capítulo</label>
+                                    <select class="form-select form-select-sm" style="height: 32px; min-height: 32px; padding-top: 2px; padding-bottom: 2px; font-size: 14px;" id="capituloSelect" name="capitulo">
+                                        <option value="" disabled selected>---</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Versículo -->
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="versiculoSelect" class="form-label fw-bold mb-1 fs-6">Versículo</label>
+                                    <select class="form-select form-select-sm" style="height: 32px; min-height: 32px; padding-top: 2px; padding-bottom: 2px; font-size: 14px;" id="versiculoSelect" name="versiculo">
+                                        <option value="" disabled selected>---</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button id="btn-buscar" type="button" class="btn btn-primary w-100 mt-2"><i class="unicon-search mr-1"></i> Buscar</button>
+                    </form>
+                </div>
+            </div>
+            <!-- El resto de la vista interlineal -->
+            <div class="col-12" style="flex: 1; min-width: 0;">
+                <div class="panel p-4 bg-white dark:bg-gray-800 rounded-3 border h-100">
+                    <h4 class="h5 mb-4 border-bottom pb-2">Florilegio Interlineal</h4>
+                    <div id="interlinear-container" class="d-flex flex-wrap gap-2 align-items-start" style="min-height: 200px;">
+                        <div class="w-100 text-center opacity-50 fst-italic">
+                            Selecciona las opciones de "Biblia para estudiar" a tu izquierda y presiona Buscar.
+                        </div>
+                    </div>
+                    <!-- Créditos del proyecto -->
+                    <div class="mt-4 pt-3 border-top d-flex align-items-start gap-2 text-gray-400 dark:text-gray-600" style="font-size: 11px; line-height: 1.5;">
+                        <i class="unicon-information-circle flex-shrink-0 mt-1" style="font-size: 14px;"></i>
+                        <span>
+                            Este espacio de estudio utiliza datos del proyecto <a href="https://github.com/eliranwong/OpenGNT" target="_blank" rel="noopener noreferrer" class="text-gray-500 dark:text-gray-500 text-decoration-underline fw-medium">OpenGNT</a>, desarrollado por Eliran Wong, integrando la morfología de MorphGNT y el texto de SBLGNT. Agradecemos a la comunidad de código abierto por facilitar estas herramientas de análisis lingüístico.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="bible-structure-data" type="application/json">
+    {{ estructura_json|safe }}
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tipoSelect = document.getElementById('tipoSelect');
+        const versionContainer = document.getElementById('versionContainer');
+        
+        // Ocultar versiones si se elige "Biblia para estudiar"
+        tipoSelect.addEventListener('change', function() {
+            if(this.value === 'estudio') {
+                versionContainer.style.display = 'none';
+            } else {
+                versionContainer.style.display = 'block';
+            }
+        });
+        
+        // Lógica dinámica de Libros, Capítulos y Versículos
+        const estructuraData = JSON.parse(document.getElementById('bible-structure-data').textContent);
+        
+        const libroSelect = document.getElementById('libroSelect');
+        const capituloSelect = document.getElementById('capituloSelect');
+        const versiculoSelect = document.getElementById('versiculoSelect');
+        
+        libroSelect.addEventListener('change', function() {
+            const libroId = this.value;
+            capituloSelect.innerHTML = '<option value="" disabled selected>---</option>';
+            versiculoSelect.innerHTML = '<option value="" disabled selected>---</option>';
+            
+            if (libroId && estructuraData[libroId]) {
+                const capitulos = estructuraData[libroId];
+                
+                // Extraer las llaves, pasarlas a números y ordenarlas de menor a mayor
+                const capKeys = Object.keys(capitulos).map(Number).sort((a,b) => a - b);
+                
+                capKeys.forEach(capNum => {
+                    const opt = document.createElement('option');
+                    opt.value = capNum;
+                    opt.textContent = capNum;
+                    capituloSelect.appendChild(opt);
+                });
+            }
+        });
+        
+        capituloSelect.addEventListener('change', function() {
+            const libroId = libroSelect.value;
+            const capId = this.value;
+            versiculoSelect.innerHTML = '<option value="" disabled selected>---</option>';
+            
+            if (libroId && capId && estructuraData[libroId] && estructuraData[libroId][capId]) {
+                const maxVersiculos = estructuraData[libroId][capId];
+                
+                for (let i = 1; i <= maxVersiculos; i++) {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = i;
+                    versiculoSelect.appendChild(opt);
+                }
+            }
+        });
+
+        // Evento de busqueda
+        const btnBuscar = document.getElementById('btn-buscar');
+        const interlinearContainer = document.getElementById('interlinear-container');
+        
+        btnBuscar.addEventListener('click', async function() {
+            const isEstudio = tipoSelect.value === 'estudio';
+            const libroId = libroSelect.value;
+            const capituloId = capituloSelect.value;
+            const versiculoId = versiculoSelect.value;
+            
+            if (!libroId || !capituloId || !versiculoId) {
+                alert("Por favor seleccione un Libro, Capítulo y Versículo válido.");
+                return;
+            }
+            
+            if (isEstudio) {
+                interlinearContainer.innerHTML = '<div class="w-100 text-center py-5"><div class="spinner-border text-primary" role="status"></div><br><span class="opacity-50">Analizando original...</span></div>';
+                
+                try {
+                    const response = await fetch(`/api/versiculo/?libro=${libroId}&capitulo=${capituloId}&versiculo=${versiculoId}`);
+                    const json = await response.json();
+                    
+                    if (json.status === 'success') {
+                        interlinearContainer.innerHTML = '';
+                        
+                        if (json.data.length === 0) {
+                             interlinearContainer.innerHTML = '<p class="w-100 text-center opacity-50">No hay palabras disponibles para este versículo.</p>';
+                             return;
+                        }
+                        
+                        // Creacion de las "Word Cards" del interlineal
+                        json.data.forEach(word => {
+                            const wordBlock = document.createElement('div');
+                            wordBlock.className = 'panel vstack text-center gap-1 px-3 pt-2 pb-1 border rounded-2 bg-gray-25 dark:bg-gray-900 border-opacity-10';
+                            wordBlock.style.minWidth = '105px';
+                            wordBlock.style.flexGrow = '0';
+                            wordBlock.style.flexShrink = '0';
+                            wordBlock.style.cursor = 'default';
+                            
+                            // 1. Griego
+                            const greekEl = document.createElement('div');
+                            greekEl.className = 'fw-bold text-dark dark:text-white';
+                            greekEl.style.fontSize = '2.25rem';
+                            greekEl.textContent = word.griego || '-';
+                            if (word.raiz_griega) {
+                                greekEl.setAttribute('data-tooltip', word.raiz_griega);
+                            }
+                            
+                            // 2. Español
+                            const spanEl = document.createElement('div');
+                            spanEl.className = 'text-primary';
+                            spanEl.style.fontSize = '1.125rem';
+                            spanEl.textContent = word.espanol || '-';
+                            
+                            // 3. Metadatos
+                            const metaEl = document.createElement('div');
+                            metaEl.className = 'text-gray-500 mt-1 pt-1 border-top';
+                            metaEl.style.fontSize = '16px';
+                            let htmlMeta = `<span data-tooltip="${word.descripcion_rmac}">${word.rmac || ''}</span>`;
+                            if (word.strong) {
+                                htmlMeta += `<br><span class="text-success fw-medium" data-tooltip="Strong: ${word.strong}">${word.strong}</span>`;
+                            }
+                            if (word.low_nida_number) {
+                                htmlMeta += `<br><span class="text-info fw-medium" data-tooltip="Low-Nida: ${word.low_nida_number}">${word.low_nida_number}</span>`;
+                            }
+                            metaEl.innerHTML = htmlMeta;
+                            
+                            wordBlock.appendChild(greekEl);
+                            wordBlock.appendChild(spanEl);
+                            wordBlock.appendChild(metaEl);
+                            
+                            interlinearContainer.appendChild(wordBlock);
+                        });
+                    } else {
+                        interlinearContainer.innerHTML = `<div class="alert alert-danger w-100 mt-3">${json.message}</div>`;
+                    }
+                } catch (err) {
+                    interlinearContainer.innerHTML = `<div class="alert alert-danger w-100 mt-3">Hubo un error de red conectando con el servidor.</div>`;
+                    console.error(err);
+                }
+                
+            } else {
+                console.log("Modo lectura normal, por implementar");
+                interlinearContainer.innerHTML = '<div class="alert alert-info w-100 mt-3 text-center">📘 El modo Biblia de Lectura Normal clásica, sin la profundidad del estudio interlineal, se encuentra en fase de desarrollo. Por defecto elige <b>"Biblia para estudiar"</b>.</div>';
+            }
+        });
+    });
+</script>
+{% endblock %}

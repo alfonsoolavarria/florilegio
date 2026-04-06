@@ -27,4 +27,6 @@ urlpatterns = [
     path("privacidad/", views.privacy, name="privacy"),
     path("terminos/", views.terms, name="terms"),
     path("contacto/", views.contact, name="contact"),
+    path("estudios/", views.estudios, name="estudios"),
+    path("api/versiculo/", views.api_get_versiculo, name="api_get_versiculo"),
 ]

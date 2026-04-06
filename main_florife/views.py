@@ -1,7 +1,10 @@
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
 from django.db.models import Q
 from django.core.paginator import Paginator
-from .models import Article, Category
+from .models import Article, Category, LibroBiblia
 
 def dashboard(request):
     featured_articles = Article.objects.filter(is_featured=True, status='liberado')[:6]
@@ -75,3 +78,46 @@ def terms(request):
 
 def contact(request):
     return render(request, 'contact.html')
+
+def estudios(request):
+    libros_nt = LibroBiblia.objects.filter(testamento="Nuevo Testamento").order_by('numero')
+    
+    estructura_datos = {libro.numero: libro.estructura_capitulos for libro in libros_nt}
+    
+    return render(request, 'estudios.html', {
+        'libros': libros_nt,
+        'estructura_json': json.dumps(estructura_datos, cls=DjangoJSONEncoder)
+    })
+
+def api_get_versiculo(request):
+    libro = request.GET.get('libro')
+    capitulo = request.GET.get('capitulo')
+    versiculo = request.GET.get('versiculo')
+    
+    if not all([libro, capitulo, versiculo]):
+        return JsonResponse({'status': 'error', 'message': 'Faltan parámetros requeridos.'}, status=400)
+    
+    try:
+        from .models import PalabraBiblia
+        palabras = PalabraBiblia.objects.filter(
+            libro=libro, 
+            capitulo=capitulo, 
+            versiculo=versiculo
+        ).select_related('traduccion', 'morfologia').order_by('ognt_sort')
+        
+        data = []
+        for p in palabras:
+            data.append({
+                'ognt_sort': p.ognt_sort,
+                'espanol': p.traduccion.espanol if hasattr(p, 'traduccion') else '',
+                'griego': p.traduccion.griego if hasattr(p, 'traduccion') else '',
+                'raiz_griega': p.traduccion.raiz_griega if hasattr(p, 'traduccion') else '',
+                'rmac': p.morfologia.rmac if hasattr(p, 'morfologia') else '',
+                'descripcion_rmac': p.morfologia.descripcion_rmac if hasattr(p, 'morfologia') else '',
+                'low_nida_number': p.morfologia.low_nida_number if hasattr(p, 'morfologia') else '',
+                'strong': p.morfologia.strong if hasattr(p, 'morfologia') else '',
+            })
+            
+        return JsonResponse({'status': 'success', 'data': data})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)

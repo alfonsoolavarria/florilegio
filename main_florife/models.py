@@ -43,3 +43,40 @@ class Article(models.Model):
     @property
     def image(self):
         return {'url': self.image_url}
+
+class PalabraBiblia(models.Model):
+    ognt_sort = models.CharField(max_length=50, primary_key=True)
+    libro = models.IntegerField()
+    capitulo = models.IntegerField()
+    versiculo = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.libro}:{self.capitulo}:{self.versiculo} - {self.ognt_sort}"
+
+class TraduccionLiteral(models.Model):
+    palabra = models.OneToOneField(PalabraBiblia, on_delete=models.CASCADE, related_name='traduccion')
+    espanol = models.CharField(max_length=255, null=True, blank=True)
+    griego = models.CharField(max_length=255, null=True, blank=True)
+    raiz_griega = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.palabra.ognt_sort} -> {self.espanol}"
+
+class Morfologia(models.Model):
+    palabra = models.OneToOneField(PalabraBiblia, on_delete=models.CASCADE, related_name='morfologia')
+    rmac = models.CharField(max_length=50, null=True, blank=True)
+    descripcion_rmac = models.CharField(max_length=255, null=True, blank=True)
+    low_nida_number = models.CharField(max_length=150, null=True, blank=True)
+    strong = models.CharField(max_length=20, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.palabra.ognt_sort} -> {self.rmac}"
+
+class LibroBiblia(models.Model):
+    numero = models.IntegerField(unique=True)
+    nombre = models.CharField(max_length=50)
+    testamento = models.CharField(max_length=50, default="Nuevo Testamento")
+    estructura_capitulos = models.JSONField(default=dict, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.numero} - {self.nombre}"
