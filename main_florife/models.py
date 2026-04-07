@@ -80,3 +80,16 @@ class LibroBiblia(models.Model):
 
     def __str__(self):
         return f"{self.numero} - {self.nombre}"
+
+class VersiculoBiblia(models.Model):
+    version = models.CharField(max_length=20) # e.g. 'rv1960', 'rva2015'
+    libro = models.IntegerField()
+    capitulo = models.IntegerField()
+    versiculo = models.IntegerField()
+    texto = models.TextField()
+
+    class Meta:
+        unique_together = ('version', 'libro', 'capitulo', 'versiculo')
+
+    def __str__(self):
+        return f"[{self.version.upper()}] {self.libro} {self.capitulo}:{self.versiculo}"

@@ -90,34 +90,65 @@ def estudios(request):
     })
 
 def api_get_versiculo(request):
+    tipo = request.GET.get('tipo', 'estudio')
     libro = request.GET.get('libro')
     capitulo = request.GET.get('capitulo')
-    versiculo = request.GET.get('versiculo')
+    versiculo = request.GET.get('versiculo') # Opcional en modo biblia, pero se usa para scroll/enfocar
+    version = request.GET.get('version', 'rv1960')
     
-    if not all([libro, capitulo, versiculo]):
-        return JsonResponse({'status': 'error', 'message': 'Faltan parámetros requeridos.'}, status=400)
+    if not all([libro, capitulo]):
+        return JsonResponse({'status': 'error', 'message': 'Faltan parámetros requeridos (libro, capitulo).'}, status=400)
     
     try:
-        from .models import PalabraBiblia
-        palabras = PalabraBiblia.objects.filter(
-            libro=libro, 
-            capitulo=capitulo, 
-            versiculo=versiculo
-        ).select_related('traduccion', 'morfologia').order_by('ognt_sort')
+        from .models import PalabraBiblia, VersiculoBiblia
         
-        data = []
-        for p in palabras:
-            data.append({
-                'ognt_sort': p.ognt_sort,
-                'espanol': p.traduccion.espanol if hasattr(p, 'traduccion') else '',
-                'griego': p.traduccion.griego if hasattr(p, 'traduccion') else '',
-                'raiz_griega': p.traduccion.raiz_griega if hasattr(p, 'traduccion') else '',
-                'rmac': p.morfologia.rmac if hasattr(p, 'morfologia') else '',
-                'descripcion_rmac': p.morfologia.descripcion_rmac if hasattr(p, 'morfologia') else '',
-                'low_nida_number': p.morfologia.low_nida_number if hasattr(p, 'morfologia') else '',
-                'strong': p.morfologia.strong if hasattr(p, 'morfologia') else '',
-            })
+        if tipo == 'biblia':
+            # Obtener todos los versículos del capítulo
+            versiculos = VersiculoBiblia.objects.filter(
+                version=version,
+                libro=libro,
+                capitulo=capitulo
+            ).order_by('versiculo')
             
-        return JsonResponse({'status': 'success', 'data': data})
+            data = []
+            for v in versiculos:
+                data.append({
+                    'versiculo': v.versiculo,
+                    'texto': v.texto
+                })
+            return JsonResponse({'status': 'success', 'modo': 'biblia', 'data': data})
+            
+        else:
+            # Modo estudio (interlineal) - Solo el versículo específico
+            if not versiculo:
+                return JsonResponse({'status': 'error', 'message': 'El modo estudio requiere un versículo específico.'}, status=400)
+                
+            palabras = PalabraBiblia.objects.filter(
+                libro=libro, 
+                capitulo=capitulo, 
+                versiculo=versiculo
+            ).select_related('traduccion', 'morfologia').order_by('ognt_sort')
+            
+            data = []
+            for p in palabras:
+                data.append({
+                    'ognt_sort': p.ognt_sort,
+                    'espanol': p.traduccion.espanol if hasattr(p, 'traduccion') else '',
+                    'griego': p.traduccion.griego if hasattr(p, 'traduccion') else '',
+                    'raiz_griega': p.traduccion.raiz_griega if hasattr(p, 'traduccion') else '',
+                    'rmac': p.morfologia.rmac if hasattr(p, 'morfologia') else '',
+                    'descripcion_rmac': p.morfologia.descripcion_rmac if hasattr(p, 'morfologia') else '',
+                    'low_nida_number': p.morfologia.low_nida_number if hasattr(p, 'morfologia') else '',
+                    'strong': p.morfologia.strong if hasattr(p, 'morfologia') else '',
+                })
+            # Buscar el texto en la versión RV1960 para mostrar arriba del interlineal
+            texto_rv1960 = ""
+            try:
+                v_obj = VersiculoBiblia.objects.get(version='rv1960', libro=libro, capitulo=capitulo, versiculo=versiculo)
+                texto_rv1960 = v_obj.texto
+            except VersiculoBiblia.DoesNotExist:
+                pass
+                
+            return JsonResponse({'status': 'success', 'modo': 'estudio', 'texto_rv1960': texto_rv1960, 'data': data})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
