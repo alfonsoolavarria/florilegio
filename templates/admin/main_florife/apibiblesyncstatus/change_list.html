@@ -1,0 +1,133 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div id="content-main">
+    <h1>Sincronización con API.Bible</h1>
+    <p>Esta herramienta permite descargar y estructurar localmente las versiones modernas de la Biblia necesarias de manera asíncrona para prevenir desconexiones y respetar la política de API.Bible de almacenamiento temporal (30 días de caché).</p>
+    
+    <div id="bibles-container" style="display:flex; flex-direction:column; gap:20px; margin-top:20px;">
+        <p>Cargando estado...</p>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const biblesContainer = document.getElementById("bibles-container");
+        
+        function loadStatuses() {
+            fetch("/api/admin/bible-status/")
+                .then(r => r.json())
+                .then(data => {
+                    biblesContainer.innerHTML = '';
+                    data.statuses.forEach(bible => {
+                        renderBiblePanel(bible);
+                    });
+                })
+                .catch(err => {
+                    biblesContainer.innerHTML = '<p>Error cargando los estados.</p>';
+                });
+        }
+        
+        function renderBiblePanel(bible) {
+            const panel = document.createElement('div');
+            panel.style.cssText = "border: 1px solid #ccc; padding: 15px; border-radius: 5px; background: #fff;";
+            
+            let statusHtml = `
+                <h3 style="margin-top:0;">${bible.name} (${bible.key.toUpperCase()})</h3>
+                <p><strong>Última Sincronización:</strong> ${bible.sync_date}</p>
+                <p><strong>Días Transcurridos:</strong> ${bible.days_passed} / 30 días</p>
+            `;
+            
+            if (bible.needs_sync) {
+                statusHtml += `<p style="color:red; font-weight:bold;">¡Se requiere sincronización!</p>`;
+            } else {
+                statusHtml += `<p style="color:green; font-weight:bold;">Estado válido.</p>`;
+            }
+            
+            statusHtml += `
+                <div style="margin-top:15px; display:flex; gap: 10px; align-items:center;">
+                    <button class="button" onclick="startSync(this, '${bible.key}')" style="cursor:pointer; background-color:#79aec8; color:white; border:none; padding:10px 15px; border-radius:4px;">
+                        Sincronizar Desde Cero
+                    </button>
+                    <span class="sync-progress" id="progress-${bible.key}" style="display:none; color:#666; font-weight:bold;"></span>
+                </div>
+                <div id="progress-bar-container-${bible.key}" style="display:none; width: 100%; background-color: #f3f3f3; border-radius: 5px; margin-top: 10px;">
+                    <div id="progress-bar-${bible.key}" style="width: 0%; height: 20px; background-color: #4CAF50; border-radius: 5px; text-align: center; color: white; line-height: 20px; font-size:12px;">0%</div>
+                </div>
+            `;
+            
+            panel.innerHTML = statusHtml;
+            biblesContainer.appendChild(panel);
+        }
+        
+        window.startSync = async function(btnNode, versionKey) {
+            if (!confirm(`¿Estás seguro de sincronizar la versión ${versionKey.toUpperCase()}?\nEsta operación borrará los textos actuales de esta versión y tomará algunos minutos.`)) {
+                return;
+            }
+            
+            btnNode.disabled = true;
+            const progressText = document.getElementById(`progress-${versionKey}`);
+            const progressBarContainer = document.getElementById(`progress-bar-container-${versionKey}`);
+            const progressBar = document.getElementById(`progress-bar-${versionKey}`);
+            
+            progressText.style.display = 'inline-block';
+            progressBarContainer.style.display = 'block';
+            progressText.textContent = 'Preparando...';
+            
+            try {
+                // 1. Obtener lista de libros
+                const setupRes = await fetch(`/api/admin/bible-sync/${versionKey}/setup/`);
+                const setupData = await setupRes.json();
+                const books = setupData.books;
+                
+                let totalChaptersEstimates = books.length * 20; // Rough estimate for progress bar
+                let chaptersProcessed = 0;
+                
+                // 2. Iterar libro por libro, capítulo por capítulo
+                for(let i=0; i<books.length; i++) {
+                    const libroNum = books[i];
+                    let currentChapter = 1;
+                    
+                    while(true) {
+                        progressText.textContent = `Descargando Libro ${libroNum}/66, Cap ${currentChapter}...`;
+                        
+                        const chapterRes = await fetch(`/api/admin/bible-sync/${versionKey}/sync/${libroNum}/${currentChapter}/`);
+                        const chapterData = await chapterRes.json();
+                        
+                        if (chapterData.end_of_book) {
+                            break; // Se acabó el libro, pasamos al siguiente
+                        }
+                        
+                        if (chapterData.error) {
+                            alert(`Error sincronizando: ${chapterData.error}`);
+                            throw new Error(chapterData.error);
+                        }
+                        
+                        chaptersProcessed++;
+                        let percent = Math.min(Math.round((chaptersProcessed / 1189) * 100), 100);
+                        progressBar.style.width = `${percent}%`;
+                        progressBar.textContent = `${percent}%`;
+                        
+                        currentChapter++;
+                    }
+                }
+                
+                // 3. Finalizar
+                progressText.textContent = 'Guardando estado final...';
+                await fetch(`/api/admin/bible-sync/${versionKey}/finish/`);
+                
+                alert(`¡Sincronización de ${versionKey.toUpperCase()} finalizada con éxito!`);
+                loadStatuses();
+                
+            } catch (error) {
+                progressText.textContent = 'Fallo la sincronización.';
+                progressText.style.color = 'red';
+                btnNode.disabled = false;
+            }
+        };
+
+        loadStatuses();
+    });
+</script>
+{% endblock %}

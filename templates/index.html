@@ -72,12 +72,22 @@
         <div class="row child-cols-12 sm:child-cols-6 lg:child-cols-3 g-4">
             {% for cat in categories %}
             <div>
-                <a href="{% url 'article_list' %}?categoria={{ cat.id }}" class="category-card panel vstack items-center justify-center p-4 lg:p-6 text-none bg-white dark:bg-gray-900">
-                    <div class="category-icon">
-                        <i class="{{ cat.icon }}"></i>
+                <a href="{% url 'article_list' %}?categoria={{ cat.id }}" class="category-card panel vstack items-center justify-center p-4 lg:p-5 text-none bg-white dark:bg-gray-800 position-relative overflow-hidden z-1 border rounded-3 shadow-xs hover:shadow-sm hover:border-primary transition-all duration-300 group">
+                    <!-- Marca de Agua (Fondo Sutil Estilo Boceto) -->
+                    <div class="position-absolute bottom-0 end-0 z-n1 text-primary opacity-10 group-hover:opacity-15 transition-all duration-500" style="transform: translate(15%, 25%) rotate(-15deg); pointer-events: none;">
+                        <i class="{{ cat.icon|default:'unicon-book' }}" style="font-size: 11rem; line-height: 1;"></i>
                     </div>
-                    <h4 class="h5 mb-1">{{ cat.name }}</h4>
-                    <span class="fs-7 opacity-50">{{ cat.count }} Artículos</span>
+                    
+                    <!-- Icono Lineal Principal Enmarcado -->
+                    <div class="category-icon mb-3 bg-primary bg-opacity-10 text-primary rounded-circle d-flex items-center justify-center border border-primary border-opacity-10 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm" style="width: 72px; height: 72px;">
+                        <i class="{{ cat.icon|default:'unicon-book' }} fs-2"></i>
+                    </div>
+                    
+                    <h4 class="h5 mb-1 fw-bold text-dark dark:text-white z-1">{{ cat.name }}</h4>
+                    <span class="fs-7 text-gray-500 dark:text-gray-400 z-1">{{ cat.count }} Artículos</span>
+                    
+                    <!-- Línea de acento inferior en hover -->
+                    <div class="position-absolute bottom-0 start-0 w-100 bg-primary transition-all duration-300 opacity-0 group-hover:opacity-100" style="height: 4px;"></div>
                 </a>
             </div>
             {% endfor %}

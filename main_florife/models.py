@@ -93,3 +93,19 @@ class VersiculoBiblia(models.Model):
 
     def __str__(self):
         return f"[{self.version.upper()}] {self.libro} {self.capitulo}:{self.versiculo}"
+
+class ApiBibleSyncStatus(models.Model):
+    VERSION_CHOICES = [
+        ('nbla', 'Nueva Biblia de las Américas'),
+        ('ntv', 'Nueva Traducción Viviente'),
+        ('rvr09', 'Reina Valera 1909'),
+    ]
+    version = models.CharField(max_length=20, choices=VERSION_CHOICES, unique=True)
+    last_synced_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name_plural = "API Bible Sync Statuses"
+
+    def __str__(self):
+        return f"{self.get_version_display()} (Last synced: {self.last_synced_at.strftime('%Y-%m-%d %H:%M')})"
+

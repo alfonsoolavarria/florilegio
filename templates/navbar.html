@@ -2,7 +2,7 @@
 <!-- Header start -->
 <header class="uc-header header-four uc-navbar-sticky-wrap z-999" data-uc-sticky="start: 200; sel-target: .uc-navbar-container; cls-active: uc-navbar-sticky; animation: uc-animation-slide-top; end: !*;">
     <nav class="uc-navbar-container uc-navbar-transparent fs-custom z-1">
-        <div class="uc-top-navbar panel z-3 dark:bg-gray-800 d-none lg:d-flex" style="background-color: #E9DDD2;">
+        <div class="uc-top-navbar panel z-3 dark:bg-gray-800" style="background-color: #E9DDD2;">
             <div class="container max-w-lg">
                 <div class="uc-navbar items-center min-h-48px text-gray-900 dark:text-white" data-uc-navbar=" animation: uc-animation-slide-top-small; duration: 150;">
                     <div class="uc-navbar-left gap-2 md:gap-3">
@@ -37,6 +37,11 @@
                                 <span class="slider"></span>
                             </label>
                         </div>
+                        <div class="uc-navbar-item d-lg-none ms-2">
+                            <a class="text-dark dark:text-white fw-bold fs-4 text-none" href="#uc-menu-panel" data-uc-offcanvas="overlay: true">
+                                <i class="icon unicon-menu"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -44,3 +49,23 @@
     </nav>
 </header>
 <!-- Header end -->
+
+<!-- Mobile Offcanvas Menu start -->
+<div id="uc-menu-panel" data-uc-offcanvas>
+    <div class="uc-offcanvas-bar bg-white dark:bg-gray-900 border-end p-4">
+        <button class="uc-offcanvas-close uc-close fs-4" type="button" data-uc-close><i class="unicon-close"></i></button>
+        <div class="uc-logo mt-2 mb-4">
+            <a href="/">
+                <img class="w-150px" src="{% static 'images/fin.svg' %}" alt="Logo">
+            </a>
+        </div>
+        <ul class="uc-nav uc-nav-default fs-5 fw-medium vstack gap-4">
+            <li><a class="text-dark dark:text-gray-200 text-none" href="/"><i class="icon icon-1 unicon-home me-2 text-primary"></i> Inicio</a></li>
+            <li><a class="text-dark dark:text-gray-200 text-none" href="{% url 'article_list' %}"><i class="icon icon-1 unicon-book me-2 text-primary"></i> Artículos</a></li>
+            <li><a class="text-dark dark:text-gray-200 text-none" href="#"><i class="icon icon-1 unicon-edit me-2 text-primary"></i> Ensayos</a></li>
+            <li><a class="text-dark dark:text-gray-200 text-none" href="{% url 'estudios' %}"><i class="icon icon-1 unicon-notebook me-2 text-primary"></i> Estudio</a></li>
+            <li><a class="text-dark dark:text-gray-200 text-none" href="{% url 'contact' %}"><i class="icon icon-1 unicon-email me-2 text-primary"></i> Contacto</a></li>
+        </ul>
+    </div>
+</div>
+<!-- Mobile Offcanvas Menu end -->

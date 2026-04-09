@@ -1,53 +1,56 @@
 import json
-import urllib.request
+import os
 from django.core.management.base import BaseCommand
 from main_florife.models import VersiculoBiblia
+from django.conf import settings
 
 class Command(BaseCommand):
-    help = 'Importa la Biblia Reina Valera 1960 (RVR1960) desde un archivo JSON remoto'
+    help = 'Importa la Biblia Reina Valera 1960 (RV1960) real desde archivos locales'
 
     def handle(self, *args, **options):
-        url = "https://raw.githubusercontent.com/thiagobodruk/bible/master/json/es_rvr.json"
-        
-        self.stdout.write(f'Descargando Biblia desde {url}...')
-        try:
-            with urllib.request.urlopen(url) as response:
-                data = json.loads(response.read().decode('utf-8-sig'))
-        except Exception as e:
-            self.stderr.write(f'Error al descargar o procesar el JSON: {e}')
-            return
+        biblia_path = os.path.join(settings.BASE_DIR, "data", "biblia_rv1960")
+        index_path = os.path.join(biblia_path, "index.json")
 
-        # thiagobodruk/bible format is usually a list of books
-        # Each book: {"abbrev": "gn", "chapters": [[vs1, vs2, ...], [vs1, ...]], "name": "Gênesis"}
+        
+        self.stdout.write(f'Leyendo índice desde {index_path}...')
+        try:
+            with open(index_path, 'r', encoding='utf-8') as f:
+                index_data = json.load(f)
+        except Exception as e:
+            self.stderr.write(f'Error al leer el índice JSON: {e}')
+            return
         
         versiculos_objects = []
         version_id = 'rv1960'
         
-        # Mapping index to book number (standard 1-66)
-        # Note: thiagobodruk/bible typically follows the order: 
-        # 0: Gen, 1: Exod, ..., 65: Rev
+        self.stdout.write('Procesando libros, capítulos y versículos...')
         
-        self.stdout.write('Procesando libros y capítulos...')
-        
-        # Boring but necessary: mapping for ensure book numbers match what we have in LibroBiblia
-        # although thiagobodruk usually follows standard order
-        
-        for book_idx, book_data in enumerate(data):
-            libro_num = book_idx + 1
-            book_name = book_data.get('name')
-            chapters = book_data.get('chapters', [])
+        for book_metadata in index_data:
+            libro_num = book_metadata['number']
+            book_key = book_metadata['key']
+            book_name = book_metadata['title']
             
-            for cap_idx, chapter_verses in enumerate(chapters):
+            book_file_path = os.path.join(biblia_path, f"{book_key}.json")
+            try:
+                with open(book_file_path, 'r', encoding='utf-8') as f:
+                    book_chapters = json.load(f)
+            except Exception as e:
+                self.stderr.write(f'Error al leer el libro {book_name} ({book_file_path}): {e}')
+                continue
+                
+            for cap_idx, chapter_verses in enumerate(book_chapters):
                 cap_num = cap_idx + 1
                 for vs_idx, text in enumerate(chapter_verses):
                     vs_num = vs_idx + 1
+                    
+                    clean_text = text.replace('_', '')
                     
                     versiculos_objects.append(VersiculoBiblia(
                         version=version_id,
                         libro=libro_num,
                         capitulo=cap_num,
                         versiculo=vs_num,
-                        texto=text
+                        texto=clean_text
                     ))
                     
         self.stdout.write(f'Borrando registros antiguos de {version_id}...')

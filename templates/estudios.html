@@ -96,7 +96,7 @@
         <ul class="nav biblia-tabs border-bottom mb-0" id="bibliaTabs">
             <li class="nav-item">
                 <button class="nav-link active" id="tab-leer-btn" data-tab-target="tab-leer" type="button">
-                    <i class="unicon-book me-1"></i> Leer Biblia
+                    <i class="unicon-book me-1"></i> Lectura Bíblica
                 </button>
             </li>
             <li class="nav-item">
@@ -121,7 +121,10 @@
                                 <div class="form-group">
                                     <label for="leer-versionSelect" class="form-label fw-bold mb-1 fs-6">Versión</label>
                                     <select class="form-select form-select-sm" style="height:32px;min-height:32px;padding-top:2px;padding-bottom:2px;font-size:14px;" id="leer-versionSelect" name="version">
-                                        <option value="rv1960" selected>Reina Valera 1960</option>
+                                        <!-- <option value="ntv" selected>Nueva Traducción Viviente (NTV)</option> -->
+                                        <option value="nbla">Nueva Biblia de las Américas (NBLA)</option>
+                                        <option value="rv1960">Reina Valera 1960 (Estudio)</option>
+                                        <!-- <option value="rvr09">Reina Valera 1909</option> -->
                                     </select>
                                 </div>
                                 <!-- Libro -->
@@ -541,6 +544,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ── Agrupador principal ────────────────────────────────────────────────────
     function groupIntoParagraphs(verses) {
+        // Did any verse come with standard paragraph markers '¶'?
+        const hasApiParagraphs = verses.some(v => v.texto && v.texto.includes('¶'));
+        
+        if (hasApiParagraphs) {
+            const paragraphs = [];
+            let current = [];
+            let forceNew = false;
+            
+            verses.forEach((vs, i) => {
+                let texto = vs.texto || '';
+                let hasBreak = texto.includes('¶');
+                
+                // If it's the very first verse, it's already a new paragraph
+                if (i === 0 || forceNew || (hasBreak && texto.indexOf('¶') < texto.length / 2)) {
+                    if (current.length) paragraphs.push(current);
+                    current = [];
+                    forceNew = false;
+                }
+                
+                // If the break is at the end of this verse, the NEXT verse should be a new paragraph
+                if (hasBreak && texto.lastIndexOf('¶') >= texto.length / 2) {
+                    forceNew = true;
+                }
+                
+                vs.texto = texto.replace(/¶/g, '').trim();
+                current.push(vs);
+            });
+            if (current.length) paragraphs.push(current);
+            return paragraphs;
+        }
+
         const isPoetry = detectIsPoetry(verses);
         const maxVerses = isPoetry ? MAX_VERSES_POETRY : MAX_VERSES_PROSE;
 
@@ -604,7 +638,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 vsNum.textContent = vs.versiculo;
 
                 vsSpan.appendChild(vsNum);
-                vsSpan.appendChild(document.createTextNode(vs.texto + ' '));
+                
+                // Formateo especial para RV1960 (sustituir 'par /n' y '/n' con saltos de línea HTML)
+                let textContent = vs.texto || '';
+                const hasPoetry = textContent.includes('/n');
+                
+                textContent = textContent.replace(/par \/n/g, '<br><br><span style="margin-left: 20px;"></span>');
+                textContent = textContent.replace(/\/n/g, '<br><span style="margin-left: 20px;"></span>');
+                
+                // Aseguramos que si tiene poesía, haga un "salto" extra al final 
+                // para que el siguiente versículo no quede pegado a la última curva poética.
+                if (hasPoetry) {
+                    textContent += '<br><br>';
+                }
+                
+                // Inyectar el texto de manera segura renderizando el html (como los <br>)
+                const textContainer = document.createElement('template');
+                textContainer.innerHTML = textContent + ' ';
+                while(textContainer.content.firstChild) {
+                    vsSpan.appendChild(textContainer.content.firstChild);
+                }
+
                 p.appendChild(vsSpan);
             });
 
@@ -630,9 +684,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Mostrar texto RV1960 arriba si existe
         if (textoRv1960) {
+            // Limpiar saltos de linea feos de RV1960 para la vista de estudio
+            let cleanRv1960 = textoRv1960.replace(/par \/n/g, ' ').replace(/\/n/g, ' ').replace(/\s+/g, ' ').trim();
             const rvContainer = document.createElement('div');
             rvContainer.className = 'w-100 p-3 mb-4 bg-primary bg-opacity-10 dark:bg-gray-900 rounded-3 border border-primary border-opacity-25';
-            rvContainer.innerHTML = `<span class="badge bg-primary mb-2">Reina Valera 1960</span><p class="mb-0 fs-5 text-gray-800 dark:text-gray-200" style="line-height: 1.6; font-size: 1.2rem !important;">${textoRv1960}</p>`;
+            rvContainer.innerHTML = `<span class="badge bg-primary mb-2">Reina Valera 1960</span><p class="mb-0 fs-5 text-gray-800 dark:text-gray-200" style="line-height: 1.6; font-size: 1.2rem !important;">${cleanRv1960}</p>`;
             container.appendChild(rvContainer);
         }
         data.forEach(word => {

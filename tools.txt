@@ -1,0 +1,16 @@
+Pasos Finales:
+Cuando estés listo para actualizar tu servidor AWS, solo debes seguir estos dos pasos:
+
+Subir archivos:
+bash
+(esto es solo si no estan pero ya los tengo)
+scp *_backup.json usuario@tu-ip-aws:/ruta/al/proyecto/
+
+Importar datos:
+bash
+
+python manage.py sync_bible_data --import_file nbla_backup.json
+python manage.py sync_bible_data --import_file rv1960_backup.json
+
+Con esto, tu base de datos en AWS quedará exactamente igual a la local, con todo el contenido y 
+formato que hemos trabajado hoy. ¿Hay algo más en lo que pueda ayudarte?

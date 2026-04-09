@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Article, Author
+from .models import Category, Article, Author, ApiBibleSyncStatus
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -19,3 +19,8 @@ class ArticleAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     list_editable = ('status', 'is_featured')
     ordering = ('-created_at',)
+
+@admin.register(ApiBibleSyncStatus)
+class ApiBibleSyncStatusAdmin(admin.ModelAdmin):
+    change_list_template = "admin/main_florife/apibiblesyncstatus/change_list.html"
+

@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from main_florife import views
+from main_florife import views_api_bible
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,4 +30,10 @@ urlpatterns = [
     path("contacto/", views.contact, name="contact"),
     path("estudios/", views.estudios, name="estudios"),
     path("api/versiculo/", views.api_get_versiculo, name="api_get_versiculo"),
+    
+    # API Bible Sync Endpoints for the Admin Panel
+    path("api/admin/bible-status/", views_api_bible.api_bible_status, name="api_bible_status"),
+    path("api/admin/bible-sync/<str:version_key>/setup/", views_api_bible.api_bible_sync_book_setup, name="api_bible_sync_book_setup"),
+    path("api/admin/bible-sync/<str:version_key>/sync/<int:libro_num>/<int:capitulo_num>/", views_api_bible.api_bible_sync_chapter, name="api_bible_sync_chapter"),
+    path("api/admin/bible-sync/<str:version_key>/finish/", views_api_bible.api_bible_finish_sync, name="api_bible_finish_sync"),
 ]
