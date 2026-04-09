@@ -1,0 +1,40 @@
+{
+  "type": "categories",
+  "categories": [
+    {
+      "id": 1,
+      "name": "Teología",
+      "icon": "unicon-book"
+    },
+    {
+      "id": 2,
+      "name": "Historia",
+      "icon": "unicon-calendar"
+    },
+    {
+      "id": 3,
+      "name": "Biografías",
+      "icon": "unicon-user"
+    },
+    {
+      "id": 4,
+      "name": "Espiritualidad",
+      "icon": "unicon-sun"
+    },
+    {
+      "id": 5,
+      "name": "Contemporáneo",
+      "icon": "unicon-archive"
+    },
+    {
+      "id": 6,
+      "name": "Interpretación",
+      "icon": "unicon-cloud"
+    },
+    {
+      "id": 7,
+      "name": "Familia",
+      "icon": "unicon-home"
+    }
+  ]
+}
