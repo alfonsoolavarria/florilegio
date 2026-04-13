@@ -9,7 +9,7 @@
             <div class="col-12 col-md-8"> 
                 <div class="uc-logo text-gray-900 dark:text-white">
                     <a href="/">
-                        <img class="text-dark dark:text-white mx-auto" style="max-width:650px; width: 100%;" src="{% static 'images/fin.svg' %}" alt="Florilegio de la Fe" data-uc-svg>
+                        <img class="text-dark dark:text-white mx-auto hero-logo" src="{% static 'images/fin.svg' %}" alt="Florilegio de la Fe" data-uc-svg>
                     </a>
                 </div>
                 <p class="mt-4 fs-5 text-gray-600 dark:text-gray-400 italic">"Profundizando en la intimidad con Dios"</p>
@@ -74,13 +74,13 @@
             <div>
                 <a href="{% url 'article_list' %}?categoria={{ cat.id }}" class="category-card panel vstack items-center justify-center p-4 lg:p-5 text-none bg-white dark:bg-gray-800 position-relative overflow-hidden z-1 border rounded-3 shadow-xs hover:shadow-sm hover:border-primary transition-all duration-300 group">
                     <!-- Marca de Agua (Fondo Sutil Estilo Boceto) -->
-                    <div class="position-absolute bottom-0 end-0 z-n1 text-primary opacity-10 group-hover:opacity-15 transition-all duration-500" style="transform: translate(15%, 25%) rotate(-15deg); pointer-events: none;">
+                    <div class="position-absolute bottom-0 end-0 z-n1 text-primary opacity-10 group-hover:opacity-15 transition-all duration-500" style="color: rgb(178 176 175) !important; transform: translate(15%, 25%) rotate(-15deg); pointer-events: none;">
                         <i class="{{ cat.icon|default:'unicon-book' }}" style="font-size: 11rem; line-height: 1;"></i>
                     </div>
                     
-                    <!-- Icono Lineal Principal Enmarcado -->
-                    <div class="category-icon mb-3 bg-primary bg-opacity-10 text-primary rounded-circle d-flex items-center justify-center border border-primary border-opacity-10 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm" style="width: 72px; height: 72px;">
-                        <i class="{{ cat.icon|default:'unicon-book' }} fs-2"></i>
+                    <!-- Icono Lineal Principal -->
+                    <div class="category-icon mb-3 text-primary d-flex items-center justify-center transition-all duration-300">
+                        <i class="{{ cat.icon|default:'unicon-book' }} fs-1"></i>
                     </div>
                     
                     <h4 class="h5 mb-1 fw-bold text-dark dark:text-white z-1">{{ cat.name }}</h4>

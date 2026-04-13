@@ -71,6 +71,75 @@
         border-radius: 0 0 12px 12px;
         background: transparent;
     }
+
+    /* Editor Quill */
+    #study-editor-wrapper {
+        display: none;
+        margin-top: 3rem;
+        border-top: 2px solid var(--bs-primary);
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    .study-editor-header {
+        background: var(--bs-primary-bg-subtle, #e7f1ff);
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+    .btn-close-study {
+        background: #e9ecef;
+        color: #495057;
+        font-size: 0.75rem;
+        padding: 4px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+    .btn-close-study:hover {
+        background: #dc3545;
+        color: #fff;
+        border-color: #dc3545;
+    }
+    .btn-export-study {
+        background: #fff;
+        color: #495057;
+        font-size: 0.75rem;
+        padding: 4px 10px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .btn-export-study:hover {
+        background: #f8f9fa;
+        border-color: var(--bs-primary);
+        color: var(--bs-primary);
+    }
+    .btn-export-word:hover {
+        border-color: #2b579a;
+        color: #2b579a;
+    }
+    .btn-export-pdf:hover {
+        border-color: #e44d26;
+        color: #e44d26;
+    }
+    .ql-container {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 1.1rem !important;
+        min-height: 300px;
+        background: #fff;
+    }
+    .dark .ql-toolbar {
+        background: #f8f9fa;
+        border-radius: 8px 8px 0 0;
+    }
+    .dark .ql-container {
+        background: #fff;
+        color: #333; /* El editor suele verse mejor en blanco incluso en dark mode para contraste de texto */
+        border-radius: 0 0 8px 8px;
+    }
 </style>
 
 <!-- Section: Header -->
@@ -221,6 +290,31 @@
                             <div id="interlinear-container" class="d-flex flex-wrap gap-2 align-items-start" style="min-height: 200px;">
                                 <div class="w-100 text-center opacity-50 fst-italic">
                                     Selecciona las opciones a tu izquierda y presiona Buscar.
+                                </div>
+                            </div>
+
+                            <!-- Contenedor del Editor de Estudio -->
+                            <div id="study-editor-wrapper">
+                                <div class="study-editor-header d-flex align-items-center gap-2">
+                                    <h5 class="h6 mb-0 text-primary fw-bold">
+                                        <i class="unicon-pen me-1"></i> Bloc de Notas de Estudio
+                                    </h5>
+                                    
+                                    <div class="ms-auto d-flex gap-2">
+                                        <button class="btn-export-study btn-export-word shadow-xs" onclick="exportToWord()">
+                                            <i class="unicon-file-word text-primary"></i> Word
+                                        </button>
+                                        <button class="btn-export-study btn-export-pdf shadow-xs" onclick="exportToPDF()">
+                                            <i class="unicon-file-medical text-danger"></i> PDF
+                                        </button>
+                                        <button class="btn-close-study shadow-xs" onclick="closeStudyEditor()">
+                                            <i class="unicon-multiply me-1"></i> Cerrar y borrar
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="quill-editor"></div>
+                                <div class="mt-3 text-end">
+                                    <span class="fs-7 text-gray-500 italic me-3">Nota: Los cambios se guardan localmente mientras el bloc está abierto.</span>
                                 </div>
                             </div>
                             <!-- Créditos del proyecto -->
@@ -723,7 +817,167 @@ document.addEventListener('DOMContentLoaded', function() {
             wordBlock.appendChild(metaEl);
             container.appendChild(wordBlock);
         });
+
+        // Añadir botón de "Iniciar Estudio" al final
+        const studyBtnWrapper = document.createElement('div');
+        studyBtnWrapper.className = 'w-100 mt-5 pt-4 border-top text-center';
+        
+        const studyBtn = document.createElement('button');
+        studyBtn.className = 'btn btn-primary lg:btn-lg px-5 shadow-sm';
+        studyBtn.innerHTML = '<i class="unicon-pen me-2"></i> Iniciar Estudio Personal';
+        studyBtn.onclick = function() {
+            initStudyEditor();
+        };
+        
+        studyBtnWrapper.appendChild(studyBtn);
+        container.appendChild(studyBtnWrapper);
     }
+
+    let quill = null;
+    const STUDY_STORAGE_KEY = 'florilegio_temp_note';
+
+    function initStudyEditor() {
+        const wrapper = document.getElementById('study-editor-wrapper');
+        const isAlreadyVisible = (wrapper.style.display === 'block');
+        
+        wrapper.style.display = 'block';
+        wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        if (!quill) {
+            quill = new Quill('#quill-editor', {
+                theme: 'snow',
+                placeholder: 'Escribe tus reflexiones, pega textos o realiza tu bosquejo aquí...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'align': [] }], // Alineación de texto
+                        ['blockquote', 'code-block'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'color': [] }, { 'background': [] }],
+                        ['clean']
+                    ]
+                }
+            });
+
+            // Recuperar si hay algo guardado (por si refrescó la página)
+            const savedNote = localStorage.getItem(STUDY_STORAGE_KEY);
+            if (savedNote) {
+                quill.root.innerHTML = savedNote;
+            }
+
+            // Guardado automático en tiempo real
+            quill.on('text-change', function() {
+                localStorage.setItem(STUDY_STORAGE_KEY, quill.root.innerHTML);
+            });
+        }
+        
+        // Si NO estaba abierto, y NO hay nada en el storage, nos aseguramos que esté limpio
+        if (!isAlreadyVisible && !localStorage.getItem(STUDY_STORAGE_KEY)) {
+            // Construir plantilla automática a partir de lo que hay en pantalla
+            const libro = estudioLibroSelect.options[estudioLibroSelect.selectedIndex].text;
+            const capitulo = estudioCapituloSelect.value;
+            const versiculo = estudioVersiculoSelect.value;
+            const referencia = `${libro} ${capitulo}:${versiculo}`;
+            
+            // Texto RV1960
+            const rvTextElement = interlinearContainer.querySelector('.fs-5');
+            const rvText = rvTextElement ? rvTextElement.innerText : '';
+            
+            // Construir interlinear en texto
+            let interlinearHtml = '<br><h3>Análisis Interlineal:</h3><ul>';
+            const words = interlinearContainer.querySelectorAll('.panel.vstack');
+            words.forEach(w => {
+                const greek = w.querySelector('.fw-bold').innerText;
+                const spanish = w.querySelector('.text-primary').innerText;
+                
+                // Extraer metadatos (RMAC, Strong, Low-Nida)
+                const metaContainer = w.querySelector('.text-gray-500');
+                const rmac = metaContainer.querySelector('span:first-of-type')?.innerText || '';
+                const strong = metaContainer.querySelector('.text-success')?.innerText || '';
+                const lowNida = metaContainer.querySelector('.text-info')?.innerText || '';
+                
+                let details = ` – <em>${rmac}</em>`;
+                if (strong) details += ` (Strong: ${strong})`;
+                if (lowNida) details += ` (Nida: ${lowNida})`;
+
+                interlinearHtml += `<li><strong>${greek}</strong>: ${spanish}${details}</li>`;
+            });
+            interlinearHtml += '</ul><br>';
+
+            const template = `
+                <h1 style="text-align: center;">${referencia.toUpperCase()}</h1>
+                <p style="text-align: center; font-style: italic;">Versión Reina Valera 1960</p>
+                <div style="background: #f8f9fa; padding: 15px; border-left: 4px solid #007bff; margin: 15px 0;">
+                    ${rvText}
+                </div>
+                ${interlinearHtml}
+                <hr>
+                <h2>Mis Notas:</h2>
+                <p>Comienza a escribir aquí tus observaciones...</p>
+            `;
+            
+            quill.clipboard.dangerouslyPasteHTML(template);
+        }
+    }
+
+    async function exportToPDF() {
+        const element = document.getElementById('quill-editor');
+        const libro = estudioLibroSelect.options[estudioLibroSelect.selectedIndex].text;
+        const capitulo = estudioCapituloSelect.value;
+        const versiculo = estudioVersiculoSelect.value;
+        
+        const opt = {
+            margin:       1,
+            filename:     `Estudio_${libro}_${capitulo}_${versiculo}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        
+        // El editor puede tener fondo blanco, html2pdf lo respetará
+        html2pdf().set(opt).from(quill.root).save();
+    }
+
+    function exportToWord() {
+        const libro = estudioLibroSelect.options[estudioLibroSelect.selectedIndex].text;
+        const capitulo = estudioCapituloSelect.value;
+        const versiculo = estudioVersiculoSelect.value;
+        const filename = `Estudio_${libro}_${capitulo}_${versiculo}.doc`;
+        
+        const content = quill.root.innerHTML;
+        const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
+            "xmlns:w='urn:schemas-microsoft-com:office:word' "+
+            "xmlns='http://www.w3.org/TR/REC-html40'>"+
+            "<head><meta charset='utf-8'><title>Estudio Bíblico</title></head><body>";
+        const footer = "</body></html>";
+        const sourceHTML = header + content + footer;
+        
+        const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+        const fileDownload = document.createElement("a");
+        document.body.appendChild(fileDownload);
+        fileDownload.href = source;
+        fileDownload.download = filename;
+        fileDownload.click();
+        document.body.removeChild(fileDownload);
+    }
+
+    function closeStudyEditor() {
+        if (confirm('¿Estás seguro de cerrar el editor? Se borrarán todas las notas actuales de este bloque.')) {
+            const wrapper = document.getElementById('study-editor-wrapper');
+            wrapper.style.display = 'none';
+            
+            if (quill) {
+                quill.setContents([]);
+            }
+            localStorage.removeItem(STUDY_STORAGE_KEY);
+        }
+    }
+
+    window.initStudyEditor = initStudyEditor;
+    window.closeStudyEditor = closeStudyEditor;
+    window.exportToPDF = exportToPDF;
+    window.exportToWord = exportToWord;
 
     function showLoading(container) {
         container.innerHTML = '<div class="w-100 text-center py-5"><div class="spinner-border text-primary" role="status"></div><br><span class="opacity-50">Cargando Escrituras...</span></div>';

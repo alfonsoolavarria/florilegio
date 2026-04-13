@@ -13,11 +13,18 @@ body {
     font-family: var(--font-sans);
 }
 
+.hero-logo {
+    max-width: 650px;
+    width: 100%;
+}
+
+/* Header & Logo */
 /* Header & Logo */
 .uc-header {
     background-color: transparent !important;
 }
 
+/* Force cream background on top navbar */
 .uc-top-navbar {
     background-color: #f7f3ed !important;
     border-bottom: 1px solid rgba(0,0,0,0.1);
@@ -634,4 +641,110 @@ body {
 .related-post-info .date {
     font-size: 0.75rem;
     color: #888;
+}
+
+/* Fix Navbar responsiveness and Toggle placement */
+@media (max-width: 991px) {
+    /* Override uni-core.min.css hiding rules */
+    #mobile-menu-toggle {
+        display: flex !important;
+        visibility: visible !important;
+        width: 44px !important;
+        height: 44px !important;
+        justify-content: center !important;
+        align-items: center !important;
+        position: relative;
+        z-index: 10;
+    }
+    
+    /* Ensure the navbar container is visible and has the right background */
+    .uc-navbar-container {
+        background-color: #f7f3ed !important;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .uc-top-navbar {
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+    }
+    
+    .uc-navbar-left, 
+    .uc-navbar-right {
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .uc-logo img {
+        max-width: 120px; /* Reduction for mobile/tablet */
+    }
+
+    .hero-logo {
+        max-width: 350px !important;
+    }
+
+    /* Fix search form width on mobile */
+    .expanding-search-form.active .search-input {
+        width: 160px; /* Reduced for mobile */
+    }
+}
+
+/* Ensure toggle is hidden on desktop */
+@media (min-width: 992px) {
+    #mobile-menu-toggle {
+        display: none !important;
+    }
+}
+
+/* Mobile Offcanvas Customization */
+.uc-offcanvas-bar {
+    background-color: #f7f3ed !important; /* Cream background like the navbar */
+    position: relative;
+}
+
+/* Fix the close button position and visibility */
+.uc-offcanvas-close {
+    position: absolute !important;
+    top: 20px !important;
+    right: 20px !important;
+    color: #333 !important; /* Dark color for contrast */
+    background: rgba(0,0,0,0.05) !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 100 !important;
+    transition: all 0.3s ease !important;
+    border: none !important;
+    cursor: pointer;
+}
+
+.uc-offcanvas-close:hover {
+    background: rgba(0,0,0,0.1) !important;
+    transform: rotate(90deg);
+}
+
+.dark .uc-offcanvas-bar {
+    background-color: #1a1a1a !important;
+}
+
+.dark .uc-offcanvas-close {
+    color: #fff !important;
+    background: rgba(255,255,255,0.1) !important;
+}
+
+.close-menu-btn {
+    border: none !important;
+    background: transparent !important;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.close-menu-btn:hover {
+    transform: rotate(90deg);
 }

@@ -14,3 +14,6 @@ python manage.py sync_bible_data --import_file rv1960_backup.json
 
 Con esto, tu base de datos en AWS quedará exactamente igual a la local, con todo el contenido y 
 formato que hemos trabajado hoy. ¿Hay algo más en lo que pueda ayudarte?
+
+Para los iconos:
+python manage.py sync_bible_data --import_file categories_backup.json
