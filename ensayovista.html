@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline": "#82756a",
+                      "on-background": "#1a1c1b",
+                      "on-tertiary-fixed-variant": "#474744",
+                      "on-tertiary-fixed": "#1c1c1a",
+                      "surface-variant": "#e2e2e0",
+                      "outline-variant": "#d4c4b7",
+                      "error": "#ba1a1a",
+                      "surface-container": "#eeeeec",
+                      "surface-bright": "#faf9f7",
+                      "on-surface-variant": "#50453b",
+                      "surface-container-high": "#e8e8e6",
+                      "secondary": "#5f5e5e",
+                      "surface-tint": "#7c5730",
+                      "surface-container-highest": "#e2e2e0",
+                      "on-secondary-fixed": "#1c1b1b",
+                      "secondary-fixed-dim": "#c8c6c5",
+                      "primary-fixed": "#ffdcbd",
+                      "on-secondary": "#ffffff",
+                      "on-primary-fixed": "#2c1600",
+                      "surface-dim": "#dadad8",
+                      "secondary-container": "#e2dfde",
+                      "on-tertiary-container": "#faffe7",
+                      "on-secondary-fixed-variant": "#474746",
+                      "inverse-surface": "#2f3130",
+                      "error-container": "#ffdad6",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-low": "#f4f4f2",
+                      "on-secondary-container": "#636262",
+                      "primary": "#79542e",
+                      "tertiary-container": "#757471",
+                      "tertiary": "#5d5c59",
+                      "tertiary-fixed-dim": "#c8c6c2",
+                      "secondary-fixed": "#e5e2e1",
+                      "primary-container": "#956c44",
+                      "primary-fixed-dim": "#eebd8e",
+                      "on-error-container": "#93000a",
+                      "inverse-primary": "#eebd8e",
+                      "surface": "#faf9f7",
+                      "inverse-on-surface": "#f1f1ef",
+                      "on-primary": "#ffffff",
+                      "on-primary-container": "#fffbff",
+                      "tertiary-fixed": "#e5e2de",
+                      "background": "#faf9f7",
+                      "on-error": "#ffffff",
+                      "on-surface": "#1a1c1b",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#61401b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "reading-width": "800px",
+                      "container-max": "1440px",
+                      "section-gap": "120px",
+                      "base": "8px",
+                      "margin-lg": "64px",
+                      "gutter": "32px"
+              },
+              "fontFamily": {
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Newsreader"],
+                      "headline-md": ["Newsreader"],
+                      "display-lg": ["Newsreader"],
+                      "label-caps": ["Inter"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-lg": ["36px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                      "headline-md": ["28px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                      "display-lg": ["56px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                      "body-lg": ["19px", {"lineHeight": "1.8", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .full-width-container {
+            max-width: 1440px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .blockquote-accent {
+            border-left: 4px solid #79542e; /* primary */
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed antialiased">
+<!-- Shared TopNavBar -->
+<header class="bg-surface sticky top-0 border-b border-outline-variant/30 h-20 flex items-center z-50">
+<div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
+<div class="font-headline-md text-headline-md text-primary tracking-tight">Theological Discourse</div>
+<nav class="hidden md:flex items-center gap-margin-lg">
+<a class="text-on-surface font-label-caps transition-colors hover:text-primary duration-300" href="#">Essays</a>
+<a class="text-on-surface font-label-caps transition-colors hover:text-primary duration-300" href="#">Journals</a>
+<a class="text-on-surface font-label-caps transition-colors hover:text-primary duration-300" href="#">Library</a>
+<a class="text-on-surface font-label-caps transition-colors hover:text-primary duration-300" href="#">Scholars</a>
+</nav>
+<div class="flex items-center gap-gutter">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">search</span>
+<button class="font-label-caps text-label-caps text-on-surface hover:text-primary transition-all font-bold">Sign In</button>
+</div>
+</div>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative w-full bg-surface-container-high border-b border-outline-variant/20"><div class="relative min-h-[60vh] w-full flex items-center py-20">
+<div class="absolute inset-0 overflow-hidden">
+<img alt="Theological Background" class="w-full h-full object-cover object-center" src="https://lh3.googleusercontent.com/aida/ADBb0ugG4zS3S6VGhd4xs7dNDdtxCH207dPed2VSjfFrlwSX8kZwmr7gvE8mdjbsesQ_KUJAhnm5VuFS6AKSnGrSor1hud-odHntgBkhZriBDOt-nhoQ2xcfoKiWg0vxtxK-LG7kdhibvKMz6LdrFO5Rlv6poug480k5Lgq_tsiE6bYQWMYDg0rZmvbvTzkesFfQwlQsF4tg9SVG3ZwMK6qggoxqCiK7IBwdIVhD4nArEEIO2mN36K_Ppi0tpgKmgfVMOIM-g4OL0HEBa3A"/>
+<div class="absolute inset-0 bg-on-surface/40 backdrop-blur-[2px]"></div>
+</div>
+<div class="relative w-full px-gutter">
+<div class="max-w-screen-xl mx-auto">
+<div class="max-w-3xl bg-background/95 p-10 md:p-16 border-l-8 border-primary shadow-2xl">
+<span class="inline-block bg-primary text-on-primary px-3 py-1 font-label-caps text-label-caps rounded-none mb-6">Teología Sistémica</span>
+<h1 class="font-display-lg text-display-lg text-on-surface mt-2 mb-6 leading-tight">La Gracia en la Tradición Escolástica</h1>
+<p class="font-headline-md text-headline-md text-on-surface-variant italic leading-relaxed">
+                    Un examen crítico del desarrollo del concepto de gratia habitualis en el pensamiento de Tomás de Aquino y la respuesta de la Reforma.
+                </p>
+</div>
+</div>
+</div>
+</div></section>
+<!-- Content Grid Layout -->
+<article class="py-16">
+<div class="full-width-container px-gutter">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+<!-- Left Sidebar -->
+<aside class="lg:col-span-3 space-y-12 order-2 lg:order-1">
+<div class="sticky top-28 space-y-12">
+<!-- In This Essay (Table of Contents) -->
+<nav class="space-y-4">
+<h4 class="font-label-caps text-label-caps text-on-surface font-bold border-b border-outline-variant pb-2 tracking-widest uppercase">En este ensayo</h4>
+<ul class="space-y-4"><li><a class="text-body-md text-on-surface-variant hover:text-primary transition-colors block leading-tight font-medium" href="#nature-habitual-grace">1. La Naturaleza de la Gracia Habitual</a></li><li><a class="text-body-md text-on-surface-variant hover:text-primary transition-colors block leading-tight font-medium" href="#justification-implications">2. Implicaciones para la Justificación</a></li><li><a class="text-body-md text-on-surface-variant hover:text-primary transition-colors block leading-tight font-medium" href="#bibliography">3. Referencias Bibliográficas</a></li></ul>
+</nav>
+<!-- Tools Section -->
+<div class="bg-surface-container p-6 border-l-4 border-primary">
+<h4 class="font-label-caps text-label-caps text-primary font-bold mb-6 tracking-wider uppercase">Herramientas</h4>
+<div class="grid grid-cols-1 gap-6">
+<button class="flex items-center gap-4 group text-left">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">share</span>
+<span class="text-xs font-label-caps text-on-surface-variant uppercase tracking-wide">Compartir</span>
+</button>
+<button class="flex items-center gap-4 group text-left">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">favorite</span>
+<span class="text-xs font-label-caps text-on-surface-variant uppercase tracking-wide">Favorito / Me gusta</span>
+</button>
+<button class="flex items-center gap-4 group text-left">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">picture_as_pdf</span>
+<span class="text-xs font-label-caps text-on-surface-variant uppercase tracking-wide">Descargar PDF</span>
+</button>
+</div>
+</div>
+<!-- Metadata (Repositioned for the new layout flow) -->
+<div class="pt-8 border-t border-outline-variant/30 space-y-6">
+<div class="flex flex-col">
+<span class="font-label-caps text-[10px] text-primary mb-1 uppercase tracking-widest">Autor</span>
+<span class="font-body-md font-bold text-on-surface">Dr. Albert Mohler</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-[10px] text-primary mb-1 uppercase tracking-widest">Publicación</span>
+<span class="font-body-md text-on-surface">15 Oct, 2024</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-[10px] text-primary mb-1 uppercase tracking-widest">Lectura</span>
+<span class="font-body-md text-on-surface">18 min</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Article Column -->
+<div class="lg:col-span-9 order-1 lg:order-2">
+<div class="font-body-lg text-body-lg text-on-surface space-y-gutter leading-relaxed max-w-reading-width">
+<p class="first-letter:text-8xl first-letter:font-headline-lg first-letter:mr-4 first-letter:float-left first-letter:text-primary first-letter:leading-none">
+                                La comprensión de la gracia dentro de la síntesis escolástica representa uno de los logros intelectuales más significativos del pensamiento medieval. Para el Doctor Angélico, la gracia no es simplemente un favor divino externo, sino una cualidad infundida en el alma que eleva la naturaleza humana hacia su fin sobrenatural.
+                            </p>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold border-b-2 border-primary/10 pb-2 mt-section-gap mb-gutter" id="nature-habitual-grace">La Naturaleza de la Gracia Habitual</h2>
+<p>
+                                En la Summa Theologiae, la distinción entre la gracia operante y cooperante establece el marco para entender cómo la voluntad humana interactúa con la iniciativa divina. No obstante, es en el concepto de la <em>habitus</em> donde encontramos la raíz de la discordia que florecería siglos después en Wittenberg.
+                            </p>
+<blockquote class="blockquote-accent pl-gutter py-6 my-section-gap font-headline-md text-headline-md italic text-on-surface bg-surface-container-lowest border-y border-outline-variant/10 shadow-sm">
+                                "La gracia no destruye la naturaleza, sino que la perfecciona; así como la inclinación natural de la voluntad obedece a la caridad, la cual es la forma de todas las virtudes."
+                                <cite class="block font-label-caps text-label-caps mt-4 not-italic text-primary font-bold">— S.Th. I-II, q. 109, a. 2</cite>
+</blockquote>
+<p>
+                                El debate contemporáneo a menudo ignora la precisión técnica con la que los escolásticos abordaron la ontología de la salvación. Para Aquino, el don de la justicia original no era una parte intrínseca de la naturaleza humana, sino un don adicional (<em>donum superadditum</em>) que mantenía el orden entre las facultades inferiores y superiores.
+                            </p>
+<h3 class="font-headline-md text-headline-md text-primary mt-margin-lg mb-4 font-semibold" id="justification-implications">Implicaciones para la Justificación</h3>
+<p>
+                                Al considerar la justificación como un proceso de transformación interna, la escolástica enfatizó la participación activa del creyente. Esta perspectiva, si bien rigurosa en su lógica metafísica, planteó interrogantes fundamentales sobre la suficiencia de la obra de Cristo, interrogantes que el pensamiento reformado buscaría responder con el énfasis en la justicia imputada.
+                            </p>
+</div>
+<!-- Bibliographic Section -->
+<section class="mt-section-gap pt-margin-lg border-t-2 border-primary/20 max-w-reading-width" id="bibliography">
+<h4 class="font-label-caps text-label-caps text-primary font-bold mb-gutter tracking-widest">REFERENCIAS BIBLIOGRÁFICAS</h4>
+<div class="space-y-4 font-body-md text-body-md text-on-surface-variant italic">
+<p class="pl-8 -indent-8">Aquinas, Thomas. <span class="not-italic font-medium text-on-surface">Summa Theologiae</span>. Traducido por la Provincia Dominicana de Inglaterra. New York: Benziger Bros, 1947.</p>
+<p class="pl-8 -indent-8">McGrath, Alister. <span class="not-italic font-medium text-on-surface">Iustitia Dei: A History of the Christian Doctrine of Justification</span>. Cambridge: Cambridge University Press, 2005.</p>
+<p class="pl-8 -indent-8">Oberman, Heiko. <span class="not-italic font-medium text-on-surface">The Harvest of Medieval Theology: Gabriel Biel and Late Medieval Nominalism</span>. Cambridge, MA: Harvard University Press, 1963.</p>
+<p class="pl-8 -indent-8">Pesch, Otto Hermann. <span class="not-italic font-medium text-on-surface">The Theology of Justification according to Saint Thomas Aquinas and Martin Luther</span>. Berlin: Akademie Verlag, 1985.</p>
+</div>
+</section>
+<!-- Author Section -->
+<section class="mt-section-gap bg-surface-container-lowest p-8 border border-outline-variant/30 flex flex-col md:flex-row items-center gap-8 max-w-reading-width">
+<div class="w-32 h-32 flex-shrink-0">
+<img alt="Dr. Albert Mohler" class="w-full h-full object-cover grayscale border border-outline-variant shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3hUgbK8rRNJkUwH2eAF3ZiJViQjxrOBBej8w-TRLn6BpW9Q3mcO1Dl8jclWmF0nAv0PcwFMQlc9oiwdsMckmF3GEwg1-qCA58D1I3yp6Ptv97L9vgNNYnkTTmQQLJPk6AzcVtFJSLWNCUJUnppCZGb9wA0pGQ2yOEU5KVHLjGVZJWJy8yXGc0E-rXhzyb2AE_xlYZWfl7z_jbb9hc1hohZZtU7y_4RJ1qPD17tF4qtYfQAXV6Bcj8D3kxwun1HsNPWtGkTm8yCcYt"/>
+</div>
+<div class="flex-1">
+<h5 class="font-headline-md text-headline-md text-on-surface mb-2">Acerca del Autor</h5>
+<p class="font-body-md text-on-surface-variant leading-relaxed">
+                                    El Dr. Albert Mohler es presidente del Southern Baptist Theological Seminary. Sus investigaciones se centran en la intersección de la dogmática clásica y la modernidad.
+                                </p>
+<div class="flex gap-4 mt-4">
+<a class="text-primary text-xs font-bold font-label-caps hover:underline underline-offset-4" href="#">Obras</a>
+<a class="text-primary text-xs font-bold font-label-caps hover:underline underline-offset-4" href="#">CV</a>
+<a class="text-primary text-xs font-bold font-label-caps hover:underline underline-offset-4" href="#">Contacto</a>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</article>
+<!-- Newsletter Section -->
+<section class="py-section-gap bg-surface-container-low border-y border-outline-variant/30">
+<div class="full-width-container px-gutter text-center">
+<div class="max-w-2xl mx-auto border-2 border-primary p-margin-lg bg-background">
+<h3 class="font-display-lg text-headline-lg mb-4 text-on-surface uppercase tracking-tight">Profundice en el Diálogo</h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10">Reciba ensayos críticos y análisis teológicos directamente en su buzón semanalmente.</p>
+<form class="flex flex-col sm:flex-row gap-0 max-w-lg mx-auto border border-outline shadow-sm">
+<input class="flex-1 bg-surface border-0 text-on-surface focus:ring-0 px-6 py-4 font-body-md" placeholder="Su correo electrónico profesional" type="email"/>
+<button class="bg-primary text-on-primary px-10 py-4 font-label-caps text-label-caps font-bold hover:bg-primary-container transition-colors uppercase tracking-widest">Subscribirse</button>
+</form>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t-4 border-primary">
+<div class="flex flex-col lg:flex-row justify-between items-start w-full px-gutter py-margin-lg full-width-container gap-12">
+<div class="flex flex-col gap-4 max-w-md">
+<div class="font-headline-md text-headline-md text-primary font-bold">Theological Discourse</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                    Una plataforma dedicada al rigor académico y la reflexión teológica profunda en la tradición clásica.
+                </p>
+<p class="text-sm text-on-surface-variant/70 mt-4">
+                    © 2024 Theological Discourse. An Anthology of Modern Scholasticism. Todos los derechos reservados.
+                </p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-margin-lg w-full lg:w-auto">
+<div class="flex flex-col gap-3">
+<span class="font-label-caps text-label-caps text-on-surface font-bold mb-2 uppercase tracking-widest">Editorial</span>
+<a class="text-on-surface-variant font-label-caps hover:text-primary transition-all text-[11px]" href="#">Submission Guidelines</a>
+<a class="text-on-surface-variant font-label-caps hover:text-primary transition-all text-[11px]" href="#">Archives</a>
+<a class="text-on-surface-variant font-label-caps hover:text-primary transition-all text-[11px]" href="#">Editorial Board</a>
+</div>
+<div class="flex flex-col gap-3">
+<span class="font-label-caps text-label-caps text-on-surface font-bold mb-2 uppercase tracking-widest">Recursos</span>
+<a class="text-on-surface-variant font-label-caps hover:text-primary transition-all text-[11px]" href="#">Library</a>
+<a class="text-on-surface-variant font-label-caps hover:text-primary transition-all text-[11px]" href="#">Journals</a>
+<a class="text-on-surface-variant font-label-caps hover:text-primary transition-all text-[11px]" href="#">Scholars Network</a>
+</div>
+<div class="flex flex-col gap-3">
+<span class="font-label-caps text-label-caps text-on-surface font-bold mb-2 uppercase tracking-widest">Legal</span>
+<a class="text-on-surface-variant font-label-caps hover:text-primary transition-all text-[11px]" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant font-label-caps hover:text-primary transition-all text-[11px]" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

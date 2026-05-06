@@ -1,0 +1,328 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<link
+  href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,700&family=Inter:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  .essays-page .material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  }
+  .essays-page {
+    background-color: #fbf9f4;
+  }
+  .essays-page .essay-img {
+    transition: transform 0.5s ease;
+  }
+  .essays-page .essay-row:hover .essay-img {
+    transform: scale(1.05);
+  }
+  .essays-page .essay-title-link {
+    color: #442a22;
+    transition: color 0.3s ease;
+    font-family: "Noto Serif", serif;
+  }
+  .essays-page .essay-row:hover .essay-title-link {
+    color: #735a3a;
+  }
+  .essays-page .category-badge {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background-color: #fddab2;
+    color: #785e3e;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  .essays-page .essay-date {
+    font-size: 0.75rem;
+    color: #504441;
+  }
+  .essays-page .essay-excerpt {
+    color: #504441;
+    line-height: 1.6;
+  }
+  .essays-page .author-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #5d4037;
+    color: #ffdbd0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+  }
+  .essays-page .author-name {
+    font-size: 0.875rem;
+    color: #442a22;
+    font-weight: 600;
+  }
+  .essays-page .essay-hr {
+    border-color: #d4c3be;
+    opacity: 0.5;
+  }
+  .essays-page .pagination-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #827470;
+    color: #504441;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+  .essays-page .pagination-btn:hover {
+    background-color: #442a22;
+    color: #fff;
+  }
+  .essays-page .pagination-active {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #442a22;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 0.875rem;
+  }
+  .essays-page .search-input-essay {
+    background-color: #f5f3ee;
+    border: none;
+    padding: 8px 16px 8px 40px;
+    width: 100%;
+    border-radius: 4px;
+  }
+  .essays-page .search-input-essay:focus {
+    outline: 1px solid #442a22;
+  }
+  .essays-page .filter-btn {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-bottom: 4px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    border: none;
+    background: none;
+  }
+  .essays-page .filter-btn.active {
+    color: #442a22;
+    border-bottom: 2px solid #442a22;
+  }
+  .essays-page .filter-btn:not(.active) {
+    color: #504441;
+  }
+  .essays-page .filter-btn:not(.active):hover {
+    color: #442a22;
+  }
+</style>
+
+<div class="essays-page">
+  <!-- Hero Section -->
+  <div
+    class="hero-brand-section panel overflow-hidden"
+    style="background-color: #fbf9f4"
+  >
+    <div class="container py-4 lg:py-6">
+      <div class="row justify-center text-center">
+        <div class="col-12 col-md-8">
+          <h1
+            class="h2 lg:h1 fw-bold"
+            style="color: #442a22; font-family: 'Noto Serif', serif"
+          >
+            Ensayos
+          </h1>
+          <p
+            class="mt-2 fs-5 italic"
+            style="color: #504441; font-family: 'Noto Serif', serif"
+          >
+            Exploraciones profundas sobre la tradición escolástica, la teología
+            natural y la síntesis de la fe y la razón en la era contemporánea.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="decorative-divider"></div>
+  </div>
+
+  <!-- Filters & Search Bar -->
+  <div class="py-4 lg:py-6" style="background-color: #fbf9f4">
+    <div class="container max-w-lg">
+      <div
+        class="panel vstack gap-4 pb-4 border-bottom"
+        style="border-color: #d4c3be"
+      >
+        <div class="hstack justify-between items-center flex-wrap gap-3">
+          <div class="hstack gap-4">
+            <button class="filter-btn active">Recientes</button>
+            <button class="filter-btn">Más Leídos</button>
+            <button class="filter-btn">Destacados</button>
+          </div>
+          <div class="position-relative" style="width: 280px">
+            <span
+              class="material-symbols-outlined"
+              style="
+                position: absolute;
+                left: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #827470;
+                font-size: 20px;
+              "
+              >search</span
+            >
+            <form method="GET" action="{% url 'essay_list' %}" class="d-inline">
+              <input
+                type="hidden"
+                name="categoria"
+                value="{{ selected_category.id|default:'' }}"
+              />
+              <input
+                class="search-input-essay"
+                id="essaySearchInput"
+                name="q"
+                placeholder="Buscar ensayos..."
+                type="text"
+                style="font-family: 'Inter', sans-serif"
+                value="{{ query|default:'' }}"
+              />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Essays Horizontal List -->
+  <div class="py-6 lg:py-9" style="background-color: #fbf9f4">
+    <div class="container max-w-lg">
+      <div class="vstack gap-6 lg:gap-8">
+        {% for essay in page_obj %}
+        <article
+          class="essay-row panel bg-white rounded-3 overflow-hidden shadow-xs hover:shadow-sm transition-all duration-300"
+        >
+          <div class="row g-0 align-items-center">
+            <div class="col-12 col-md-4">
+              <figure
+                class="featured-image m-0 ratio ratio-4x3 overflow-hidden rounded-3"
+                style="background-color: #f0eee9"
+              >
+                <img
+                  class="media-cover image essay-img"
+                  src="{{ essay.image_url }}"
+                  alt="{{ essay.title }}"
+                />
+                <a
+                  href="{% url 'essay_detail' essay.slug %}"
+                  class="position-cover"
+                ></a>
+              </figure>
+            </div>
+            <div class="col-12 col-md-8">
+              <div class="p-4 lg:p-5 vstack gap-3">
+                <div class="hstack gap-2 items-center">
+                  <span class="category-badge">{{ essay.category }}</span>
+                  <span class="essay-date"
+                    >{{ essay.created_at|date:"d F, Y" }}</span
+                  >
+                </div>
+                <h2 class="h4 m-0" style="font-family: 'Noto Serif', serif">
+                  <a
+                    href="{% url 'essay_detail' essay.slug %}"
+                    class="text-none essay-title-link"
+                    >{{ essay.title }}</a
+                  >
+                </h2>
+                <p
+                  class="essay-excerpt line-clamp-3 mb-0"
+                  style="font-family: 'Noto Serif', serif"
+                >
+                  {{ essay.content|striptags|truncatechars:200 }}
+                </p>
+                <div class="hstack gap-2 items-center mt-auto pt-2">
+                  <div class="author-avatar">
+                    {{ essay.author.name|default:"FF"|slice:":2"|upper }}
+                  </div>
+                  <span class="author-name"
+                    >{{ essay.author.name|default:"Florilegio de la Fe" }}</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+        {% empty %}
+        <div class="text-center py-9">
+          <span
+            class="material-symbols-outlined"
+            style="opacity: 0.2; font-size: 64px; color: #504441"
+            >search_off</span
+          >
+          <h3 class="h4 mt-3 mb-2">No se encontraron ensayos</h3>
+          <p style="color: #504441">Pruebe con otra búsqueda o categoría.</p>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% if page_obj.has_other_pages %}
+      <div class="pagination-panel mt-6 lg:mt-9">
+        <nav class="hstack justify-center gap-1" aria-label="Pagination">
+          {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&categoria={{ selected_category.id }}{% endif %}{% if query %}&q={{ query }}{% endif %}" class="pagination-btn">
+              <span class="material-symbols-outlined" style="font-size: 20px;">chevron_left</span>
+          </a>
+          {% endif %}
+
+          {% for num in page_obj.paginator.page_range %}
+              {% if page_obj.number == num %}
+              <span class="pagination-active">{{ num }}</span>
+              {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <a href="?page={{ num }}{% if selected_category %}&categoria={{ selected_category.id }}{% endif %}{% if query %}&q={{ query }}{% endif %}" class="pagination-btn">{{ num }}</a>
+              {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}{% if selected_category %}&categoria={{ selected_category.id }}{% endif %}{% if query %}&q={{ query }}{% endif %}" class="pagination-btn">
+              <span class="material-symbols-outlined" style="font-size: 20px;">chevron_right</span>
+          </a>
+          {% endif %}
+        </nav>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("essaySearchInput");
+    let searchTimeout;
+
+    // Submit form on Enter key
+    searchInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        this.closest("form").submit();
+      }
+    });
+
+    // Optional: Auto-submit after typing stops (delay 500ms)
+    searchInput.addEventListener("input", function () {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        if (this.value.length >= 3 || this.value.length === 0) {
+          this.closest("form").submit();
+        }
+      }, 500);
+    });
+  });
+</script>
+{% endblock %}

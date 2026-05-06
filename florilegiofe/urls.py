@@ -23,6 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", views.dashboard, name="index"),
     path("articulos/", views.article_list, name="article_list"),
+    path("ensayos/", views.essay_list, name="essay_list"),
+    path("ensayo/<slug:slug>/", views.essay_detail, name="essay_detail"),
     path("buscar/", views.search_view, name="search"),
     path("articulo/<slug:slug>/", views.article_detail, name="article_detail"),
     path("privacidad/", views.privacy, name="privacy"),

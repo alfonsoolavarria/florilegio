@@ -1,399 +1,609 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block content %}
 <style>
-    /* Tooltip personalizado */
-    [data-tooltip] {
-        position: relative;
-        cursor: default;
-    }
-    [data-tooltip]::before {
-        content: attr(data-tooltip);
-        position: absolute;
-        bottom: calc(100% + 10px);
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(30, 30, 30, 0.92);
-        color: #fff;
-        padding: 7px 12px;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 600;
-        white-space: nowrap;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.2s ease;
-        z-index: 9999;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-        letter-spacing: 0.02em;
-    }
-    [data-tooltip]::after {
-        content: '';
-        position: absolute;
-        bottom: calc(100% + 3px);
-        left: 50%;
-        transform: translateX(-50%);
-        border: 7px solid transparent;
-        border-top-color: rgba(30, 30, 30, 0.92);
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.2s ease;
-        z-index: 9999;
-    }
-    [data-tooltip]:hover::before,
-    [data-tooltip]:hover::after {
-        opacity: 1;
-    }
+  /* Tooltip personalizado */
+  [data-tooltip] {
+    position: relative;
+    cursor: default;
+  }
+  [data-tooltip]::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(30, 30, 30, 0.92);
+    color: #fff;
+    padding: 7px 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 9999;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    letter-spacing: 0.02em;
+  }
+  [data-tooltip]::after {
+    content: "";
+    position: absolute;
+    bottom: calc(100% + 3px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-top-color: rgba(30, 30, 30, 0.92);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 9999;
+  }
+  [data-tooltip]:hover::before,
+  [data-tooltip]:hover::after {
+    opacity: 1;
+  }
 
-    /* Tabs principales */
-    .biblia-tabs .nav-link {
-        font-weight: 600;
-        font-size: 1rem;
-        padding: 0.65rem 1.5rem;
-        border-radius: 10px 10px 0 0;
-        color: var(--bs-gray-600, #6c757d);
-        border: 1px solid transparent;
-        transition: color 0.2s, border-color 0.2s;
-    }
-    .biblia-tabs .nav-link.active {
-        color: var(--bs-primary, #0d6efd);
-        border-color: var(--bs-border-color, #dee2e6) var(--bs-border-color, #dee2e6) #fff;
-        background: #fff;
-    }
-    .dark .biblia-tabs .nav-link.active {
-        background: var(--bs-gray-800, #343a40);
-        border-color: var(--bs-border-color, #495057) var(--bs-border-color, #495057) var(--bs-gray-800, #343a40);
-    }
-    .biblia-tab-content {
-        border: 1px solid var(--bs-border-color, #dee2e6);
-        border-top: none;
-        border-radius: 0 0 12px 12px;
-        background: transparent;
-    }
+  /* Tabs principales */
+  .biblia-tabs .nav-link {
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.65rem 1.5rem;
+    border-radius: 10px 10px 0 0;
+    color: var(--bs-gray-600, #6c757d);
+    border: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .biblia-tabs .nav-link.active {
+    color: var(--bs-primary, #0d6efd);
+    border-color: var(--bs-border-color, #dee2e6)
+      var(--bs-border-color, #dee2e6) #fff;
+    background: #fff;
+  }
+  .dark .biblia-tabs .nav-link.active {
+    background: var(--bs-gray-800, #343a40);
+    border-color: var(--bs-border-color, #495057)
+      var(--bs-border-color, #495057) var(--bs-gray-800, #343a40);
+  }
+  .biblia-tab-content {
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    background: transparent;
+  }
 
-    /* Editor Quill */
-    #study-editor-wrapper {
-        display: none;
-        margin-top: 3rem;
-        border-top: 2px solid var(--bs-primary);
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-    }
-    .study-editor-header {
-        background: var(--bs-primary-bg-subtle, #e7f1ff);
-        padding: 0.75rem 1rem;
-        border-radius: 8px;
-        margin-bottom: 1.5rem;
-    }
-    .btn-close-study {
-        background: #e9ecef;
-        color: #495057;
-        font-size: 0.75rem;
-        padding: 4px 12px;
-        border: 1px solid #ced4da;
-        border-radius: 6px;
-        transition: all 0.2s;
-    }
-    .btn-close-study:hover {
-        background: #dc3545;
-        color: #fff;
-        border-color: #dc3545;
-    }
-    .btn-export-study {
-        background: #fff;
-        color: #495057;
-        font-size: 0.75rem;
-        padding: 4px 10px;
-        border: 1px solid #ced4da;
-        border-radius: 6px;
-        transition: all 0.2s;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-    }
-    .btn-export-study:hover {
-        background: #f8f9fa;
-        border-color: var(--bs-primary);
-        color: var(--bs-primary);
-    }
-    .btn-export-word:hover {
-        border-color: #2b579a;
-        color: #2b579a;
-    }
-    .btn-export-pdf:hover {
-        border-color: #e44d26;
-        color: #e44d26;
-    }
-    .ql-container {
-        font-family: 'Inter', sans-serif !important;
-        font-size: 1.1rem !important;
-        min-height: 300px;
-        background: #fff;
-    }
-    .dark .ql-toolbar {
-        background: #f8f9fa;
-        border-radius: 8px 8px 0 0;
-    }
-    .dark .ql-container {
-        background: #fff;
-        color: #333; /* El editor suele verse mejor en blanco incluso en dark mode para contraste de texto */
-        border-radius: 0 0 8px 8px;
-    }
+  /* Editor Quill */
+  #study-editor-wrapper {
+    display: none;
+    margin-top: 3rem;
+    border-top: 2px solid var(--bs-primary);
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  .study-editor-header {
+    background: var(--bs-primary-bg-subtle, #e7f1ff);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+  }
+  .btn-close-study {
+    background: #e9ecef;
+    color: #495057;
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .btn-close-study:hover {
+    background: #dc3545;
+    color: #fff;
+    border-color: #dc3545;
+  }
+  .btn-export-study {
+    background: #fff;
+    color: #495057;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .btn-export-study:hover {
+    background: #f8f9fa;
+    border-color: var(--bs-primary);
+    color: var(--bs-primary);
+  }
+  .btn-export-word:hover {
+    border-color: #2b579a;
+    color: #2b579a;
+  }
+  .btn-export-pdf:hover {
+    border-color: #e44d26;
+    color: #e44d26;
+  }
+  .ql-container {
+    font-family: "Inter", sans-serif !important;
+    font-size: 1.25rem !important;
+    min-height: 300px;
+    background: #fff;
+    line-height: 1.8 !important;
+  }
+  .ql-container .ql-editor {
+    line-height: 1.8 !important;
+    font-size: 1.25rem !important;
+  }
+  .ql-container .ql-editor ul {
+    list-style: none !important;
+    padding-left: 0 !important;
+  }
+  .ql-container .ql-editor ul li::before {
+    content: "" !important;
+    display: none !important;
+  }
+  .ql-container .ql-editor ol {
+    list-style: none !important;
+    padding-left: 0 !important;
+    counter-reset: none !important;
+  }
+  .ql-container .ql-editor ol li::before {
+    content: "" !important;
+    display: none !important;
+  }
+  .dark .ql-toolbar {
+    background: #f8f9fa;
+    border-radius: 8px 8px 0 0;
+  }
+  .dark .ql-container {
+    background: #fff;
+    color: #333; /* El editor suele verse mejor en blanco incluso en dark mode para contraste de texto */
+    border-radius: 0 0 8px 8px;
+  }
+
+  /* Selects personalizados para Opciones de Lectura y Estudio */
+  .bible-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #fff;
+    border: 1.5px solid #dee2e6;
+    border-radius: 10px;
+    padding: 0.7rem 2.5rem 0.7rem 1rem;
+    font-size: 0.95rem;
+    font-family: var(--font-sans);
+    color: #333;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23800020' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    background-size: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .bible-select:hover {
+    border-color: #800020;
+  }
+  .bible-select:focus {
+    outline: none;
+    border-color: #800020;
+    box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.12);
+  }
+  .dark .bible-select {
+    background-color: #2d2d2d;
+    border-color: #495057;
+    color: #e0e0e0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23a3a3a3' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  }
+  .dark .bible-select:hover {
+    border-color: #a3a3a3;
+  }
+  .dark .bible-select:focus {
+    border-color: #a3a3a3;
+    box-shadow: 0 0 0 3px rgba(163, 163, 163, 0.15);
+  }
+  .bible-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #6b7280;
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+  .dark .bible-label {
+    color: #9ca3af;
+  }
 </style>
 
 <!-- Section: Header -->
-<div class="hero-brand-section panel overflow-hidden bg-gray-25 dark:bg-gray-900">
-    <div class="container py-2 lg:py-3">
-        <div class="row justify-center text-center">
-            <div class="col-12 col-md-8"> 
-                <h1 class="h2 lg:h1 fw-bold text-gray-900 dark:text-white">Biblia</h1>
-                <p class="mt-2 fs-5 text-gray-600 dark:text-gray-400 italic">
-                    Estudios de las Escrituras
-                </p>
-            </div>
-        </div>
+<div
+  class="hero-brand-section panel overflow-hidden bg-gray-25 dark:bg-gray-900"
+>
+  <div class="container py-2 lg:py-3">
+    <div class="row justify-center text-center">
+      <div class="col-12 col-md-8">
+        <h1 class="h2 lg:h1 fw-bold text-gray-900 dark:text-white">Biblia</h1>
+        <p class="mt-2 fs-5 text-gray-600 dark:text-gray-400 italic">
+          Estudios de las Escrituras
+        </p>
+      </div>
     </div>
-    <div class="decorative-divider"></div>
+  </div>
+  <div class="decorative-divider"></div>
 </div>
 
 <!-- Section: Tabs -->
 <div class="category-grid-section py-3 lg:py-4 bg-white dark:bg-gray-900">
-    <div class="container-fluid px-4 ps-lg-10">
+  <div class="container-fluid px-4 ps-lg-10">
+    <!-- Nav Tabs (manual JS, sin depender de Bootstrap JS) -->
+    <ul class="nav biblia-tabs border-bottom mb-0" id="bibliaTabs">
+      <li class="nav-item">
+        <button
+          class="nav-link active"
+          id="tab-leer-btn"
+          data-tab-target="tab-leer"
+          type="button"
+        >
+          <i class="unicon-book me-1"></i> Lectura Bíblica
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          class="nav-link"
+          id="tab-estudio-btn"
+          data-tab-target="tab-estudio"
+          type="button"
+        >
+          <i class="unicon-search-alt me-1"></i> Biblia para Estudiar
+        </button>
+      </li>
+    </ul>
 
-        <!-- Nav Tabs (manual JS, sin depender de Bootstrap JS) -->
-        <ul class="nav biblia-tabs border-bottom mb-0" id="bibliaTabs">
-            <li class="nav-item">
-                <button class="nav-link active" id="tab-leer-btn" data-tab-target="tab-leer" type="button">
-                    <i class="unicon-book me-1"></i> Lectura Bíblica
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" id="tab-estudio-btn" data-tab-target="tab-estudio" type="button">
-                    <i class="unicon-search-alt me-1"></i> Biblia para Estudiar
-                </button>
-            </li>
-        </ul>
-
-        <!-- Tab Content -->
-        <div class="biblia-tab-content p-3" id="bibliaTabContent">
-
-            <!-- ===================== PESTAÑA 1: LEER BIBLIA ===================== -->
-            <div class="biblia-pane" id="tab-leer" style="display:block;">
-                <div class="row">
-                    <!-- Panel lateral Leer -->
-                    <div class="col-12" style="flex: 0 0 300px; max-width: 290px;">
-                        <div class="panel p-3 bg-gray-25 dark:bg-gray-800 rounded-3 border">
-                            <h4 class="h5 mb-3 border-bottom pb-2">Opciones de Lectura</h4>
-                            <form id="leer-form" class="vstack gap-3">
-                                <!-- Versión -->
-                                <div class="form-group">
-                                    <label for="leer-versionSelect" class="form-label fw-bold mb-1 fs-6">Versión</label>
-                                    <select class="form-select form-select-sm" style="height:32px;min-height:32px;padding-top:2px;padding-bottom:2px;font-size:14px;" id="leer-versionSelect" name="version">
-                                        <!-- <option value="ntv" selected>Nueva Traducción Viviente (NTV)</option> -->
-                                        <option value="nbla">Nueva Biblia de las Américas (NBLA)</option>
-                                        <option value="rv1960">Reina Valera 1960 (Estudio)</option>
-                                        <!-- <option value="rvr09">Reina Valera 1909</option> -->
-                                    </select>
-                                </div>
-                                <!-- Libro -->
-                                <div class="form-group">
-                                    <label for="leer-libroSelect" class="form-label fw-bold mb-1 fs-6">Libro</label>
-                                    <select class="form-select form-select-sm" style="height:32px;min-height:32px;padding-top:2px;padding-bottom:2px;font-size:14px;" id="leer-libroSelect" name="libro">
-                                        <option value="" disabled selected>Seleccione libro...</option>
-                                        <optgroup label="Nuevo Testamento">
-                                            {% for libro in libros %}
-                                            <option value="{{ libro.numero }}">{{ libro.nombre }}</option>
-                                            {% endfor %}
-                                        </optgroup>
-                                    </select>
-                                </div>
-                                <!-- Capítulo -->
-                                <div class="form-group">
-                                    <label for="leer-capituloSelect" class="form-label fw-bold mb-1 fs-6">Capítulo</label>
-                                    <select class="form-select form-select-sm" style="height:32px;min-height:32px;padding-top:2px;padding-bottom:2px;font-size:14px;" id="leer-capituloSelect" name="capitulo">
-                                        <option value="" disabled selected>---</option>
-                                    </select>
-                                </div>
-                                <button id="btn-leer" type="button" class="btn btn-primary w-100 mt-2">
-                                    <i class="unicon-book me-1"></i> Leer
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Área de contenido Leer -->
-                    <div class="col-12" style="flex: 1; min-width: 0;">
-                        <div class="panel p-4 bg-white dark:bg-gray-800 rounded-3 border h-100">
-                            <h4 class="h5 mb-4 border-bottom pb-2">Lectura Bíblica</h4>
-                            <div id="leer-container" class="d-flex flex-wrap gap-2 align-items-start" style="min-height: 200px;">
-                                <div class="w-100 text-center opacity-50 fst-italic">
-                                    Selecciona una versión, libro y capítulo a tu izquierda y presiona Leer.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Tab Content -->
+    <div class="biblia-tab-content p-3" id="bibliaTabContent">
+      <!-- ===================== PESTAÑA 1: LEER BIBLIA ===================== -->
+      <div class="biblia-pane" id="tab-leer" style="display: block">
+        <div class="row">
+          <!-- Panel lateral Leer -->
+          <div class="col-12" style="flex: 0 0 300px; max-width: 290px">
+            <div class="panel p-3 bg-gray-25 dark:bg-gray-800 rounded-3 border">
+              <h4 class="h5 mb-3 border-bottom pb-2">Opciones de Lectura</h4>
+              <form id="leer-form" class="vstack gap-3">
+                <!-- Versión -->
+                <div class="form-group">
+                  <label
+                    for="leer-versionSelect"
+                    class="bible-label"
+                    >Versión</label
+                  >
+                  <select
+                    class="bible-select"
+                    id="leer-versionSelect"
+                    name="version"
+                  >
+                    <!-- <option value="ntv" selected>Nueva Traducción Viviente (NTV)</option> -->
+                    <option value="nbla">
+                      Nueva Biblia de las Américas (NBLA)
+                    </option>
+                    <option value="rv1960">Reina Valera 1960 (Estudio)</option>
+                    <!-- <option value="rvr09">Reina Valera 1909</option> -->
+                  </select>
                 </div>
-            </div>
-
-            <!-- ===================== PESTAÑA 2: BIBLIA PARA ESTUDIAR ===================== -->
-            <div class="biblia-pane" id="tab-estudio" style="display:none;">
-                <div class="row">
-                    <!-- Panel lateral Estudio -->
-                    <div class="col-12" style="flex: 0 0 300px; max-width: 290px;">
-                        <div class="panel p-3 bg-gray-25 dark:bg-gray-800 rounded-3 border">
-                            <h4 class="h5 mb-3 border-bottom pb-2">Opciones de Estudio</h4>
-                            <form id="estudio-form" class="vstack gap-3">
-                                <!-- Libro -->
-                                <div class="form-group">
-                                    <label for="estudio-libroSelect" class="form-label fw-bold mb-1 fs-6">Libro</label>
-                                    <select class="form-select form-select-sm" style="height:32px;min-height:32px;padding-top:2px;padding-bottom:2px;font-size:14px;" id="estudio-libroSelect" name="libro">
-                                        <option value="" disabled selected>Seleccione libro...</option>
-                                        <optgroup label="Nuevo Testamento">
-                                            {% for libro in libros %}
-                                            <option value="{{ libro.numero }}">{{ libro.nombre }}</option>
-                                            {% endfor %}
-                                        </optgroup>
-                                    </select>
-                                </div>
-                                <div class="row g-2">
-                                    <!-- Capítulo -->
-                                    <div class="col-6">
-                                        <div class="form-group">
-                                            <label for="estudio-capituloSelect" class="form-label fw-bold mb-1 fs-6">Capítulo</label>
-                                            <select class="form-select form-select-sm" style="height:32px;min-height:32px;padding-top:2px;padding-bottom:2px;font-size:14px;" id="estudio-capituloSelect" name="capitulo">
-                                                <option value="" disabled selected>---</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <!-- Versículo (requerido) -->
-                                    <div class="col-6">
-                                        <div class="form-group">
-                                            <label for="estudio-versiculoSelect" class="form-label fw-bold mb-1 fs-6">Versículo</label>
-                                            <select class="form-select form-select-sm" style="height:32px;min-height:32px;padding-top:2px;padding-bottom:2px;font-size:14px;" id="estudio-versiculoSelect" name="versiculo">
-                                                <option value="" disabled selected>---</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button id="btn-estudio" type="button" class="btn btn-primary w-100 mt-2">
-                                    <i class="unicon-search me-1"></i> Buscar
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Área de contenido Estudio Interlineal -->
-                    <div class="col-12" style="flex: 1; min-width: 0;">
-                        <div class="panel p-4 bg-white dark:bg-gray-800 rounded-3 border h-100">
-                            <h4 class="h5 mb-4 border-bottom pb-2">Florilegio Interlineal</h4>
-                            <div id="interlinear-container" class="d-flex flex-wrap gap-2 align-items-start" style="min-height: 200px;">
-                                <div class="w-100 text-center opacity-50 fst-italic">
-                                    Selecciona las opciones a tu izquierda y presiona Buscar.
-                                </div>
-                            </div>
-
-                            <!-- Contenedor del Editor de Estudio -->
-                            <div id="study-editor-wrapper">
-                                <div class="study-editor-header d-flex align-items-center gap-2">
-                                    <h5 class="h6 mb-0 text-primary fw-bold">
-                                        <i class="unicon-pen me-1"></i> Bloc de Notas de Estudio
-                                    </h5>
-                                    
-                                    <div class="ms-auto d-flex gap-2">
-                                        <button class="btn-export-study btn-export-word shadow-xs" onclick="exportToWord()">
-                                            <i class="unicon-file-word text-primary"></i> Word
-                                        </button>
-                                        <button class="btn-export-study btn-export-pdf shadow-xs" onclick="exportToPDF()">
-                                            <i class="unicon-file-medical text-danger"></i> PDF
-                                        </button>
-                                        <button class="btn-close-study shadow-xs" onclick="closeStudyEditor()">
-                                            <i class="unicon-multiply me-1"></i> Cerrar y borrar
-                                        </button>
-                                    </div>
-                                </div>
-                                <div id="quill-editor"></div>
-                                <div class="mt-3 text-end">
-                                    <span class="fs-7 text-gray-500 italic me-3">Nota: Los cambios se guardan localmente mientras el bloc está abierto.</span>
-                                </div>
-                            </div>
-                            <!-- Créditos del proyecto -->
-                            <div class="mt-4 pt-3 border-top d-flex align-items-start gap-2 text-gray-400 dark:text-gray-600" style="font-size: 11px; line-height: 1.5;">
-                                <i class="unicon-information-circle flex-shrink-0 mt-1" style="font-size: 14px;"></i>
-                                <span>
-                                    Este espacio de estudio utiliza datos del proyecto <a href="https://github.com/eliranwong/OpenGNT" target="_blank" rel="noopener noreferrer" class="text-gray-500 dark:text-gray-500 text-decoration-underline fw-medium">OpenGNT</a>, desarrollado por Eliran Wong, integrando la morfología de MorphGNT y el texto de SBLGNT. Agradecemos a la comunidad de código abierto por facilitar estas herramientas de análisis lingüístico.
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Libro -->
+                <div class="form-group">
+                  <label
+                    for="leer-libroSelect"
+                    class="bible-label"
+                    >Libro</label
+                  >
+                  <select
+                    class="bible-select"
+                    id="leer-libroSelect"
+                    name="libro"
+                  >
+                    <option value="" disabled selected>
+                      Seleccione libro...
+                    </option>
+                    <optgroup label="Nuevo Testamento">
+                      {% for libro in libros %}
+                      <option value="{{ libro.numero }}">
+                        {{ libro.nombre }}
+                      </option>
+                      {% endfor %}
+                    </optgroup>
+                  </select>
                 </div>
+                <!-- Capítulo -->
+                <div class="form-group">
+                  <label
+                    for="leer-capituloSelect"
+                    class="bible-label"
+                    >Capítulo</label
+                  >
+                  <select
+                    class="bible-select"
+                    id="leer-capituloSelect"
+                    name="capitulo"
+                  >
+                    <option value="" disabled selected>---</option>
+                  </select>
+                </div>
+                <button
+                  id="btn-leer"
+                  type="button"
+                  class="btn btn-primary w-100 mt-2"
+                >
+                  <i class="unicon-book me-1"></i> Leer
+                </button>
+              </form>
             </div>
+          </div>
 
-        </div><!-- /tab-content -->
+          <!-- Área de contenido Leer -->
+          <div class="col-12" style="flex: 1; min-width: 0">
+            <div
+              class="panel p-4 bg-white dark:bg-gray-800 rounded-3 border h-100"
+            >
+              <h4 class="h5 mb-4 border-bottom pb-2">Lectura Bíblica</h4>
+              <div
+                id="leer-container"
+                class="d-flex flex-wrap gap-2 align-items-start"
+                style="min-height: 200px"
+              >
+                <div class="w-100 text-center opacity-50 fst-italic">
+                  Selecciona una versión, libro y capítulo a tu izquierda y
+                  presiona Leer.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== PESTAÑA 2: BIBLIA PARA ESTUDIAR ===================== -->
+      <div class="biblia-pane" id="tab-estudio" style="display: none">
+        <div class="row">
+          <!-- Panel lateral Estudio -->
+          <div class="col-12" style="flex: 0 0 300px; max-width: 290px">
+            <div class="panel p-3 bg-gray-25 dark:bg-gray-800 rounded-3 border">
+              <h4 class="h5 mb-3 border-bottom pb-2">Opciones de Estudio</h4>
+              <form id="estudio-form" class="vstack gap-3">
+                <!-- Libro -->
+                <div class="form-group">
+                  <label
+                    for="estudio-libroSelect"
+                    class="bible-label"
+                    >Libro</label
+                  >
+                  <select
+                    class="bible-select"
+                    id="estudio-libroSelect"
+                    name="libro"
+                  >
+                    <option value="" disabled selected>
+                      Seleccione libro...
+                    </option>
+                    <optgroup label="Nuevo Testamento">
+                      {% for libro in libros %}
+                      <option value="{{ libro.numero }}">
+                        {{ libro.nombre }}
+                      </option>
+                      {% endfor %}
+                    </optgroup>
+                  </select>
+                </div>
+                <div class="row g-2">
+                  <!-- Capítulo -->
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label
+                        for="estudio-capituloSelect"
+                        class="bible-label"
+                        >Capítulo</label
+                      >
+                      <select
+                        class="bible-select"
+                        id="estudio-capituloSelect"
+                        name="capitulo"
+                      >
+                        <option value="" disabled selected>---</option>
+                      </select>
+                    </div>
+                  </div>
+                  <!-- Versículo (requerido) -->
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label
+                        for="estudio-versiculoSelect"
+                        class="bible-label"
+                        >Versículo</label
+                      >
+                      <select
+                        class="bible-select"
+                        id="estudio-versiculoSelect"
+                        name="versiculo"
+                      >
+                        <option value="" disabled selected>---</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  id="btn-estudio"
+                  type="button"
+                  class="btn btn-primary w-100 mt-2"
+                >
+                  <i class="unicon-search me-1"></i> Buscar
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Área de contenido Estudio Interlineal -->
+          <div class="col-12" style="flex: 1; min-width: 0">
+            <div
+              class="panel p-4 bg-white dark:bg-gray-800 rounded-3 border h-100"
+            >
+              <h4 class="h5 mb-4 border-bottom pb-2">Florilegio Interlineal</h4>
+              <div
+                id="interlinear-container"
+                class="d-flex flex-wrap gap-2 align-items-start"
+                style="min-height: 200px"
+              >
+                <div class="w-100 text-center opacity-50 fst-italic">
+                  Selecciona las opciones a tu izquierda y presiona Buscar.
+                </div>
+              </div>
+
+              <!-- Contenedor del Editor de Estudio -->
+              <div id="study-editor-wrapper">
+                <div
+                  class="study-editor-header d-flex align-items-center gap-2"
+                >
+                  <h5 class="h6 mb-0 text-primary fw-bold">
+                    <i class="unicon-pen me-1"></i> Bloc de Notas de Estudio
+                  </h5>
+
+                  <div class="ms-auto d-flex gap-2">
+                    <button
+                      class="btn-export-study btn-export-word shadow-xs"
+                      onclick="exportToWord()"
+                    >
+                      <i class="unicon-file-word text-primary"></i> Word
+                    </button>
+                    <button
+                      class="btn-export-study btn-export-pdf shadow-xs"
+                      onclick="exportToPDF()"
+                    >
+                      <i class="unicon-file-medical text-danger"></i> PDF
+                    </button>
+                    <button
+                      class="btn-close-study shadow-xs"
+                      onclick="closeStudyEditor()"
+                    >
+                      <i class="unicon-multiply me-1"></i> Cerrar y borrar
+                    </button>
+                  </div>
+                </div>
+                <div id="quill-editor"></div>
+                <div class="mt-3 text-end">
+                  <span class="fs-7 text-gray-500 italic me-3"
+                    >Nota: Los cambios se guardan localmente mientras el bloc
+                    está abierto.</span
+                  >
+                </div>
+              </div>
+              <!-- Créditos del proyecto -->
+              <div
+                class="mt-4 pt-3 border-top d-flex align-items-start gap-2 text-gray-400 dark:text-gray-600"
+                style="font-size: 11px; line-height: 1.5"
+              >
+                <i
+                  class="unicon-information-circle flex-shrink-0 mt-1"
+                  style="font-size: 14px"
+                ></i>
+                <span>
+                  Este espacio de estudio utiliza datos del proyecto
+                  <a
+                    href="https://github.com/eliranwong/OpenGNT"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-gray-500 dark:text-gray-500 text-decoration-underline fw-medium"
+                    >OpenGNT</a
+                  >, desarrollado por Eliran Wong, integrando la morfología de
+                  MorphGNT y el texto de SBLGNT. Agradecemos a la comunidad de
+                  código abierto por facilitar estas herramientas de análisis
+                  lingüístico.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <!-- /tab-content -->
+  </div>
 </div>
 
 <script id="bible-structure-data" type="application/json">
-    {{ estructura_json|safe }}
+  {{ estructura_json|safe }}
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const estructuraData = JSON.parse(document.getElementById('bible-structure-data').textContent);
+  document.addEventListener("DOMContentLoaded", function () {
+    const estructuraData = JSON.parse(
+      document.getElementById("bible-structure-data").textContent
+    );
 
     // ─── Tab switching manual ──────────────────────────────────────────────────
-    document.querySelectorAll('#bibliaTabs .nav-link').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            const targetId = this.getAttribute('data-tab-target');
-            // Quitar activo de todos los botones
-            document.querySelectorAll('#bibliaTabs .nav-link').forEach(function(b) {
-                b.classList.remove('active');
-            });
-            // Ocultar todos los paneles
-            document.querySelectorAll('.biblia-pane').forEach(function(p) {
-                p.style.display = 'none';
-            });
-            // Activar el botón y panel seleccionado
-            this.classList.add('active');
-            document.getElementById(targetId).style.display = 'block';
+    document.querySelectorAll("#bibliaTabs .nav-link").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const targetId = this.getAttribute("data-tab-target");
+        // Quitar activo de todos los botones
+        document
+          .querySelectorAll("#bibliaTabs .nav-link")
+          .forEach(function (b) {
+            b.classList.remove("active");
+          });
+        // Ocultar todos los paneles
+        document.querySelectorAll(".biblia-pane").forEach(function (p) {
+          p.style.display = "none";
         });
+        // Activar el botón y panel seleccionado
+        this.classList.add("active");
+        document.getElementById(targetId).style.display = "block";
+      });
     });
 
-
     // ─── Helpers ───────────────────────────────────────────────────────────────
-    function populateCapitulos(libroId, capSelect, verSelect, addTodos = false) {
-        capSelect.innerHTML = '<option value="" disabled selected>---</option>';
-        if (addTodos) {
-            verSelect.innerHTML = '<option value="">Todos</option>';
-        } else {
-            verSelect.innerHTML = '<option value="" disabled selected>---</option>';
-        }
-        if (libroId && estructuraData[libroId]) {
-            const capKeys = Object.keys(estructuraData[libroId]).map(Number).sort((a, b) => a - b);
-            capKeys.forEach(capNum => {
-                const opt = document.createElement('option');
-                opt.value = capNum;
-                opt.textContent = capNum;
-                capSelect.appendChild(opt);
-            });
-        }
+    function populateCapitulos(
+      libroId,
+      capSelect,
+      verSelect,
+      addTodos = false
+    ) {
+      capSelect.innerHTML = '<option value="" disabled selected>---</option>';
+      if (addTodos) {
+        verSelect.innerHTML = '<option value="">Todos</option>';
+      } else {
+        verSelect.innerHTML = '<option value="" disabled selected>---</option>';
+      }
+      if (libroId && estructuraData[libroId]) {
+        const capKeys = Object.keys(estructuraData[libroId])
+          .map(Number)
+          .sort((a, b) => a - b);
+        capKeys.forEach((capNum) => {
+          const opt = document.createElement("option");
+          opt.value = capNum;
+          opt.textContent = capNum;
+          capSelect.appendChild(opt);
+        });
+      }
     }
 
     function populateVersiculos(libroId, capId, verSelect, addTodos = false) {
-        if (addTodos) {
-            verSelect.innerHTML = '<option value="">Todos</option>';
-        } else {
-            verSelect.innerHTML = '<option value="" disabled selected>---</option>';
+      if (addTodos) {
+        verSelect.innerHTML = '<option value="">Todos</option>';
+      } else {
+        verSelect.innerHTML = '<option value="" disabled selected>---</option>';
+      }
+      if (
+        libroId &&
+        capId &&
+        estructuraData[libroId] &&
+        estructuraData[libroId][capId]
+      ) {
+        const maxVersiculos = estructuraData[libroId][capId];
+        for (let i = 1; i <= maxVersiculos; i++) {
+          const opt = document.createElement("option");
+          opt.value = i;
+          opt.textContent = i;
+          verSelect.appendChild(opt);
         }
-        if (libroId && capId && estructuraData[libroId] && estructuraData[libroId][capId]) {
-            const maxVersiculos = estructuraData[libroId][capId];
-            for (let i = 1; i <= maxVersiculos; i++) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = i;
-                verSelect.appendChild(opt);
-            }
-        }
+      }
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -406,127 +616,127 @@ document.addEventListener('DOMContentLoaded', function() {
     // ── 1. NARRATIVA: Cambio de TIEMPO ────────────────────────────────────────
     // Indicadores cronológicos explícitos
     const NARRATIVE_TIME = [
-        /^(Y |)al (día siguiente|otro día|anochecer|amanecer|atardecer)/i,
-        /^(Y |)cuando (llegó la noche|era de noche|era de día|amaneció)/i,
-        /^(Pasados?|Después de) (algunos?|muchos?|tres|siete|cuarenta)? ?(días?|años?|meses?|horas?|tiempo)/i,
-        /^Al tercer día/i,
-        /^Al cabo de/i,
-        /^Desde (aquel|ese|entonces)/i,
-        /^Desde entonces/i,
-        /^En (aquellos|aquellos|esos|estos) (días|tiempos|momentos)/i,
-        /^En aquel (tiempo|día|momento|mismo)/i,
-        /^Un (sábado|día|momento)/i,
-        /^Después (de esto|que|de que|de haber)/i,
-        /^Luego (de esto|de que|que)/i,
-        /^Mientras (tanto|él|Jesús|ellos)/i,
-        /^Cuando (llegó|vino|vinieron|pasó|aconteció)/i,
-        /^Y aconteció (que|después|cuando|en)/i,
-        /^Y sucedió (que|después)/i,
-        /^Y (luego|después|entonces|en seguida|inmediatamente|enseguida)/i,
-        /^Tres días después/i,
-        /^A los (tres|ocho|cuarenta) días/i,
+      /^(Y |)al (día siguiente|otro día|anochecer|amanecer|atardecer)/i,
+      /^(Y |)cuando (llegó la noche|era de noche|era de día|amaneció)/i,
+      /^(Pasados?|Después de) (algunos?|muchos?|tres|siete|cuarenta)? ?(días?|años?|meses?|horas?|tiempo)/i,
+      /^Al tercer día/i,
+      /^Al cabo de/i,
+      /^Desde (aquel|ese|entonces)/i,
+      /^Desde entonces/i,
+      /^En (aquellos|aquellos|esos|estos) (días|tiempos|momentos)/i,
+      /^En aquel (tiempo|día|momento|mismo)/i,
+      /^Un (sábado|día|momento)/i,
+      /^Después (de esto|que|de que|de haber)/i,
+      /^Luego (de esto|de que|que)/i,
+      /^Mientras (tanto|él|Jesús|ellos)/i,
+      /^Cuando (llegó|vino|vinieron|pasó|aconteció)/i,
+      /^Y aconteció (que|después|cuando|en)/i,
+      /^Y sucedió (que|después)/i,
+      /^Y (luego|después|entonces|en seguida|inmediatamente|enseguida)/i,
+      /^Tres días después/i,
+      /^A los (tres|ocho|cuarenta) días/i,
     ];
 
     // ── 1. NARRATIVA: Cambio de LUGAR ─────────────────────────────────────────
     // Movimiento espacial explícito
     const NARRATIVE_PLACE = [
-        /^(Y |)Jesús (entró|salió|subió|bajó|fue|volvió|se retiró|se dirigió|llegó|partió|cruzó|atravesó)/i,
-        /^(Y |)él (entró|salió|subió|bajó|fue|volvió|se retiró|llegó|partió)/i,
-        /^(Y |)(salió|entró|subió|bajó|volvió|partió|llegó|se fue|regresó) (Jesús|él|ella|Pedro|Juan|Pablo)/i,
-        /^(Y |)(salieron|entraron|subieron|bajaron|volvieron|partieron|llegaron|se fueron)/i,
-        /^Luego (entró|salió|fue|volvió|subió|bajó) (en|a|de)/i,
-        /^(Y |)se retiró (al|a la|hacia)/i,
-        /^(Y |)Jesús se retiró/i,
-        /^(Y |)(fue|fueron) (a|al|hacia|hasta|por)/i,
-        /^(Y |)(cruzó|atravesó|pasó) (al|a la|el|la)/i,
-        /^Al (otro lado|cruzar|llegar)/i,
-        /^(Y |)se dirigió (a|al|hacia)/i,
-        /^Salió de allí/i,
-        /^(Y |)de allí (fue|salió|partió|volvió)/i,
-        /^(Y |)(estando|habiendo llegado) en (Jerusalén|Galilea|Cafarnaúm|Betania|el templo|la sinagoga|el desierto|una casa|una barca)/i,
-        /^(Y |)entrando (en|a) (una casa|la sinagoga|el templo|Cafarnaúm|Jerusalén)/i,
+      /^(Y |)Jesús (entró|salió|subió|bajó|fue|volvió|se retiró|se dirigió|llegó|partió|cruzó|atravesó)/i,
+      /^(Y |)él (entró|salió|subió|bajó|fue|volvió|se retiró|llegó|partió)/i,
+      /^(Y |)(salió|entró|subió|bajó|volvió|partió|llegó|se fue|regresó) (Jesús|él|ella|Pedro|Juan|Pablo)/i,
+      /^(Y |)(salieron|entraron|subieron|bajaron|volvieron|partieron|llegaron|se fueron)/i,
+      /^Luego (entró|salió|fue|volvió|subió|bajó) (en|a|de)/i,
+      /^(Y |)se retiró (al|a la|hacia)/i,
+      /^(Y |)Jesús se retiró/i,
+      /^(Y |)(fue|fueron) (a|al|hacia|hasta|por)/i,
+      /^(Y |)(cruzó|atravesó|pasó) (al|a la|el|la)/i,
+      /^Al (otro lado|cruzar|llegar)/i,
+      /^(Y |)se dirigió (a|al|hacia)/i,
+      /^Salió de allí/i,
+      /^(Y |)de allí (fue|salió|partió|volvió)/i,
+      /^(Y |)(estando|habiendo llegado) en (Jerusalén|Galilea|Cafarnaúm|Betania|el templo|la sinagoga|el desierto|una casa|una barca)/i,
+      /^(Y |)entrando (en|a) (una casa|la sinagoga|el templo|Cafarnaúm|Jerusalén)/i,
     ];
 
     // ── 1. NARRATIVA: Cambio de PERSONAJE ─────────────────────────────────────
     // Un personaje o grupo aparece o desaparece del relato
     const NARRATIVE_CHARACTER = [
-        /^(Y |)(el rey|el centurión|el fariseo|el escriba|el sacerdote|el sumo sacerdote) /i,
-        /^(Y |)(Herodes|Pilato|Caifás|Ananías|Nicodemo|María|Marta|Lázaro|Zaqueo)/i,
-        /^(Y |)(los fariseos|los escribas|los sacerdotes|los principales|los discípulos|los apóstoles|la multitud|la gente|el pueblo)/i,
-        /^(Y |)(Pedro|Juan|Jacobo|Andrés|Felipe|Bartolomé|Mateo|Tomás|Pablo|Bernabé|Silas)/i,
-        /^(Y |)sus discípulos/i,
-        /^(Y |)los (discípulos|apóstoles|doce) (le dijeron|preguntaron|vinieron|se acercaron|se reunieron)/i,
-        /^(Y |)(los fariseos|los escribas) (se acercaron|vinieron|preguntaron|le dijeron|respondieron)/i,
-        /^(Y |)se le (acercaron|acercó)/i,
-        /^(Y |)vino (a él|a Jesús) un/i,
-        /^(Y |)un (hombre|oficial|centurión|fariseo|escriba|loco|ciego|sordo|leproso|paralítico)/i,
-        /^(Y |)una (mujer|viuda|madre|hija)/i,
-        /^(Y |)el rey Herodes/i,
-        /^(Y |)a los discípulos se les/i,
-        /^(Y |)(los apóstoles|los discípulos) se reunieron/i,
+      /^(Y |)(el rey|el centurión|el fariseo|el escriba|el sacerdote|el sumo sacerdote) /i,
+      /^(Y |)(Herodes|Pilato|Caifás|Ananías|Nicodemo|María|Marta|Lázaro|Zaqueo)/i,
+      /^(Y |)(los fariseos|los escribas|los sacerdotes|los principales|los discípulos|los apóstoles|la multitud|la gente|el pueblo)/i,
+      /^(Y |)(Pedro|Juan|Jacobo|Andrés|Felipe|Bartolomé|Mateo|Tomás|Pablo|Bernabé|Silas)/i,
+      /^(Y |)sus discípulos/i,
+      /^(Y |)los (discípulos|apóstoles|doce) (le dijeron|preguntaron|vinieron|se acercaron|se reunieron)/i,
+      /^(Y |)(los fariseos|los escribas) (se acercaron|vinieron|preguntaron|le dijeron|respondieron)/i,
+      /^(Y |)se le (acercaron|acercó)/i,
+      /^(Y |)vino (a él|a Jesús) un/i,
+      /^(Y |)un (hombre|oficial|centurión|fariseo|escriba|loco|ciego|sordo|leproso|paralítico)/i,
+      /^(Y |)una (mujer|viuda|madre|hija)/i,
+      /^(Y |)el rey Herodes/i,
+      /^(Y |)a los discípulos se les/i,
+      /^(Y |)(los apóstoles|los discípulos) se reunieron/i,
     ];
 
     // ── 2. ARGUMENTACIÓN: Cambio de SUJETO ────────────────────────────────────
     // El autor pasa a hablar a/de un grupo distinto
     const ARG_SUBJECT = [
-        /^(Las |Los )?(casadas?|esposas?|mujeres casadas?)/i,
-        /^(Los |Las )?(esposos?|maridos?)/i,
-        /^(Los |Las )?(hijos?|hijas?)[,.:]/i,
-        /^(Y vosotros,? )?(padres?)[,.:]/i,
-        /^(Los |Las )?(siervos?|esclavos?)[,.:]/i,
-        /^(Y vosotros,? )?(amos?)[,.:]/i,
-        /^(Los |Las )?(ancianos?|diáconos?|obispos?|pastores?)[,.:]/i,
-        /^(Los |Las )?(jóvenes?)[,.:]/i,
-        /^(Y vosotros,? )?hermanos?[,.:]/i,
-        /^Amados?,/i,
-        /^Y (vosotros|ustedes),/i,
+      /^(Las |Los )?(casadas?|esposas?|mujeres casadas?)/i,
+      /^(Los |Las )?(esposos?|maridos?)/i,
+      /^(Los |Las )?(hijos?|hijas?)[,.:]/i,
+      /^(Y vosotros,? )?(padres?)[,.:]/i,
+      /^(Los |Las )?(siervos?|esclavos?)[,.:]/i,
+      /^(Y vosotros,? )?(amos?)[,.:]/i,
+      /^(Los |Las )?(ancianos?|diáconos?|obispos?|pastores?)[,.:]/i,
+      /^(Los |Las )?(jóvenes?)[,.:]/i,
+      /^(Y vosotros,? )?hermanos?[,.:]/i,
+      /^Amados?,/i,
+      /^Y (vosotros|ustedes),/i,
     ];
 
     // ── 2. ARGUMENTACIÓN: Cambio de TEMA ──────────────────────────────────────
     // El autor introduce explícitamente un nuevo asunto
     const ARG_TOPIC = [
-        /^(En cuanto a|Acerca de|Con respecto a|Tocante a|Sobre) (las?|los?|lo que)/i,
-        /^(Ahora bien)[,.:]/i,
-        /^(Pero ahora)[,.:]/i,
-        /^(Quiero que sepáis|Os hago saber|Os recuerdo)[,.:]/i,
-        /^(Os exhorto|Te exhorto|Os ruego|Te ruego),?/i,
-        /^(Amados?,? yo os exhorto|Amados?,? les exhorto)/i,
-        /^(Además)[,.:]/i,
-        /^(Asimismo)[,.:]/i,
-        /^(También os digo|También les digo)[,.:]/i,
-        /^(No os engañéis|No se engañen)[,.:]/i,
-        /^(Sabed|Debes saber|Sepan)[,.:]/i,
+      /^(En cuanto a|Acerca de|Con respecto a|Tocante a|Sobre) (las?|los?|lo que)/i,
+      /^(Ahora bien)[,.:]/i,
+      /^(Pero ahora)[,.:]/i,
+      /^(Quiero que sepáis|Os hago saber|Os recuerdo)[,.:]/i,
+      /^(Os exhorto|Te exhorto|Os ruego|Te ruego),?/i,
+      /^(Amados?,? yo os exhorto|Amados?,? les exhorto)/i,
+      /^(Además)[,.:]/i,
+      /^(Asimismo)[,.:]/i,
+      /^(También os digo|También les digo)[,.:]/i,
+      /^(No os engañéis|No se engañen)[,.:]/i,
+      /^(Sabed|Debes saber|Sepan)[,.:]/i,
     ];
 
     // ── 2. ARGUMENTACIÓN: Conclusión / Inicio nuevo ───────────────────────────
     const ARG_CONCLUSION = [
-        /^(Por último|Finalmente|En fin|Al fin)[,.:]/i,
-        /^(En resumen|En conclusión|En suma)[,.:]/i,
-        /^(Solamente procurad|Solamente)[,.:]/i,
-        /^(Por tanto|Por lo tanto|Por lo cual|Por eso|De ahí que)[,.:]/i,
-        /^(Así (pues|que)|De manera que|De modo que)[,.:]/i,
-        /^(Por consiguiente)[,.:]/i,
-        /^(Lo que venimos diciendo|Lo que esto quiere decir)[,.:]/i,
-        /^(Ahora bien,? lo que)[,.:]/i,
-        /^(Y la conclusión es)[,.:]/i,
-        /^(Esto significa|Esto quiere decir)[,.:]/i,
-        /^(Lo dicho anteriormente)/i,
+      /^(Por último|Finalmente|En fin|Al fin)[,.:]/i,
+      /^(En resumen|En conclusión|En suma)[,.:]/i,
+      /^(Solamente procurad|Solamente)[,.:]/i,
+      /^(Por tanto|Por lo tanto|Por lo cual|Por eso|De ahí que)[,.:]/i,
+      /^(Así (pues|que)|De manera que|De modo que)[,.:]/i,
+      /^(Por consiguiente)[,.:]/i,
+      /^(Lo que venimos diciendo|Lo que esto quiere decir)[,.:]/i,
+      /^(Ahora bien,? lo que)[,.:]/i,
+      /^(Y la conclusión es)[,.:]/i,
+      /^(Esto significa|Esto quiere decir)[,.:]/i,
+      /^(Lo dicho anteriormente)/i,
     ];
 
     // ── Fallback: Transiciones narrativas genéricas ───────────────────────────
     // Para narrativa que no entra en categorías anteriores pero es claro inicio
     const GENERIC_TRANSITION = [
-        /^Entonces/i,
-        /^(Y |)he aquí/i,
-        /^(Respondió|Respondieron|Dijo|Dijeron|Preguntó|Preguntaron)[,.: ]/i,
-        /^(Y |)(le|les) respondió[,.: ]/i,
-        /^(Y |)(le|les) dijo[,.: ]/i,
-        /^Jesús (le|les|les dijo|respondió|preguntó|llamó)/i,
-        /^(Mas|Pero|Sin embargo)[,.: ]/i,
+      /^Entonces/i,
+      /^(Y |)he aquí/i,
+      /^(Respondió|Respondieron|Dijo|Dijeron|Preguntó|Preguntaron)[,.: ]/i,
+      /^(Y |)(le|les) respondió[,.: ]/i,
+      /^(Y |)(le|les) dijo[,.: ]/i,
+      /^Jesús (le|les|les dijo|respondió|preguntó|llamó)/i,
+      /^(Mas|Pero|Sin embargo)[,.: ]/i,
     ];
 
-    const MAX_VERSES_PROSE   = 7; // Tope de seguridad para narrativa/argumentación
-    const MAX_VERSES_POETRY  = 4; // Las estrofas poéticas son cortas
+    const MAX_VERSES_PROSE = 7; // Tope de seguridad para narrativa/argumentación
+    const MAX_VERSES_POETRY = 4; // Las estrofas poéticas son cortas
 
     // ═══════════════════════════════════════════════════════════════════════════
     // 3. POESÍA – Reglas de cambio de estrofa
@@ -538,310 +748,431 @@ document.addEventListener('DOMContentLoaded', function() {
     // Selah es el marcador de pausa/estrofa más fuerte en los Salmos
     // Las letras del acróstico (Sal 119, Proverbios 31, etc.)
     const POETRY_STRUCTURAL = [
-        /\bSelah\b/i,
-        /^(ÁLEF|ALEF|BET|GUÍMEL|GUIMEL|DÁLET|DALET|HE|VAV|ZAYIN|JET|TET|YOD|CAF|LÁMED|LÁMED|MEM|NUN|SÁMEC|AYIN|PE|TSADE|QOF|RESH|SIN|ŚIN|TAV)/i,
+      /\bSelah\b/i,
+      /^(ÁLEF|ALEF|BET|GUÍMEL|GUIMEL|DÁLET|DALET|HE|VAV|ZAYIN|JET|TET|YOD|CAF|LÁMED|LÁMED|MEM|NUN|SÁMEC|AYIN|PE|TSADE|QOF|RESH|SIN|ŚIN|TAV)/i,
     ];
 
     // ── Doxologías e himnos de alabanza ───────────────────────────────────────
     // Comienzan una nueva sección de alabanza/adoración
     const POETRY_DOXOLOGY = [
-        /^(¡Aleluya!|Aleluya[,!.])/i,
-        /^(¡Alabad|Alabad) (a|al) (Jehová|Señor|Dios)/i,
-        /^(¡Cantad|Cantad) (a|al) (Jehová|Señor|Dios)/i,
-        /^(¡Glorificad|Glorificad|¡Dad gloria|Dad gloria)/i,
-        /^(¡Bendito|Bendito) (sea )?(Jehová|el Señor|Dios)/i,
-        /^(¡Engrandezco|Engrandeceré|¡Exaltaré|Exaltaré|Exaltad) (a|al)/i,
-        /^(Dad (gracias|gloria)|¡Aclamad|Aclamad) (a|al)/i,
-        /^(¡Loado|Loado|¡Alabado|Alabado) sea/i,
+      /^(¡Aleluya!|Aleluya[,!.])/i,
+      /^(¡Alabad|Alabad) (a|al) (Jehová|Señor|Dios)/i,
+      /^(¡Cantad|Cantad) (a|al) (Jehová|Señor|Dios)/i,
+      /^(¡Glorificad|Glorificad|¡Dad gloria|Dad gloria)/i,
+      /^(¡Bendito|Bendito) (sea )?(Jehová|el Señor|Dios)/i,
+      /^(¡Engrandezco|Engrandeceré|¡Exaltaré|Exaltaré|Exaltad) (a|al)/i,
+      /^(Dad (gracias|gloria)|¡Aclamad|Aclamad) (a|al)/i,
+      /^(¡Loado|Loado|¡Alabado|Alabado) sea/i,
     ];
 
     // ── Bienaventuranzas y fórmulas sapienciales ──────────────────────────────
     const POETRY_BEATITUDE = [
-        /^(¡Bienaventurado|Bienaventurado[s]?|¡Dichoso[s]?|Dichoso[s]?) (el|la|los|las)/i,
-        /^(El (sabio|prudente|entendido|justo|recto))/i,
-        /^(El (necio|insensato|impío|malvado|pecador))/i,
+      /^(¡Bienaventurado|Bienaventurado[s]?|¡Dichoso[s]?|Dichoso[s]?) (el|la|los|las)/i,
+      /^(El (sabio|prudente|entendido|justo|recto))/i,
+      /^(El (necio|insensato|impío|malvado|pecador))/i,
     ];
 
     // ── Pivotes temáticos: lamento → confianza / petición → alabanza ──────────
     // Muy frecuentes en Salmos: el autor pasa del "¿Por qué?" al "Pero tú…"
     const POETRY_PIVOT = [
-        /^(Mas tú|Pero tú|Sin embargo,? tú)[,;]? (Jehová|Señor|oh Dios|oh Jehová)/i,
-        /^(Pero yo (confío|me refugio|esperaré|cantaré|alabaré))/i,
-        /^(Yo (sé|confío|espero|cantaré|alabaré) que)/i,
-        /^(¿Hasta cuándo|¿Por qué|¿Cuándo) (me|nos|oh Jehová|oh Señor)/i,
-        /^(Oye|Escucha|Atiende|Inclina) (mi|oh Jehová|oh Señor|tu oído)/i,
-        /^(En ti (confío|me refugio|espero|me amparo))/i,
-        /^(A ti (clamo|elevo|dirijo|levanto))/i,
+      /^(Mas tú|Pero tú|Sin embargo,? tú)[,;]? (Jehová|Señor|oh Dios|oh Jehová)/i,
+      /^(Pero yo (confío|me refugio|esperaré|cantaré|alabaré))/i,
+      /^(Yo (sé|confío|espero|cantaré|alabaré) que)/i,
+      /^(¿Hasta cuándo|¿Por qué|¿Cuándo) (me|nos|oh Jehová|oh Señor)/i,
+      /^(Oye|Escucha|Atiende|Inclina) (mi|oh Jehová|oh Señor|tu oído)/i,
+      /^(En ti (confío|me refugio|espero|me amparo))/i,
+      /^(A ti (clamo|elevo|dirijo|levanto))/i,
     ];
 
     // ── Cambio de tema poético ─────────────────────────────────────────────────
     // El poeta intro­duce un asunto nuevo: describe a Dios, luego al justo, luego al necio…
     const POETRY_THEME_SHIFT = [
-        /^(Jehová|El Señor) (es|será|ha sido) (mi|tu|su|nuestro)/i,
-        /^(Porque (Jehová|el Señor|Dios) (es|ha|dará|guardará|conoce))/i,
-        /^(Los (impíos|malos|malvados|pecadores|altivos)) /i,
-        /^(Los (justos|rectos|fieles|santos|humildes)) /i,
-        /^(El que (habita|confía|teme|ama|guarda)) /i,
-        /^(La senda|El camino) (de los|del|de los justos|de los impíos)/i,
-        /^(No (así|es así)) (los|el)/i,
-        /^(Por eso|Por tanto) (los impíos|no se mantendrán)/i,
+      /^(Jehová|El Señor) (es|será|ha sido) (mi|tu|su|nuestro)/i,
+      /^(Porque (Jehová|el Señor|Dios) (es|ha|dará|guardará|conoce))/i,
+      /^(Los (impíos|malos|malvados|pecadores|altivos)) /i,
+      /^(Los (justos|rectos|fieles|santos|humildes)) /i,
+      /^(El que (habita|confía|teme|ama|guarda)) /i,
+      /^(La senda|El camino) (de los|del|de los justos|de los impíos)/i,
+      /^(No (así|es así)) (los|el)/i,
+      /^(Por eso|Por tanto) (los impíos|no se mantendrán)/i,
     ];
 
     // ── Detección automática de texto poético ─────────────────────────────────
     // Heurísticas: Selah, versículos cortos, libros poéticos identificados
     function detectIsPoetry(verses) {
-        // 1) Selah = marcador de poesía sin ambigüedad
-        if (verses.some(vs => /\bSelah\b/i.test(vs.texto || ''))) return true;
-        // 2) Letras acrósticas (Sal 119, Pr 31)
-        const ACROSTIC = /^(ÁLEF|ALEF|BET|GUÍMEL|DÁLET|HE|VAV|ZAYIN|JET|TET|YOD|CAF|LÁMED|MEM|NUN|SÁMEC|AYIN|PE|TSADE|QOF|RESH|SIN|TAV)/i;
-        if (verses.some(vs => ACROSTIC.test(vs.texto || ''))) return true;
-        // 3) Bienaventuranzas al inicio (Salmos 1, Proverbios)
-        if (verses.length > 0 && /^(Bienaventurado|Dichoso)/i.test(verses[0].texto || '')) return true;
-        // 4) Promedio de longitud: versículos cortos = poesía
-        const avgLen = verses.reduce((s, vs) => s + (vs.texto || '').length, 0) / verses.length;
-        return avgLen < 72;
+      // 1) Selah = marcador de poesía sin ambigüedad
+      if (verses.some((vs) => /\bSelah\b/i.test(vs.texto || ""))) return true;
+      // 2) Letras acrósticas (Sal 119, Pr 31)
+      const ACROSTIC =
+        /^(ÁLEF|ALEF|BET|GUÍMEL|DÁLET|HE|VAV|ZAYIN|JET|TET|YOD|CAF|LÁMED|MEM|NUN|SÁMEC|AYIN|PE|TSADE|QOF|RESH|SIN|TAV)/i;
+      if (verses.some((vs) => ACROSTIC.test(vs.texto || ""))) return true;
+      // 3) Bienaventuranzas al inicio (Salmos 1, Proverbios)
+      if (
+        verses.length > 0 &&
+        /^(Bienaventurado|Dichoso)/i.test(verses[0].texto || "")
+      )
+        return true;
+      // 4) Promedio de longitud: versículos cortos = poesía
+      const avgLen =
+        verses.reduce((s, vs) => s + (vs.texto || "").length, 0) /
+        verses.length;
+      return avgLen < 72;
     }
 
     // ── Puntuación de ruptura de párrafo para PROSA ───────────────────────────
     function scoreProseBreak(text) {
-        const groups = [
-            { rules: NARRATIVE_TIME,      weight: 3 },
-            { rules: NARRATIVE_PLACE,     weight: 3 },
-            { rules: NARRATIVE_CHARACTER, weight: 2 },
-            { rules: ARG_SUBJECT,         weight: 3 },
-            { rules: ARG_TOPIC,           weight: 3 },
-            { rules: ARG_CONCLUSION,      weight: 3 },
-            { rules: GENERIC_TRANSITION,  weight: 1 },
-        ];
-        let score = 0;
-        for (const g of groups) {
-            if (g.rules.some(re => re.test(text))) score += g.weight;
-        }
-        return score;
+      const groups = [
+        { rules: NARRATIVE_TIME, weight: 3 },
+        { rules: NARRATIVE_PLACE, weight: 3 },
+        { rules: NARRATIVE_CHARACTER, weight: 2 },
+        { rules: ARG_SUBJECT, weight: 3 },
+        { rules: ARG_TOPIC, weight: 3 },
+        { rules: ARG_CONCLUSION, weight: 3 },
+        { rules: GENERIC_TRANSITION, weight: 1 },
+      ];
+      let score = 0;
+      for (const g of groups) {
+        if (g.rules.some((re) => re.test(text))) score += g.weight;
+      }
+      return score;
     }
 
     // ── Puntuación de ruptura de ESTROFA para poesía ──────────────────────────
     function scorePoetryBreak(text) {
-        const groups = [
-            { rules: POETRY_STRUCTURAL,   weight: 4 }, // Selah / acróstico = definitivo
-            { rules: POETRY_DOXOLOGY,     weight: 3 }, // Nueva sección de alabanza
-            { rules: POETRY_BEATITUDE,    weight: 3 }, // Fórmula sapiencial nueva
-            { rules: POETRY_PIVOT,        weight: 3 }, // Giro lamento→confianza
-            { rules: POETRY_THEME_SHIFT,  weight: 2 }, // Cambio de tema interno
-        ];
-        let score = 0;
-        for (const g of groups) {
-            if (g.rules.some(re => re.test(text))) score += g.weight;
-        }
-        return score;
+      const groups = [
+        { rules: POETRY_STRUCTURAL, weight: 4 }, // Selah / acróstico = definitivo
+        { rules: POETRY_DOXOLOGY, weight: 3 }, // Nueva sección de alabanza
+        { rules: POETRY_BEATITUDE, weight: 3 }, // Fórmula sapiencial nueva
+        { rules: POETRY_PIVOT, weight: 3 }, // Giro lamento→confianza
+        { rules: POETRY_THEME_SHIFT, weight: 2 }, // Cambio de tema interno
+      ];
+      let score = 0;
+      for (const g of groups) {
+        if (g.rules.some((re) => re.test(text))) score += g.weight;
+      }
+      return score;
     }
 
     // ── Agrupador principal ────────────────────────────────────────────────────
     function groupIntoParagraphs(verses) {
-        // Did any verse come with standard paragraph markers '¶'?
-        const hasApiParagraphs = verses.some(v => v.texto && v.texto.includes('¶'));
-        
-        if (hasApiParagraphs) {
-            const paragraphs = [];
-            let current = [];
-            let forceNew = false;
-            
-            verses.forEach((vs, i) => {
-                let texto = vs.texto || '';
-                let hasBreak = texto.includes('¶');
-                
-                // If it's the very first verse, it's already a new paragraph
-                if (i === 0 || forceNew || (hasBreak && texto.indexOf('¶') < texto.length / 2)) {
-                    if (current.length) paragraphs.push(current);
-                    current = [];
-                    forceNew = false;
-                }
-                
-                // If the break is at the end of this verse, the NEXT verse should be a new paragraph
-                if (hasBreak && texto.lastIndexOf('¶') >= texto.length / 2) {
-                    forceNew = true;
-                }
-                
-                vs.texto = texto.replace(/¶/g, '').trim();
-                current.push(vs);
-            });
-            if (current.length) paragraphs.push(current);
-            return paragraphs;
-        }
+      // Did any verse come with standard paragraph markers '¶'?
+      const hasApiParagraphs = verses.some(
+        (v) => v.texto && v.texto.includes("¶")
+      );
 
-        const isPoetry = detectIsPoetry(verses);
-        const maxVerses = isPoetry ? MAX_VERSES_POETRY : MAX_VERSES_PROSE;
-
+      if (hasApiParagraphs) {
         const paragraphs = [];
         let current = [];
+        let forceNew = false;
 
         verses.forEach((vs, i) => {
-            if (i === 0) { current.push(vs); return; }
+          let texto = vs.texto || "";
+          let hasBreak = texto.includes("¶");
 
-            const text = vs.texto || '';
-            const score = isPoetry ? scorePoetryBreak(text) : scoreProseBreak(text);
+          // If it's the very first verse, it's already a new paragraph
+          if (
+            i === 0 ||
+            forceNew ||
+            (hasBreak && texto.indexOf("¶") < texto.length / 2)
+          ) {
+            if (current.length) paragraphs.push(current);
+            current = [];
+            forceNew = false;
+          }
 
-            const isBreak = isPoetry
-                // POESÍA: cualquier señal temática o estructural corta la estrofa;
-                // o el tope de versículos por estrofa
-                ? (score >= 2 || (score >= 1 && current.length >= 2) || current.length >= maxVerses)
-                // PROSA: señal fuerte, o señal débil con bloque largo, o tope
-                : (score >= 2 || (score >= 1 && current.length >= 4) || current.length >= maxVerses);
+          // If the break is at the end of this verse, the NEXT verse should be a new paragraph
+          if (hasBreak && texto.lastIndexOf("¶") >= texto.length / 2) {
+            forceNew = true;
+          }
 
-            if (isBreak) {
-                paragraphs.push(current);
-                current = [];
-            }
-            current.push(vs);
+          vs.texto = texto.replace(/¶/g, "").trim();
+          current.push(vs);
         });
-
         if (current.length) paragraphs.push(current);
         return paragraphs;
+      }
+
+      const isPoetry = detectIsPoetry(verses);
+      const maxVerses = isPoetry ? MAX_VERSES_POETRY : MAX_VERSES_PROSE;
+
+      const paragraphs = [];
+      let current = [];
+
+      verses.forEach((vs, i) => {
+        if (i === 0) {
+          current.push(vs);
+          return;
+        }
+
+        const text = vs.texto || "";
+        const score = isPoetry ? scorePoetryBreak(text) : scoreProseBreak(text);
+
+        const isBreak = isPoetry
+          ? // POESÍA: cualquier señal temática o estructural corta la estrofa;
+            // o el tope de versículos por estrofa
+            score >= 2 ||
+            (score >= 1 && current.length >= 2) ||
+            current.length >= maxVerses
+          : // PROSA: señal fuerte, o señal débil con bloque largo, o tope
+            score >= 2 ||
+            (score >= 1 && current.length >= 4) ||
+            current.length >= maxVerses;
+
+        if (isBreak) {
+          paragraphs.push(current);
+          current = [];
+        }
+        current.push(vs);
+      });
+
+      if (current.length) paragraphs.push(current);
+      return paragraphs;
     }
 
     function renderBibleText(container, data, versiculoId) {
-        container.innerHTML = '';
-        if (data.length === 0) {
-            container.innerHTML = '<p class="w-100 text-center opacity-50">No hay contenido disponible para esta selección.</p>';
-            return;
-        }
+      container.innerHTML = "";
+      if (data.length === 0) {
+        container.innerHTML =
+          '<p class="w-100 text-center opacity-50">No hay contenido disponible para esta selección.</p>';
+        return;
+      }
 
-        const wrapper = document.createElement('div');
-        wrapper.className = 'bible-chapter-text text-gray-800 dark:text-gray-200 p-2';
-        wrapper.style.fontSize = '1.15rem';
+      const wrapper = document.createElement("div");
+      wrapper.className =
+        "bible-chapter-text text-gray-800 dark:text-gray-200 p-2";
+      wrapper.style.fontSize = "1.15rem";
 
-        const paragraphs = groupIntoParagraphs(data);
+      const paragraphs = groupIntoParagraphs(data);
 
-        paragraphs.forEach(verses => {
-            const p = document.createElement('p');
-            p.className = 'mb-3';
-            p.style.textAlign = 'justify';
-            p.style.lineHeight = '1.85';
+      paragraphs.forEach((verses) => {
+        const p = document.createElement("p");
+        p.className = "mb-3";
+        p.style.textAlign = "justify";
+        p.style.lineHeight = "1.85";
 
-            verses.forEach(vs => {
-                const vsSpan = document.createElement('span');
-                vsSpan.className = 'bible-verse-item';
-                if (versiculoId && vs.versiculo == versiculoId) {
-                    vsSpan.className += ' bg-primary bg-opacity-10 rounded px-1 fw-medium';
-                    vsSpan.id = `vs-focus-${vs.versiculo}`;
-                }
+        verses.forEach((vs) => {
+          const vsSpan = document.createElement("span");
+          vsSpan.className = "bible-verse-item";
+          if (versiculoId && vs.versiculo == versiculoId) {
+            vsSpan.className +=
+              " bg-primary bg-opacity-10 rounded px-1 fw-medium";
+            vsSpan.id = `vs-focus-${vs.versiculo}`;
+          }
 
-                const vsNum = document.createElement('sup');
-                vsNum.className = 'text-primary fw-bold me-1';
-                vsNum.style.fontSize = '0.72rem';
-                vsNum.textContent = vs.versiculo;
+          const vsNum = document.createElement("sup");
+          vsNum.className = "text-primary fw-bold me-1";
+          vsNum.style.fontSize = "0.72rem";
+          vsNum.textContent = vs.versiculo;
 
-                vsSpan.appendChild(vsNum);
-                
-                // Formateo especial para RV1960 (sustituir 'par /n' y '/n' con saltos de línea HTML)
-                let textContent = vs.texto || '';
-                const hasPoetry = textContent.includes('/n');
-                
-                textContent = textContent.replace(/par \/n/g, '<br><br><span style="margin-left: 20px;"></span>');
-                textContent = textContent.replace(/\/n/g, '<br><span style="margin-left: 20px;"></span>');
-                
-                // Aseguramos que si tiene poesía, haga un "salto" extra al final 
-                // para que el siguiente versículo no quede pegado a la última curva poética.
-                if (hasPoetry) {
-                    textContent += '<br><br>';
-                }
-                
-                // Inyectar el texto de manera segura renderizando el html (como los <br>)
-                const textContainer = document.createElement('template');
-                textContainer.innerHTML = textContent + ' ';
-                while(textContainer.content.firstChild) {
-                    vsSpan.appendChild(textContainer.content.firstChild);
-                }
+          vsSpan.appendChild(vsNum);
 
-                p.appendChild(vsSpan);
-            });
+          // Formateo especial para RV1960 (sustituir 'par /n' y '/n' con saltos de línea HTML)
+          let textContent = vs.texto || "";
+          const hasPoetry = textContent.includes("/n");
 
-            wrapper.appendChild(p);
+          textContent = textContent.replace(
+            /par \/n/g,
+            '<br><br><span style="margin-left: 20px;"></span>'
+          );
+          textContent = textContent.replace(
+            /\/n/g,
+            '<br><span style="margin-left: 20px;"></span>'
+          );
+
+          // Aseguramos que si tiene poesía, haga un "salto" extra al final
+          // para que el siguiente versículo no quede pegado a la última curva poética.
+          if (hasPoetry) {
+            textContent += "<br><br>";
+          }
+
+          // Inyectar el texto de manera segura renderizando el html (como los <br>)
+          const textContainer = document.createElement("template");
+          textContainer.innerHTML = textContent + " ";
+          while (textContainer.content.firstChild) {
+            vsSpan.appendChild(textContainer.content.firstChild);
+          }
+
+          p.appendChild(vsSpan);
         });
 
-        container.appendChild(wrapper);
+        wrapper.appendChild(p);
+      });
 
-        if (versiculoId) {
-            setTimeout(() => {
-                const target = document.getElementById(`vs-focus-${versiculoId}`);
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
-        }
+      container.appendChild(wrapper);
+
+      if (versiculoId) {
+        setTimeout(() => {
+          const target = document.getElementById(`vs-focus-${versiculoId}`);
+          if (target)
+            target.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 100);
+      }
     }
 
     function renderEstudio(container, data, textoRv1960) {
-        container.innerHTML = '';
-        if (data.length === 0) {
-            container.innerHTML = '<p class="w-100 text-center opacity-50">No hay contenido disponible para esta selección.</p>';
-            return;
-        }
+      container.innerHTML = "";
+      if (data.length === 0) {
+        container.innerHTML =
+          '<p class="w-100 text-center opacity-50">No hay contenido disponible para esta selección.</p>';
+        return;
+      }
 
-        // Mostrar texto RV1960 arriba si existe
-        if (textoRv1960) {
-            // Limpiar saltos de linea feos de RV1960 para la vista de estudio
-            let cleanRv1960 = textoRv1960.replace(/par \/n/g, ' ').replace(/\/n/g, ' ').replace(/\s+/g, ' ').trim();
-            const rvContainer = document.createElement('div');
-            rvContainer.className = 'w-100 p-3 mb-4 bg-primary bg-opacity-10 dark:bg-gray-900 rounded-3 border border-primary border-opacity-25';
-            rvContainer.innerHTML = `<span class="badge bg-primary mb-2">Reina Valera 1960</span><p class="mb-0 fs-5 text-gray-800 dark:text-gray-200" style="line-height: 1.6; font-size: 1.2rem !important;">${cleanRv1960}</p>`;
-            container.appendChild(rvContainer);
-        }
-        data.forEach(word => {
-            const wordBlock = document.createElement('div');
-            wordBlock.className = 'panel vstack text-center gap-1 px-3 pt-2 pb-1 border rounded-2 bg-gray-25 dark:bg-gray-900 border-opacity-10';
-            wordBlock.style.minWidth = '105px';
-            wordBlock.style.flexGrow = '0';
-            wordBlock.style.flexShrink = '0';
-            wordBlock.style.cursor = 'default';
-
-            const greekEl = document.createElement('div');
-            greekEl.className = 'fw-bold text-dark dark:text-white';
-            greekEl.style.fontSize = '2.25rem';
-            greekEl.textContent = word.griego || '-';
-            if (word.raiz_griega) greekEl.setAttribute('data-tooltip', word.raiz_griega);
-
-            const spanEl = document.createElement('div');
-            spanEl.className = 'text-primary';
-            spanEl.style.fontSize = '1.125rem';
-            spanEl.textContent = word.espanol || '-';
-
-            const metaEl = document.createElement('div');
-            metaEl.className = 'text-gray-500 mt-1 pt-1 border-top';
-            metaEl.style.fontSize = '16px';
-            let htmlMeta = `<span data-tooltip="${word.descripcion_rmac}">${word.rmac || ''}</span>`;
-            if (word.strong) htmlMeta += `<br><span class="text-success fw-medium" data-tooltip="Strong: ${word.strong}">${word.strong}</span>`;
-            if (word.low_nida_number) htmlMeta += `<br><span class="text-info fw-medium" data-tooltip="Low-Nida: ${word.low_nida_number}">${word.low_nida_number}</span>`;
-            metaEl.innerHTML = htmlMeta;
-
-            wordBlock.appendChild(greekEl);
-            wordBlock.appendChild(spanEl);
-            wordBlock.appendChild(metaEl);
-            container.appendChild(wordBlock);
-        });
-
-        // Añadir botón de "Iniciar Estudio" al final
-        const studyBtnWrapper = document.createElement('div');
-        studyBtnWrapper.className = 'w-100 mt-5 pt-4 border-top text-center';
+      // Mostrar texto RV1960 arriba si existe
+      if (textoRv1960) {
+        // Limpiar saltos de linea feos de RV1960 para la vista de estudio
+        let cleanRv1960 = textoRv1960
+          .replace(/par \/n/g, " ")
+          .replace(/\/n/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
         
-        const studyBtn = document.createElement('button');
-        studyBtn.className = 'btn btn-primary lg:btn-lg px-5 shadow-sm';
-        studyBtn.innerHTML = '<i class="unicon-pen me-2"></i> Iniciar Estudio Personal';
-        studyBtn.onclick = function() {
-            initStudyEditor();
-        };
+        const libro = estudioLibroSelect.options[estudioLibroSelect.selectedIndex]?.text || '';
+        const capitulo = estudioCapituloSelect.value || '';
+        const versiculo = estudioVersiculoSelect.value || '';
+        const referencia = `${libro} ${capitulo}:${versiculo}`;
         
-        studyBtnWrapper.appendChild(studyBtn);
-        container.appendChild(studyBtnWrapper);
+        const rvContainer = document.createElement("div");
+        rvContainer.className =
+          "w-100 p-3 mb-4 bg-primary bg-opacity-10 dark:bg-gray-900 rounded-3 border border-primary border-opacity-25";
+        rvContainer.innerHTML = `<span class="badge bg-primary mb-2">Reina Valera 1960</span><h4 class="mb-2 text-primary fw-semibold" style="font-family: var(--bs-body-font-family); font-size: 1.35rem !important;">${referencia}</h4><p class="mb-0 fs-5 text-gray-800 dark:text-gray-200" style="line-height: 1.6; font-size: 1.2rem !important;">${cleanRv1960}</p>`;
+        container.appendChild(rvContainer);
+      }
+      data.forEach((word) => {
+        const wordBlock = document.createElement("div");
+        wordBlock.className =
+          "panel vstack text-center gap-1 px-3 pt-2 pb-1 border rounded-2 bg-gray-25 dark:bg-gray-900 border-opacity-10";
+        wordBlock.style.minWidth = "105px";
+        wordBlock.style.flexGrow = "0";
+        wordBlock.style.flexShrink = "0";
+        wordBlock.style.cursor = "default";
+
+        const greekEl = document.createElement("div");
+        greekEl.className = "fw-bold text-dark dark:text-white";
+        greekEl.style.fontSize = "2.25rem";
+        greekEl.textContent = word.griego || "-";
+        if (word.raiz_griega)
+          greekEl.setAttribute("data-tooltip", word.raiz_griega);
+
+        const spanEl = document.createElement("div");
+        spanEl.className = "text-primary";
+        spanEl.style.fontSize = "1.125rem";
+        spanEl.textContent = word.espanol || "-";
+
+        const metaEl = document.createElement("div");
+        metaEl.className = "text-gray-500 mt-1 pt-1 border-top";
+        metaEl.style.fontSize = "16px";
+        let htmlMeta = `<span data-tooltip="${word.descripcion_rmac}">${
+          word.rmac || ""
+        }</span>`;
+        if (word.strong)
+          htmlMeta += `<br><span class="text-success fw-medium" data-tooltip="Strong: ${word.strong}">${word.strong}</span>`;
+        if (word.low_nida_number)
+          htmlMeta += `<br><span class="text-info fw-medium" data-tooltip="Low-Nida: ${word.low_nida_number}">${word.low_nida_number}</span>`;
+        metaEl.innerHTML = htmlMeta;
+
+        wordBlock.appendChild(greekEl);
+        wordBlock.appendChild(spanEl);
+        wordBlock.appendChild(metaEl);
+        container.appendChild(wordBlock);
+      });
+
+      // Añadir botón de "Iniciar Estudio" al final
+      const studyBtnWrapper = document.createElement("div");
+      studyBtnWrapper.className = "w-100 mt-5 pt-4 border-top text-center";
+
+      const studyBtn = document.createElement("button");
+      studyBtn.className = "btn btn-primary lg:btn-lg px-5 shadow-sm";
+
+      const editorWrapper = document.getElementById("study-editor-wrapper");
+      const alreadyOpen =
+        editorWrapper && editorWrapper.style.display === "block";
+
+      studyBtn.innerHTML = alreadyOpen
+        ? '<i class="unicon-document me-2"></i> Copiar al Estudio'
+        : '<i class="unicon-pen me-2"></i> Iniciar Estudio Personal';
+
+      studyBtn.onclick = function () {
+        initStudyEditor(alreadyOpen);
+      };
+
+      studyBtnWrapper.appendChild(studyBtn);
+      container.appendChild(studyBtnWrapper);
     }
 
     let quill = null;
-    const STUDY_STORAGE_KEY = 'florilegio_temp_note';
+    let isEditorOpen = false;
+    const STUDY_STORAGE_KEY = "florilegio_temp_note";
+    let estudioLibroSelect,
+      estudioCapituloSelect,
+      estudioVersiculoSelect,
+      interlinearContainer,
+      btnEstudio;
 
-    function initStudyEditor() {
+    // ─── Pestaña 2: BIBLIA PARA ESTUDIAR ──────────────────────────────────────
+    estudioLibroSelect = document.getElementById("estudio-libroSelect");
+    estudioCapituloSelect = document.getElementById("estudio-capituloSelect");
+    estudioVersiculoSelect = document.getElementById("estudio-versiculoSelect");
+    interlinearContainer = document.getElementById("interlinear-container");
+    btnEstudio = document.getElementById("btn-estudio");
+
+    function buildReferenceHtml(includeHeader = true, includeDivider = false) {
+      const libro =
+        estudioLibroSelect.options[estudioLibroSelect.selectedIndex]?.text ||
+        "";
+      const capitulo = estudioCapituloSelect.value || "";
+      const versiculo = estudioVersiculoSelect.value || "";
+      const referencia = `${libro} ${capitulo}:${versiculo}`;
+
+      const rvTextElement = interlinearContainer.querySelector(".fs-5");
+      const rvText = rvTextElement
+        ? rvTextElement.innerText
+        : "(sin texto RV1960)";
+
+      const words = interlinearContainer.querySelectorAll(".panel.vstack");
+      let interlinearHtml = "";
+      if (words.length > 0) {
+        interlinearHtml = '<ul style="list-style: none; padding-left: 0;">';
+        words.forEach((w) => {
+          const greek = w.querySelector(".fw-bold")?.innerText || "-";
+          const spanish = w.querySelector(".text-primary")?.innerText || "-";
+          const metaContainer = w.querySelector(".text-gray-500");
+          const rmac =
+            metaContainer?.querySelector("span:first-of-type")?.innerText || "";
+          const strong =
+            metaContainer?.querySelector(".text-success")?.innerText || "";
+          const lowNida =
+            metaContainer?.querySelector(".text-info")?.innerText || "";
+          let details = `<em>${rmac}</em>`;
+          if (strong) details += ` (Strong: ${strong})`;
+          if (lowNida) details += ` (Nida: ${lowNida})`;
+          interlinearHtml += `<li><strong>${greek}</strong>: ${spanish} – ${details}</li>`;
+        });
+        interlinearHtml += "</ul>";
+      } else {
+        interlinearHtml =
+          "<p><em>(no hay palabras interlineales encontradas)</em></p>";
+      }
+
+      let html = "";
+      if (includeDivider) html += "<hr>";
+      if (includeHeader) {
+        html += `<h1 style="text-align: center;">${referencia.toUpperCase()}</h1>`;
+        html += `<p style="text-align: center; font-style: italic;">Versión Reina Valera 1960</p>`;
+        html += `<div style="background: #f8f9fa; padding: 15px; border-left: 4px solid #007bff; margin: 15px 0;">${rvText}</div>`;
+        html += `<h3>Análisis Interlineal:</h3>${interlinearHtml}<br>`;
+      }
+      return html;
+    }
+
+    function initStudyEditor(wasOpen = false) {
         const wrapper = document.getElementById('study-editor-wrapper');
-        const isAlreadyVisible = (wrapper.style.display === 'block');
-        
         wrapper.style.display = 'block';
         wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        const libro = estudioLibroSelect.options[estudioLibroSelect.selectedIndex]?.text || '';
+        const capitulo = estudioCapituloSelect.value || '';
+        const versiculo = estudioVersiculoSelect.value || '';
+        const referencia = `${libro} ${capitulo}:${versiculo}`.toUpperCase();
 
         if (!quill) {
             quill = new Quill('#quill-editor', {
@@ -851,7 +1182,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     toolbar: [
                         [{ 'header': [1, 2, 3, false] }],
                         ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'align': [] }], // Alineación de texto
+                        [{ 'align': [] }],
                         ['blockquote', 'code-block'],
                         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                         [{ 'color': [] }, { 'background': [] }],
@@ -860,118 +1191,101 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
-            // Recuperar si hay algo guardado (por si refrescó la página)
             const savedNote = localStorage.getItem(STUDY_STORAGE_KEY);
             if (savedNote) {
                 quill.root.innerHTML = savedNote;
+            } else {
+                quill.clipboard.dangerouslyPasteHTML(buildReferenceHtml() + `<hr><h2>Mis Notas:</h2><p>Comienza a escribir aquí tus observaciones...</p><br><br>`);
             }
 
-            // Guardado automático en tiempo real
             quill.on('text-change', function() {
                 localStorage.setItem(STUDY_STORAGE_KEY, quill.root.innerHTML);
             });
-        }
-        
-        // Si NO estaba abierto, y NO hay nada en el storage, nos aseguramos que esté limpio
-        if (!isAlreadyVisible && !localStorage.getItem(STUDY_STORAGE_KEY)) {
-            // Construir plantilla automática a partir de lo que hay en pantalla
-            const libro = estudioLibroSelect.options[estudioLibroSelect.selectedIndex].text;
-            const capitulo = estudioCapituloSelect.value;
-            const versiculo = estudioVersiculoSelect.value;
-            const referencia = `${libro} ${capitulo}:${versiculo}`;
+            isEditorOpen = true;
+        } else if (wasOpen && quill.getLength() > 1) {
+            // Verificar si el versículo ya existe en el editor
+            const existingContent = quill.root.innerHTML;
+            const alreadyExists = existingContent.includes(referencia);
             
-            // Texto RV1960
-            const rvTextElement = interlinearContainer.querySelector('.fs-5');
-            const rvText = rvTextElement ? rvTextElement.innerText : '';
+            if (alreadyExists) {
+                alert('Este versículo ya está en tu estudio. No se duplicará.');
+                return;
+            }
             
-            // Construir interlinear en texto
-            let interlinearHtml = '<br><h3>Análisis Interlineal:</h3><ul>';
-            const words = interlinearContainer.querySelectorAll('.panel.vstack');
-            words.forEach(w => {
-                const greek = w.querySelector('.fw-bold').innerText;
-                const spanish = w.querySelector('.text-primary').innerText;
-                
-                // Extraer metadatos (RMAC, Strong, Low-Nida)
-                const metaContainer = w.querySelector('.text-gray-500');
-                const rmac = metaContainer.querySelector('span:first-of-type')?.innerText || '';
-                const strong = metaContainer.querySelector('.text-success')?.innerText || '';
-                const lowNida = metaContainer.querySelector('.text-info')?.innerText || '';
-                
-                let details = ` – <em>${rmac}</em>`;
-                if (strong) details += ` (Strong: ${strong})`;
-                if (lowNida) details += ` (Nida: ${lowNida})`;
-
-                interlinearHtml += `<li><strong>${greek}</strong>: ${spanish}${details}</li>`;
-            });
-            interlinearHtml += '</ul><br>';
-
-            const template = `
-                <h1 style="text-align: center;">${referencia.toUpperCase()}</h1>
-                <p style="text-align: center; font-style: italic;">Versión Reina Valera 1960</p>
-                <div style="background: #f8f9fa; padding: 15px; border-left: 4px solid #007bff; margin: 15px 0;">
-                    ${rvText}
-                </div>
-                ${interlinearHtml}
-                <hr>
-                <h2>Mis Notas:</h2>
-                <p>Comienza a escribir aquí tus observaciones...</p>
-            `;
+            // Append new verse to existing study at the end
+            const newContent = `<br>` + buildReferenceHtml(true, true);
+            quill.clipboard.dangerouslyPasteHTML(quill.getLength() - 1, newContent);
             
-            quill.clipboard.dangerouslyPasteHTML(template);
+            localStorage.setItem(STUDY_STORAGE_KEY, quill.root.innerHTML);
+            isEditorOpen = true;
+        } else {
+            // Reopening after close (empty), start fresh
+            quill.clipboard.dangerouslyPasteHTML(buildReferenceHtml() + `<hr><h2>Mis Notas:</h2><p>Comienza a escribir aquí tus observaciones...</p><br><br>`);
+            isEditorOpen = true;
         }
     }
 
     async function exportToPDF() {
-        const element = document.getElementById('quill-editor');
-        const libro = estudioLibroSelect.options[estudioLibroSelect.selectedIndex].text;
-        const capitulo = estudioCapituloSelect.value;
-        const versiculo = estudioVersiculoSelect.value;
-        
-        const opt = {
-            margin:       1,
-            filename:     `Estudio_${libro}_${capitulo}_${versiculo}.pdf`,
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2 },
-            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-        };
-        
-        // El editor puede tener fondo blanco, html2pdf lo respetará
-        html2pdf().set(opt).from(quill.root).save();
+      const element = document.getElementById("quill-editor");
+      const libro =
+        estudioLibroSelect.options[estudioLibroSelect.selectedIndex].text;
+      const capitulo = estudioCapituloSelect.value;
+      const versiculo = estudioVersiculoSelect.value;
+
+      const opt = {
+        margin: 1,
+        filename: `Estudio_${libro}_${capitulo}_${versiculo}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      };
+
+      // El editor puede tener fondo blanco, html2pdf lo respetará
+      html2pdf().set(opt).from(quill.root).save();
     }
 
     function exportToWord() {
-        const libro = estudioLibroSelect.options[estudioLibroSelect.selectedIndex].text;
-        const capitulo = estudioCapituloSelect.value;
-        const versiculo = estudioVersiculoSelect.value;
-        const filename = `Estudio_${libro}_${capitulo}_${versiculo}.doc`;
-        
-        const content = quill.root.innerHTML;
-        const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
-            "xmlns:w='urn:schemas-microsoft-com:office:word' "+
-            "xmlns='http://www.w3.org/TR/REC-html40'>"+
-            "<head><meta charset='utf-8'><title>Estudio Bíblico</title></head><body>";
-        const footer = "</body></html>";
-        const sourceHTML = header + content + footer;
-        
-        const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
-        const fileDownload = document.createElement("a");
-        document.body.appendChild(fileDownload);
-        fileDownload.href = source;
-        fileDownload.download = filename;
-        fileDownload.click();
-        document.body.removeChild(fileDownload);
+      const libro =
+        estudioLibroSelect.options[estudioLibroSelect.selectedIndex].text;
+      const capitulo = estudioCapituloSelect.value;
+      const versiculo = estudioVersiculoSelect.value;
+      const filename = `Estudio_${libro}_${capitulo}_${versiculo}.doc`;
+
+      const content = quill.root.innerHTML;
+      const header =
+        "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+        "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+        "xmlns='http://www.w3.org/TR/REC-html40'>" +
+        "<head><meta charset='utf-8'><title>Estudio Bíblico</title></head><body>";
+      const footer = "</body></html>";
+      const sourceHTML = header + content + footer;
+
+      const source =
+        "data:application/vnd.ms-word;charset=utf-8," +
+        encodeURIComponent(sourceHTML);
+      const fileDownload = document.createElement("a");
+      document.body.appendChild(fileDownload);
+      fileDownload.href = source;
+      fileDownload.download = filename;
+      fileDownload.click();
+      document.body.removeChild(fileDownload);
     }
 
     function closeStudyEditor() {
-        if (confirm('¿Estás seguro de cerrar el editor? Se borrarán todas las notas actuales de este bloque.')) {
-            const wrapper = document.getElementById('study-editor-wrapper');
-            wrapper.style.display = 'none';
-            
-            if (quill) {
-                quill.setContents([]);
-            }
-            localStorage.removeItem(STUDY_STORAGE_KEY);
+      if (
+        confirm(
+          "¿Estás seguro de cerrar el editor? Se borrarán todas las notas actuales de este bloque."
+        )
+      ) {
+        const wrapper = document.getElementById("study-editor-wrapper");
+        wrapper.style.display = "none";
+
+        if (quill) {
+          quill.setContents([]);
         }
+        localStorage.removeItem(STUDY_STORAGE_KEY);
+        isEditorOpen = false;
+      }
     }
 
     window.initStudyEditor = initStudyEditor;
@@ -980,102 +1294,115 @@ document.addEventListener('DOMContentLoaded', function() {
     window.exportToWord = exportToWord;
 
     function showLoading(container) {
-        container.innerHTML = '<div class="w-100 text-center py-5"><div class="spinner-border text-primary" role="status"></div><br><span class="opacity-50">Cargando Escrituras...</span></div>';
+      container.innerHTML =
+        '<div class="w-100 text-center py-5"><div class="spinner-border text-primary" role="status"></div><br><span class="opacity-50">Cargando Escrituras...</span></div>';
     }
 
     // ─── Pestaña 1: LEER BIBLIA ────────────────────────────────────────────────
-    const leerLibroSelect    = document.getElementById('leer-libroSelect');
-    const leerCapituloSelect = document.getElementById('leer-capituloSelect');
-    const leerVersionSelect  = document.getElementById('leer-versionSelect');
-    const leerContainer      = document.getElementById('leer-container');
-    const btnLeer            = document.getElementById('btn-leer');
+    const leerLibroSelect = document.getElementById("leer-libroSelect");
+    const leerCapituloSelect = document.getElementById("leer-capituloSelect");
+    const leerVersionSelect = document.getElementById("leer-versionSelect");
+    const leerContainer = document.getElementById("leer-container");
+    const btnLeer = document.getElementById("btn-leer");
 
-    leerLibroSelect.addEventListener('change', function() {
-        leerCapituloSelect.innerHTML = '<option value="" disabled selected>---</option>';
-        const libroId = this.value;
-        if (libroId && estructuraData[libroId]) {
-            Object.keys(estructuraData[libroId]).map(Number).sort((a,b)=>a-b).forEach(n => {
-                const o = document.createElement('option');
-                o.value = n; o.textContent = n;
-                leerCapituloSelect.appendChild(o);
-            });
-        }
+    leerLibroSelect.addEventListener("change", function () {
+      leerCapituloSelect.innerHTML =
+        '<option value="" disabled selected>---</option>';
+      const libroId = this.value;
+      if (libroId && estructuraData[libroId]) {
+        Object.keys(estructuraData[libroId])
+          .map(Number)
+          .sort((a, b) => a - b)
+          .forEach((n) => {
+            const o = document.createElement("option");
+            o.value = n;
+            o.textContent = n;
+            leerCapituloSelect.appendChild(o);
+          });
+      }
     });
 
-    btnLeer.addEventListener('click', async function() {
-        const version    = leerVersionSelect.value;
-        const libroId    = leerLibroSelect.value;
-        const capituloId = leerCapituloSelect.value;
+    btnLeer.addEventListener("click", async function () {
+      const version = leerVersionSelect.value;
+      const libroId = leerLibroSelect.value;
+      const capituloId = leerCapituloSelect.value;
 
-        if (!libroId || !capituloId) {
-            alert('Por favor seleccione un Libro y Capítulo.');
-            return;
+      if (!libroId || !capituloId) {
+        alert("Por favor seleccione un Libro y Capítulo.");
+        return;
+      }
+
+      showLoading(leerContainer);
+
+      try {
+        const url = `/api/versiculo/?tipo=biblia&version=${version}&libro=${libroId}&capitulo=${capituloId}&versiculo=`;
+        const response = await fetch(url);
+        const json = await response.json();
+
+        if (json.status === "success") {
+          renderBibleText(leerContainer, json.data, null);
+        } else {
+          leerContainer.innerHTML = `<div class="alert alert-danger w-100 mt-3">${json.message}</div>`;
         }
-
-        showLoading(leerContainer);
-
-        try {
-            const url = `/api/versiculo/?tipo=biblia&version=${version}&libro=${libroId}&capitulo=${capituloId}&versiculo=`;
-            const response = await fetch(url);
-            const json = await response.json();
-
-            if (json.status === 'success') {
-                renderBibleText(leerContainer, json.data, null);
-            } else {
-                leerContainer.innerHTML = `<div class="alert alert-danger w-100 mt-3">${json.message}</div>`;
-            }
-        } catch (err) {
-            leerContainer.innerHTML = '<div class="alert alert-danger w-100 mt-3">Hubo un error de red conectando con el servidor.</div>';
-            console.error(err);
-        }
+      } catch (err) {
+        leerContainer.innerHTML =
+          '<div class="alert alert-danger w-100 mt-3">Hubo un error de red conectando con el servidor.</div>';
+        console.error(err);
+      }
     });
 
-    // ─── Pestaña 2: BIBLIA PARA ESTUDIAR ──────────────────────────────────────
-    const estudioLibroSelect    = document.getElementById('estudio-libroSelect');
-    const estudioCapituloSelect = document.getElementById('estudio-capituloSelect');
-    const estudioVersiculoSelect= document.getElementById('estudio-versiculoSelect');
-    const interlinearContainer  = document.getElementById('interlinear-container');
-    const btnEstudio            = document.getElementById('btn-estudio');
-
-    estudioLibroSelect.addEventListener('change', function() {
-        populateCapitulos(this.value, estudioCapituloSelect, estudioVersiculoSelect, false);
+    estudioLibroSelect.addEventListener("change", function () {
+      populateCapitulos(
+        this.value,
+        estudioCapituloSelect,
+        estudioVersiculoSelect,
+        false
+      );
     });
 
-    estudioCapituloSelect.addEventListener('change', function() {
-        populateVersiculos(estudioLibroSelect.value, this.value, estudioVersiculoSelect, false);
+    estudioCapituloSelect.addEventListener("change", function () {
+      populateVersiculos(
+        estudioLibroSelect.value,
+        this.value,
+        estudioVersiculoSelect,
+        false
+      );
     });
 
-    btnEstudio.addEventListener('click', async function() {
-        const libroId    = estudioLibroSelect.value;
-        const capituloId = estudioCapituloSelect.value;
-        const versiculoId= estudioVersiculoSelect.value;
+    btnEstudio.addEventListener("click", async function () {
+      const libroId = estudioLibroSelect.value;
+      const capituloId = estudioCapituloSelect.value;
+      const versiculoId = estudioVersiculoSelect.value;
 
-        if (!libroId || !capituloId) {
-            alert('Por favor seleccione un Libro y Capítulo.');
-            return;
+      if (!libroId || !capituloId) {
+        alert("Por favor seleccione un Libro y Capítulo.");
+        return;
+      }
+      if (!versiculoId) {
+        alert(
+          "El modo de estudio requiere seleccionar un versículo específico."
+        );
+        return;
+      }
+
+      showLoading(interlinearContainer);
+
+      try {
+        const url = `/api/versiculo/?tipo=estudio&version=rva2015&libro=${libroId}&capitulo=${capituloId}&versiculo=${versiculoId}`;
+        const response = await fetch(url);
+        const json = await response.json();
+
+        if (json.status === "success") {
+          renderEstudio(interlinearContainer, json.data, json.texto_rv1960);
+        } else {
+          interlinearContainer.innerHTML = `<div class="alert alert-danger w-100 mt-3">${json.message}</div>`;
         }
-        if (!versiculoId) {
-            alert('El modo de estudio requiere seleccionar un versículo específico.');
-            return;
-        }
-
-        showLoading(interlinearContainer);
-
-        try {
-            const url = `/api/versiculo/?tipo=estudio&version=rva2015&libro=${libroId}&capitulo=${capituloId}&versiculo=${versiculoId}`;
-            const response = await fetch(url);
-            const json = await response.json();
-
-            if (json.status === 'success') {
-                renderEstudio(interlinearContainer, json.data, json.texto_rv1960);
-            } else {
-                interlinearContainer.innerHTML = `<div class="alert alert-danger w-100 mt-3">${json.message}</div>`;
-            }
-        } catch (err) {
-            interlinearContainer.innerHTML = '<div class="alert alert-danger w-100 mt-3">Hubo un error de red conectando con el servidor.</div>';
-            console.error(err);
-        }
+      } catch (err) {
+        interlinearContainer.innerHTML =
+          '<div class="alert alert-danger w-100 mt-3">Hubo un error de red conectando con el servidor.</div>';
+        console.error(err);
+      }
     });
-});
+  });
 </script>
 {% endblock %}

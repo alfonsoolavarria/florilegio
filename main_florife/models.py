@@ -44,6 +44,31 @@ class Article(models.Model):
     def image(self):
         return {'url': self.image_url}
 
+class Essay(models.Model):
+    STATUS_CHOICES = [
+        ('revision', 'En Revisión'),
+        ('liberado', 'Liberado'),
+    ]
+
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True)
+    author = models.ForeignKey(Author, on_delete=models.SET_NULL, null=True, related_name="essays")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="essays")
+    image_url = models.URLField(max_length=500)
+    content = models.TextField()
+    tags = models.JSONField(default=list)
+    is_featured = models.BooleanField(default=False)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='revision')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def image(self):
+        return {'url': self.image_url}
+
 class PalabraBiblia(models.Model):
     ognt_sort = models.CharField(max_length=50, primary_key=True)
     libro = models.IntegerField()

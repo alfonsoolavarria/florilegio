@@ -27,9 +27,14 @@
         <div class="row child-cols-12 sm:child-cols-6 lg:child-cols-3 g-4">
             {% for cat in categories %}
             <div>
-                <a href="?categoria={{ cat.id }}" class="category-card panel vstack items-center justify-center p-4 lg:p-6 text-none bg-white dark:bg-gray-800 {% if selected_category.id == cat.id %}border-primary border-2 shadow-sm{% endif %}">
+                <a href="?categoria={{ cat.id }}" class="category-card panel vstack items-center justify-center p-4 lg:p-6 text-none bg-white dark:bg-gray-800 position-relative overflow-hidden z-1 border rounded-3 shadow-xs hover:shadow-sm hover:border-primary transition-all duration-300 group {% if selected_category.id == cat.id %}border-primary border-2 shadow-sm{% endif %}">
+                    <!-- Marca de Agua (Fondo Sutil Estilo Boceto) -->
+                    <div class="position-absolute bottom-0 end-0 z-n1 text-primary opacity-10 group-hover:opacity-15 transition-all duration-500" style="color: rgb(178 176 175) !important; transform: translate(15%, 25%) rotate(-15deg); pointer-events: none;">
+                        <i class="{{ cat.icon|default:'unicon-book' }}" style="font-size: 11rem; line-height: 1"></i>
+                    </div>
+
                     <div class="category-icon">
-                        <i class="{{ cat.icon }}"></i>
+                        <i class="{{ cat.icon|default:'unicon-book' }}"></i>
                     </div>
                     <h4 class="h5 mb-1">{{ cat.name }}</h4>
                     <span class="fs-7 opacity-50">{{ cat.articles.count }} Artículos</span>
@@ -39,7 +44,12 @@
             <!-- Option to clear filter -->
             {% if selected_category %}
             <div>
-                <a href="?" class="category-card panel vstack items-center justify-center p-4 lg:p-6 text-none bg-gray-50 dark:bg-gray-800">
+                <a href="?" class="category-card panel vstack items-center justify-center p-4 lg:p-6 text-none bg-gray-50 dark:bg-gray-800 position-relative overflow-hidden z-1 border rounded-3 shadow-xs hover:shadow-sm transition-all duration-300 group">
+                    <!-- Marca de Agua (Fondo Sutil Estilo Boceto) -->
+                    <div class="position-absolute bottom-0 end-0 z-n1 text-primary opacity-10 group-hover:opacity-15 transition-all duration-500" style="color: rgb(178 176 175) !important; transform: translate(15%, 25%) rotate(-15deg); pointer-events: none;">
+                        <i class="unicon-grid" style="font-size: 11rem; line-height: 1"></i>
+                    </div>
+
                     <div class="category-icon">
                         <i class="unicon-grid"></i>
                     </div>

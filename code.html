@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#594325",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#201a18",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#4c4542",
+                    "tertiary": "#352f2c",
+                    "on-background": "#1b1c19",
+                    "secondary": "#735a3a",
+                    "error-container": "#ffdad6",
+                    "primary-fixed-dim": "#e7bdb1",
+                    "secondary-fixed-dim": "#e2c19b",
+                    "on-primary-fixed": "#2c160e",
+                    "surface-container": "#f0eee9",
+                    "surface-container-highest": "#e4e2dd",
+                    "surface": "#fbf9f4",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed-dim": "#cfc4c0",
+                    "inverse-primary": "#e7bdb1",
+                    "on-surface-variant": "#504441",
+                    "inverse-surface": "#30312e",
+                    "on-surface": "#1b1c19",
+                    "background": "#fbf9f4",
+                    "outline": "#827470",
+                    "surface-container-high": "#eae8e3",
+                    "inverse-on-surface": "#f2f1ec",
+                    "tertiary-fixed": "#ece0dc",
+                    "primary-container": "#5d4037",
+                    "on-secondary-container": "#785e3e",
+                    "secondary-container": "#fddab2",
+                    "surface-tint": "#77574d",
+                    "on-primary-container": "#d4ada1",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#ffdbd0",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#d4c3be",
+                    "surface-container-low": "#f5f3ee",
+                    "tertiary-container": "#4c4542",
+                    "on-secondary-fixed": "#291801",
+                    "surface-dim": "#dbdad5",
+                    "surface-variant": "#e4e2dd",
+                    "on-tertiary-container": "#bdb3af",
+                    "on-primary-fixed-variant": "#5d4037",
+                    "on-secondary": "#ffffff",
+                    "surface-bright": "#fbf9f4",
+                    "secondary-fixed": "#ffddb6",
+                    "primary": "#442a22"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "lg": "48px",
+                    "base": "8px",
+                    "md": "24px",
+                    "xl": "80px",
+                    "container-max": "1140px",
+                    "gutter": "24px",
+                    "sm": "12px"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Noto Serif"],
+                    "headline-lg": ["Noto Serif"],
+                    "headline-md": ["Noto Serif"],
+                    "body-lg": ["Noto Serif"],
+                    "body-md": ["Noto Serif"],
+                    "label-md": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-xl": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.7", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #fbf9f4; /* Surface Background from config */
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- TopAppBar -->
+<header class="bg-[#FDFCFB] dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 sticky top-0 z-50">
+<div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto w-full">
+<div class="flex items-center gap-xl">
+<span class="font-serif text-2xl font-bold italic text-[#5D4037] dark:text-[#D7CCC8]">Theologia Scholastica</span>
+<nav class="hidden md:flex items-center gap-md">
+<a class="font-serif text-lg tracking-tight text-[#5D4037] dark:text-white border-b border-[#5D4037] pb-1 font-medium" href="#">Ensayos</a>
+<a class="font-serif text-lg tracking-tight text-stone-500 dark:text-stone-400 hover:text-[#5D4037] transition-colors" href="#">Índice Temático</a>
+<a class="font-serif text-lg tracking-tight text-stone-500 dark:text-stone-400 hover:text-[#5D4037] transition-colors" href="#">Autores</a>
+<a class="font-serif text-lg tracking-tight text-stone-500 dark:text-stone-400 hover:text-[#5D4037] transition-colors" href="#">Biblioteca</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center text-stone-500 hover:text-[#5D4037] transition-all scale-95 duration-200 ease-in-out cursor-pointer">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+</div>
+<div class="flex items-center text-stone-500 hover:text-[#5D4037] transition-all scale-95 duration-200 ease-in-out cursor-pointer">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-5xl mx-auto px-gutter py-xl">
+<!-- Hero Section -->
+<header class="mb-xl text-center">
+<h1 class="font-headline-xl text-headline-xl text-primary mb-base">Ensayos</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                Exploraciones profundas sobre la tradición escolástica, la teología natural y la síntesis de la fe y la razón en la era contemporánea.
+            </p>
+</header>
+<!-- Filters & Search Bar (Instructional addition for "Explorador" context) -->
+<div class="flex flex-col md:flex-row justify-between items-center mb-xl border-b border-outline-variant pb-md">
+<div class="flex gap-md mb-md md:mb-0">
+<button class="font-label-md text-label-md uppercase tracking-widest text-primary border-b-2 border-primary pb-xs">Recientes</button>
+<button class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors pb-xs">Más Leídos</button>
+<button class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors pb-xs">Destacados</button>
+</div>
+<div class="relative w-full md:w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary rounded-none py-2 pl-10 pr-4 font-label-md text-label-md" placeholder="Buscar ensayos..." type="text"/>
+</div>
+</div>
+<!-- Essays Horizontal List -->
+<section class="flex flex-col gap-xl">
+<!-- Essay Row 1 -->
+<article class="grid grid-cols-1 md:grid-cols-12 gap-md items-start group">
+<div class="md:col-span-3 aspect-[4/3] bg-surface-container overflow-hidden">
+<img alt="Ensayo sobre la escolástica" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A macro photograph of an antique, leather-bound theological book lying open on a weathered wooden desk. The scene is bathed in warm, directional morning light that catches the texture of the vellum pages and delicate ink calligraphy. The overall aesthetic is one of scholarly focus and timeless academic tradition, utilizing a warm palette of sepias, creams, and dark mahogany tones consistent with an editorial scholarly publication." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy1pMNw45F5cn0A_YGevi9ZUeo30BEAsVVhdy2PuyVFpOYoYxjTsldNo--9T2tkSxpreGphQOeaZ1g2ahJbsbsmFQ6iv4W6Tlp1OIGOJmLNDoReYjxOPNi1tybM914J3I2fNjdbMgNkvUba6ZLMe-KbYO7Wqt0rAeqeciZncWU-ny3bD92MYJYi2YysW8b-MA-HMHrhc1PgETkTvmBdoNTwGChJEbhPdadpf9zbd1IYGnGSARIFi6kRGqQuo0u4sWp5PzLbD4cTuQ"/>
+</div>
+<div class="md:col-span-9 flex flex-col justify-between h-full">
+<div>
+<div class="flex items-center gap-sm mb-base">
+<span class="font-label-sm text-label-sm uppercase tracking-widest bg-secondary-container text-on-secondary-container px-2 py-0.5">Metafísica</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">12 Octubre, 2023</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary mb-base group-hover:text-secondary transition-colors cursor-pointer">La Analogía del Ser en la tradición Tomista</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md line-clamp-3">
+                            Un análisis exhaustivo sobre cómo la distinción entre esencia y existencia fundamenta la posibilidad de un conocimiento racional de lo divino, rescatando las fuentes originales del siglo XIII para el diálogo filosófico actual.
+                        </p>
+</div>
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs">AM</div>
+<p class="font-label-md text-label-md text-primary font-semibold">Dr. Alberto Magno</p>
+</div>
+</div>
+</article>
+<hr class="border-outline-variant opacity-50"/>
+<!-- Essay Row 2 -->
+<article class="grid grid-cols-1 md:grid-cols-12 gap-md items-start group">
+<div class="md:col-span-3 aspect-[4/3] bg-surface-container overflow-hidden">
+<img alt="Ensayo sobre manuscritos" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A wide-angle shot of a serene, sun-drenched private library with floor-to-ceiling wooden bookshelves filled with historical manuscripts. Soft golden hour light filters through high windows, illuminating dust motes and highlighting the rich textures of the books and a central study table. The atmosphere is quiet and intellectually reverent, following a minimal editorial design language with natural earth tones and high-contrast lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrQoQwCFvtUMGHQQAAMiBl5rOGS0uN7HJLKI4JkZmc1q4Pb8ZYmfFd2dzx9R-4PhQh8-XCAs5V1zH2j81yg29otVegNQNY6rIvH9XpQw09-tvRKuZa9s5LVOvusV9leHLFQy7UoszxJ-No3KhhEtnq_Co07vX66o5Dv3Rc7cAy-lEvFZb1l1GeRmzaMVhGWVhFd4vpJ4RsdQtnUbfbEjI7hDV6_P6AAA4r301u3Wx3O24T3zAi4ZBKNqMRXkC01rIXB2VvAvjo2fg"/>
+</div>
+<div class="md:col-span-9 flex flex-col justify-between h-full">
+<div>
+<div class="flex items-center gap-sm mb-base">
+<span class="font-label-sm text-label-sm uppercase tracking-widest bg-secondary-container text-on-secondary-container px-2 py-0.5">Ética</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">05 Septiembre, 2023</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary mb-base group-hover:text-secondary transition-colors cursor-pointer">Virtud y Bien Común: Una relectura de la Secunda Secundae</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md line-clamp-3">
+                            Explorando la relevancia de la justicia distributiva en el pensamiento de Aquino y su aplicación práctica en las estructuras sociales contemporáneas. El ensayo profundiza en el concepto de "Habitus" como motor de cambio social.
+                        </p>
+</div>
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs">CD</div>
+<p class="font-label-md text-label-md text-primary font-semibold">Prof. Catherine de Sienne</p>
+</div>
+</div>
+</article>
+<hr class="border-outline-variant opacity-50"/>
+<!-- Essay Row 3 -->
+<article class="grid grid-cols-1 md:grid-cols-12 gap-md items-start group">
+<div class="md:col-span-3 aspect-[4/3] bg-surface-container overflow-hidden">
+<img alt="Ensayo sobre escritura" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A minimalist composition showing a single inkwell and a quill pen resting on a blank parchment sheet. The setting is a clean, stone-walled study with subtle shadow patterns from a nearby arched window. The lighting is soft and neutral, emphasizing a quiet space for contemplation and writing. The color palette is composed of soft creams, stone grays, and deep charcoal blacks, reflecting a modern minimalist approach to classic scholarly themes." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9lNZ_mNcyatakEdrosS5gAoSCExTlE8oFPFKzbopJSWfiMwGt5p_2LCOGrbj3BS3FDYHR6vPa1d4WhEJqsnjANaJk4iSHymaY-Cc6wSTRHP8ZbE8Pm7BmVFv44xjagoMkwaaorMvdQTS3051fpBEklOGViWB4MIE0OO2bYplfpu0TC2kKzPz3I2JJ9LcMdPXHdq81Qkdo-jiUM1t0WDdjiTKQBQvDd_XJ_q7tTQSj1OIe2umaT65taLK65k0r9OT7NvCih_3lNAU"/>
+</div>
+<div class="md:col-span-9 flex flex-col justify-between h-full">
+<div>
+<div class="flex items-center gap-sm mb-base">
+<span class="font-label-sm text-label-sm uppercase tracking-widest bg-secondary-container text-on-secondary-container px-2 py-0.5">Epistemología</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">28 Agosto, 2023</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary mb-base group-hover:text-secondary transition-colors cursor-pointer">El Intelecto Agente y la Iluminación Divina</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md line-clamp-3">
+                            Debates sobre la gnoseología medieval: una comparación crítica entre las posturas agustinianas y el aristotelismo cristiano. ¿Cómo interactúa la luz natural de la razón con la revelación en el acto del entendimiento?
+                        </p>
+</div>
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs">BT</div>
+<p class="font-label-md text-label-md text-primary font-semibold">Dr. Bonaventura T.</p>
+</div>
+</div>
+</article>
+</section>
+<!-- Pagination -->
+<nav class="flex justify-center items-center gap-md mt-xl py-lg border-t border-outline-variant">
+<button class="w-10 h-10 flex items-center justify-center border border-outline text-on-surface-variant hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center bg-primary text-white font-label-md">1</button>
+<button class="w-10 h-10 flex items-center justify-center border border-outline text-on-surface-variant hover:bg-primary-container hover:text-white font-label-md">2</button>
+<button class="w-10 h-10 flex items-center justify-center border border-outline text-on-surface-variant hover:bg-primary-container hover:text-white font-label-md">3</button>
+<button class="w-10 h-10 flex items-center justify-center border border-outline text-on-surface-variant hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</nav>
+</main>
+<!-- Footer -->
+<footer class="bg-[#FDFCFB] dark:bg-stone-950 border-t border-stone-200 dark:border-stone-800 mt-20">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 py-10 max-w-7xl mx-auto">
+<p class="font-sans text-xs uppercase tracking-widest text-stone-400 dark:text-stone-600 mb-6 md:mb-0">
+                © 2024 Instituto de Estudios Teológicos. Edición Académica.
+            </p>
+<nav class="flex flex-wrap justify-center gap-md">
+<a class="font-sans text-xs uppercase tracking-widest text-stone-400 dark:text-stone-600 hover:text-[#5D4037] dark:hover:text-stone-200 transition-opacity opacity-80 hover:opacity-100" href="#">Privacidad</a>
+<a class="font-sans text-xs uppercase tracking-widest text-stone-400 dark:text-stone-600 hover:text-[#5D4037] dark:hover:text-stone-200 transition-opacity opacity-80 hover:opacity-100" href="#">Términos de Uso</a>
+<a class="font-sans text-xs uppercase tracking-widest text-stone-400 dark:text-stone-600 hover:text-[#5D4037] dark:hover:text-stone-200 transition-opacity opacity-80 hover:opacity-100" href="#">Contacto</a>
+<a class="font-sans text-xs uppercase tracking-widest text-stone-400 dark:text-stone-600 hover:text-[#5D4037] dark:hover:text-stone-200 transition-opacity opacity-80 hover:opacity-100" href="#">Archivo Histórico</a>
+</nav>
+</div>
+</footer>
+</body></html>
