@@ -31,6 +31,7 @@ urlpatterns = [
     path("terminos/", views.terms, name="terms"),
     path("contacto/", views.contact, name="contact"),
     path("estudios/", views.estudios, name="estudios"),
+    path("apoyo/", views.apoyo, name="apoyo"),
     path("api/versiculo/", views.api_get_versiculo, name="api_get_versiculo"),
     
     # API Bible Sync Endpoints for the Admin Panel

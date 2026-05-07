@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.db.models import Q
 from django.core.paginator import Paginator
 from .models import Article, Category, LibroBiblia, Essay
+from django.core.serializers.json import DjangoJSONEncoder
 
 def dashboard(request):
     featured_articles = Article.objects.filter(is_featured=True, status='liberado')[:6]
@@ -141,6 +142,9 @@ def terms(request):
 
 def contact(request):
     return render(request, 'contact.html')
+
+def apoyo(request):
+    return render(request, 'apoyo.html')
 
 def estudios(request):
     libros_nt = LibroBiblia.objects.filter(testamento="Nuevo Testamento").order_by('numero')

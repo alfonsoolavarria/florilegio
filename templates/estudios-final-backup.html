@@ -127,18 +127,9 @@
   .ql-container {
     font-family: "Inter", sans-serif !important;
     font-size: 1.25rem !important;
-    height: 550px;
-    overflow-y: auto;
+    min-height: 300px;
     background: #fff;
     line-height: 1.8 !important;
-  }
-  #study-editor-wrapper {
-    max-height: 600px;
-    overflow-y: auto;
-    margin-top: 3rem;
-    border-top: 2px solid var(--bs-primary);
-    padding-top: 2rem;
-    padding-bottom: 2rem;
   }
   .ql-container .ql-editor {
     line-height: 1.8 !important;
@@ -192,14 +183,6 @@
     background-size: 12px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.04);
   }
-
-  /* Mode selector buttons */
-  #btn-mode-leer.active,
-  #btn-mode-estudio.active {
-    background-color: #fff !important;
-    color: var(--bs-primary) !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  }
   .bible-select:hover {
     border-color: #800020;
   }
@@ -233,327 +216,553 @@
   .dark .bible-label {
     color: #9ca3af;
   }
-
-  /* Modal personalizado estilo Florilegio */
-  .flor-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    visibility: hidden;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.18s ease, visibility 0.18s ease;
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
-  }
-  .flor-modal-overlay.open {
-    visibility: visible;
-    pointer-events: auto;
-    opacity: 1;
-  }
-  .flor-modal {
-    background: #fff;
-    border-radius: 16px;
-    max-width: 420px;
-    width: 90%;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
-    transform: translateY(24px) scale(0.96);
-    transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
-    overflow: hidden;
-    will-change: transform;
-  }
-  .flor-modal-overlay.open .flor-modal {
-    transform: translateY(0) scale(1);
-  }
-  .flor-modal-header {
-    padding: 1.35rem 1.5rem 0;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .flor-modal-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    flex-shrink: 0;
-  }
-  .flor-modal-icon.warning {
-    background: #fef3c7;
-    color: #d97706;
-  }
-  .flor-modal-icon.info {
-    background: #dbeafe;
-    color: #2563eb;
-  }
-  .flor-modal-title {
-    font-family: var(--font-sans);
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #1a1a1a;
-    margin: 0;
-  }
-  .flor-modal-body {
-    padding: 0.75rem 1.5rem 1.5rem;
-    color: #555;
-    font-size: 0.95rem;
-    line-height: 1.6;
-  }
-  .flor-modal-footer {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: flex-end;
-    padding: 0 1.5rem 1.25rem;
-  }
-  .flor-modal-btn {
-    min-width: 90px;
-    padding: 0.55rem 1.2rem;
-    border-radius: 10px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
-    font-family: var(--font-sans);
-  }
-  .flor-modal-btn-cancel {
-    background: #f3f4f6;
-    color: #374151;
-    border: 1px solid #e5e7eb;
-  }
-  .flor-modal-btn-cancel:hover {
-    background: #e5e7eb;
-  }
-  .flor-modal-btn-primary {
-    background: #800020;
-    color: #fff;
-  }
-  .flor-modal-btn-primary:hover {
-    background: #a00028;
-  }
-  .dark .flor-modal {
-    background: #1f2937;
-  }
-  .dark .flor-modal-title {
-    color: #f3f4f6;
-  }
-  .dark .flor-modal-body {
-    color: #d1d5db;
-  }
-  .dark .flor-modal-btn-cancel {
-    background: #374151;
-    color: #e5e7eb;
-    border-color: #4b5563;
-  }
-  .dark .flor-modal-btn-cancel:hover {
-    background: #4b5563;
-  }
 </style>
 
-<!-- Section: Header -->
-<div class="hero-brand-section panel overflow-hidden bg-gray-25 dark:bg-gray-900">
-  <div class="container py-3 lg:py-4">
-    <div class="row justify-center text-center">
-      <div class="col-12 col-md-8">
-        <h1 class="h2 lg:h1 fw-bold text-gray-900 dark:text-white">Biblia</h1>
-        <p class="mt-2 fs-5 text-gray-600 dark:text-gray-400 italic">
-          Estudios de las Escrituras
-        </p>
+<!-- Section: Header (diseño de estudiovista.html) -->
+<header class="max-w-container-max mx-auto px-gutter py-margin-lg text-center">
+  <h1 class="font-display-lg text-display-lg text-on-surface mb-2">
+    Biblia
+  </h1>
+  <p
+    class="font-headline-md text-headline-md text-on-surface-variant italic mb-4"
+  >
+    Estudios de las Escrituras
+  </p>
+  <!-- Mode Selector (diseño de estudiovista.html) -->
+  <div class="mt-margin-lg flex justify-center">
+    <div class="bg-surface-container-low p-1 rounded-xl flex gap-1">
+      <button
+        id="tab-leer-btn"
+        onclick="switchTab('leer')"
+        class="mode-selector-btn active"
+        type="button"
+      >
+        <i class="unicon-book me-1"></i> Lectura Bíblica
+      </button>
+      <button
+        id="tab-estudio-btn"
+        onclick="switchTab('estudio')"
+        class="mode-selector-btn"
+        type="button"
+      >
+        <i class="unicon-search-alt me-1"></i> Biblia para Estudiar
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Section: Main Layout (diseño de estudiovista.html) -->
+<div
+  class="max-w-container-max mx-auto px-gutter flex flex-col lg:flex-row gap-gutter pb-section-gap"
+>
+  <!-- Sidebar: Search & Filter (diseño de estudiovista.html) -->
+  <aside class="w-full lg:w-72 shrink-0">
+    <div
+      class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 sticky top-24"
+    >
+      <h3
+        class="font-label-caps text-on-surface-variant mb-6 uppercase tracking-widest"
+      >
+        Navegación
+      </h3>
+      <!-- Contenido de Lectura Bíblica -->
+      <div id="sidebar-leer" style="display: block;">
+        <div class="space-y-gutter">
+          <!-- Versión -->
+          <div>
+            <label for="leer-versionSelect" class="font-label-caps text-on-surface-variant block mb-2"
+              >Versión</label>
+            >
+            <select class="w-full bg-surface border-b border-outline-variant focus:border-primary focus:ring-0 text-body-md py-2 appearance-none" id="leer-versionSelect" name="version">
+              <option value="nbla">Nueva Biblia de las Américas (NBLA)</option>
+              <option value="rv1960">Reina Valera 1960 (Estudio)</option>
+            </select>
+          </div>
+          <!-- Libro -->
+          <div>
+            <label for="leer-libroSelect" class="font-label-caps text-on-surface-variant block mb-2"
+              >Libro</label>
+            >
+            <select class="w-full bg-surface border-b border-outline-variant focus:border-primary focus:ring-0 text-body-md py-2 appearance-none" id="leer-libroSelect" name="libro">
+              <option value="" disabled selected>Seleccione libro...</option>
+              <optgroup label="Nuevo Testamento">
+                {% for libro in libros %}
+                <option value="{{ libro.numero }}">{{ libro.nombre }}</option>
+                {% endfor %}
+              </optgroup>
+            </select>
+          </div>
+          <!-- Capítulo -->
+          <div>
+            <label for="leer-capituloSelect" class="font-label-caps text-on-surface-variant block mb-2"
+              >Capítulo</label>
+            >
+            <select class="w-full bg-surface border-b border-outline-variant focus:border-primary focus:ring-0 text-body-md py-2 appearance-none" id="leer-capituloSelect" name="capitulo">
+              <option value="" disabled selected>---</option>
+            </select>
+          </div>
+          <button id="btn-leer" type="button" class="w-full py-3 bg-primary text-on-primary rounded-lg font-label-caps flex items-center justify-center gap-2 hover:bg-primary-container transition-all">
+            <span class="unicon-book" style="font-size: 18px;"></span>
+            Leer
+          </button>
+        </div>
       </div>
+
+      <!-- Contenido de Biblia para Estudiar -->
+      <div id="sidebar-estudio" style="display: none;">
+        <div class="space-y-gutter">
+          <!-- Libro -->
+          <div>
+            <label for="estudio-libroSelect" class="font-label-caps text-on-surface-variant block mb-2"
+              >Libro</label>
+            >
+            <select class="w-full bg-surface border-b border-outline-variant focus:border-primary focus:ring-0 text-body-md py-2 appearance-none" id="estudio-libroSelect" name="libro">
+              <option value="" disabled selected>Seleccione libro...</option>
+              <optgroup label="Nuevo Testamento">
+                {% for libro in libros %}
+                <option value="{{ libro.numero }}">{{ libro.nombre }}</option>
+                {% endfor %}
+              </optgroup>
+            </select>
+          </div>
+          <!-- Capítulo y Versículo -->
+          <div class="grid grid-cols-2 gap-base">
+            <div>
+              <label for="estudio-capituloSelect" class="font-label-caps text-on-surface-variant block mb-2"
+                >Capítulo</label>
+              >
+              <select class="w-full bg-surface border-b border-outline-variant focus:border-primary focus:ring-0 text-body-md py-2 appearance-none" id="estudio-capituloSelect" name="capitulo">
+                <option value="" disabled selected>---</option>
+              </select>
+            </div>
+            <div>
+              <label for="estudio-versiculoSelect" class="font-label-caps text-on-surface-variant block mb-2"
+                >Versículo</label>
+              >
+              <select class="w-full bg-surface border-b border-outline-variant focus:border-primary focus:ring-0 text-body-md py-2 appearance-none" id="estudio-versiculoSelect" name="versiculo">
+                <option value="" disabled selected>---</option>
+              </select>
+            </div>
+          </div>
+          <button id="btn-estudio" type="button" class="w-full py-3 bg-primary text-on-primary rounded-lg font-label-caps flex items-center justify-center gap-2 hover:bg-primary-container transition-all">
+            <span class="material-symbols-outlined" style="font-size: 18px;">search</span>
+            Buscar
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area (diseño de estudiovista.html) -->
+  <div class="flex-grow space-y-gutter">
+    <!-- ===================== ÁREA DE LECTURA BÍBLICA ===================== -->
+    <div id="content-leer" style="display: block;">
+      <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-gutter shadow-sm">
+        <div
+          class="flex items-center justify-between mb-margin-lg border-b border-outline-variant/20 pb-4"
+        >
+          <h2 class="font-headline-md text-headline-md text-on-surface">
+            Lectura Bíblica
+          </h2>
+        </div>
+        <div
+          id="leer-container"
+          class="d-flex flex-wrap gap-2 align-items-start"
+          style="min-height: 200px"
+        >
+          <div class="w-100 text-center opacity-50 fst-italic text-on-surface-variant">
+            Seleccione una versión, libro y capítulo en el panel izquierdo y presione Leer.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== ÁREA DE BIBLIA PARA ESTUDIAR ===================== -->
+    <div id="content-estudio" style="display: none;">
+      <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-gutter shadow-sm">
+        <div
+          class="flex items-center justify-between mb-margin-lg border-b border-outline-variant/20 pb-4"
+        >
+          <h2 class="font-headline-md text-headline-md text-on-surface">
+            <span id="estudio-referencia">Florilegio Interlineal</span>
+          </h2>
+          <div class="flex gap-base">
+            <span
+              class="material-symbols-outlined text-primary cursor-pointer hover:bg-surface-container p-2 rounded-full"
+              onclick="shareEstudio()"
+            >share</span>
+          </div>
+        </div>
+        <div
+          id="interlinear-container"
+          class="d-flex flex-wrap gap-2 align-items-start"
+          style="min-height: 200px"
+        >
+          <div class="w-100 text-center opacity-50 fst-italic text-on-surface-variant">
+            Seleccione las opciones en el panel izquierdo y presione Buscar.
+          </div>
+        </div>
+
+        <!-- Contenedor del Editor de Estudio -->
+        <div id="study-editor-wrapper" style="display: none;">
+          <div
+            class="study-editor-header d-flex align-items-center gap-2"
+          >
+            <h5 class="h6 mb-0 text-primary fw-bold">
+              <i class="unicon-pen me-1"></i> Bloc de Notas de Estudio
+            </h5>
+
+            <div class="ms-auto d-flex gap-2">
+              <button
+                class="btn-export-study btn-export-word shadow-xs"
+                onclick="exportToWord()"
+              >
+                <i class="unicon-file-word text-primary"></i> Word
+              </button>
+              <button
+                class="btn-export-study btn-export-pdf shadow-xs"
+                onclick="exportToPDF()"
+              >
+                <i class="unicon-file-medical text-danger"></i> PDF
+              </button>
+              <button
+                class="btn-close-study shadow-xs"
+                onclick="closeStudyEditor()"
+              >
+                <i class="unicon-multiply me-1"></i> Cerrar y borrar
+              </button>
+            </div>
+          </div>
+          <div id="quill-editor"></div>
+          <div class="mt-3 text-end">
+            <span class="fs-7 text-gray-500 italic me-3"
+              >Nota: Los cambios se guardan localmente mientras el bloc
+              está abierto.</span>
+            >
+          </div>
+        </div>
+        <!-- Créditos del proyecto -->
+        <div
+          class="mt-4 pt-3 border-top d-flex align-items-start gap-2 text-gray-400 dark:text-gray-600"
+          style="font-size: 11px; line-height: 1.5"
+        >
+          <i
+            class="unicon-information-circle flex-shrink-0 mt-1"
+            style="font-size: 14px"
+          ></i>
+          <span>
+            Este espacio de estudio utiliza datos del proyecto
+            <a
+              href="https://github.com/eliranwong/OpenGNT"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-gray-500 dark:text-gray-500 text-decoration-underline fw-medium"
+              >OpenGNT</a>
+            >, desarrollado por Eliran Wong, integrando la morfología de
+            MorphGNT y el texto de SBLGNT. Agradecemos a la comunidad de
+            código abierto por facilitar estas herramientas de análisis
+            lingüístico.
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="decorative-divider"></div>
 </div>
 
-<!-- Mode Selector (centered buttons like estudiovista) -->
-<div class="container py-3">
-  <div class="row justify-center">
-    <div class="col-12 text-center">
-      <div class="d-inline-flex bg-light rounded-pill p-1 border" style="background-color: var(--bs-gray-100) !important;">
+<!-- Section: Tabs -->
+<div class="category-grid-section py-3 lg:py-4 bg-white dark:bg-gray-900">
+  <div class="container-fluid px-4 ps-lg-10">
+    <!-- Nav Tabs (manual JS, sin depender de Bootstrap JS) -->
+    <ul class="nav biblia-tabs border-bottom mb-0" id="bibliaTabs">
+      <li class="nav-item">
         <button
+          class="nav-link active"
+          id="tab-leer-btn"
+          data-tab-target="tab-leer"
           type="button"
-          class="btn rounded-pill px-4 py-2 fw-semibold active border-0"
-          id="btn-mode-leer"
-          style="font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase;"
-          onclick="switchTab('leer')"
         >
           <i class="unicon-book me-1"></i> Lectura Bíblica
         </button>
+      </li>
+      <li class="nav-item">
         <button
+          class="nav-link"
+          id="tab-estudio-btn"
+          data-tab-target="tab-estudio"
           type="button"
-          class="btn rounded-pill px-4 py-2 fw-semibold border-0"
-          id="btn-mode-estudio"
-          style="font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase;"
-          onclick="switchTab('estudio')"
         >
-          <i class="unicon-search me-1"></i> Biblia para Estudiar
+          <i class="unicon-search-alt me-1"></i> Biblia para Estudiar
         </button>
-      </div>
-    </div>
-  </div>
-</div>
+      </li>
+    </ul>
 
-<!-- Section: Main Content with Sidebar Layout -->
-<div class="category-grid-section py-3 lg:py-4 bg-white dark:bg-gray-900">
-  <div class="container-fluid px-4 ps-lg-10">
-    <!-- Hidden tab buttons for compatibility -->
-    <div style="display:none;">
-      <button class="nav-link active" id="tab-leer-btn" data-tab-target="tab-leer" type="button"></button>
-      <button class="nav-link" id="tab-estudio-btn" data-tab-target="tab-estudio" type="button"></button>
-    </div>
-
-    <!-- Main Layout: Sidebar + Content -->
-    <div class="d-flex flex-column flex-lg-row gap-4 mt-4">
-      <!-- Sidebar: Navegación (always visible) -->
-      <aside class="w-100" style="flex: 0 0 300px; max-width: 300px;">
-        <div class="panel p-4 bg-gray-25 dark:bg-gray-800 rounded-3 border sticky-top" style="top: 80px; z-index: 100;">
-          <h4 class="h6 mb-3 border-bottom pb-2 text-uppercase letter-spacing-wider" style="font-size: 0.8rem; letter-spacing: 0.1em;">Navegación</h4>
-          <!-- Sidebar content changes based on mode -->
-          <div id="sidebar-leer">
-            <form id="leer-form" class="vstack gap-3">
-              <div class="form-group">
-                <label for="leer-versionSelect" class="bible-label">Versión</label>
-                <select class="bible-select" id="leer-versionSelect" name="version">
-                  <option value="nbla">Nueva Biblia de las Américas (NBLA)</option>
-                  <option value="rv1960">Reina Valera 1960 (Estudio)</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="leer-libroSelect" class="bible-label">Libro</label>
-                <select class="bible-select" id="leer-libroSelect" name="libro">
-                  <option value="" disabled selected>Seleccione libro...</option>
-                  <optgroup label="Nuevo Testamento">
-                    {% for libro in libros %}
-                    <option value="{{ libro.numero }}">{{ libro.nombre }}</option>
-                    {% endfor %}
-                  </optgroup>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="leer-capituloSelect" class="bible-label">Capítulo</label>
-                <select class="bible-select" id="leer-capituloSelect" name="capitulo">
-                  <option value="" disabled selected>---</option>
-                </select>
-              </div>
-              <button id="btn-leer" type="button" class="btn btn-primary w-100 mt-2">
-                <i class="unicon-book me-1"></i> Leer
-              </button>
-            </form>
-          </div>
-          <div id="sidebar-estudio" style="display: none;">
-            <form id="estudio-form" class="vstack gap-3">
-              <div class="form-group">
-                <label for="estudio-libroSelect" class="bible-label">Libro</label>
-                <select class="bible-select" id="estudio-libroSelect" name="libro">
-                  <option value="" disabled selected>Seleccione libro...</option>
-                  <optgroup label="Nuevo Testamento">
-                    {% for libro in libros %}
-                    <option value="{{ libro.numero }}">{{ libro.nombre }}</option>
-                    {% endfor %}
-                  </optgroup>
-                </select>
-              </div>
-              <div class="row g-2">
-                <div class="col-6">
-                  <div class="form-group">
-                    <label for="estudio-capituloSelect" class="bible-label">Capítulo</label>
-                    <select class="bible-select" id="estudio-capituloSelect" name="capitulo">
-                      <option value="" disabled selected>---</option>
-                    </select>
-                  </div>
+    <!-- Tab Content -->
+    <div class="biblia-tab-content p-3" id="bibliaTabContent">
+      <!-- ===================== PESTAÑA 1: LEER BIBLIA ===================== -->
+      <div class="biblia-pane" id="tab-leer" style="display: block">
+        <div class="row">
+          <!-- Panel lateral Leer -->
+          <div class="col-12" style="flex: 0 0 300px; max-width: 290px">
+            <div class="panel p-3 bg-gray-25 dark:bg-gray-800 rounded-3 border">
+              <h4 class="h5 mb-3 border-bottom pb-2">Opciones de Lectura</h4>
+              <form id="leer-form" class="vstack gap-3">
+                <!-- Versión -->
+                <div class="form-group">
+                  <label
+                    for="leer-versionSelect"
+                    class="bible-label"
+                    >Versión</label
+                  >
+                  <select
+                    class="bible-select"
+                    id="leer-versionSelect"
+                    name="version"
+                  >
+                    <!-- <option value="ntv" selected>Nueva Traducción Viviente (NTV)</option> -->
+                    <option value="nbla">
+                      Nueva Biblia de las Américas (NBLA)
+                    </option>
+                    <option value="rv1960">Reina Valera 1960 (Estudio)</option>
+                    <!-- <option value="rvr09">Reina Valera 1909</option> -->
+                  </select>
                 </div>
-                <div class="col-6">
-                  <div class="form-group">
-                    <label for="estudio-versiculoSelect" class="bible-label">Versículo</label>
-                    <select class="bible-select" id="estudio-versiculoSelect" name="versiculo">
-                      <option value="" disabled selected>---</option>
-                    </select>
-                  </div>
+                <!-- Libro -->
+                <div class="form-group">
+                  <label
+                    for="leer-libroSelect"
+                    class="bible-label"
+                    >Libro</label
+                  >
+                  <select
+                    class="bible-select"
+                    id="leer-libroSelect"
+                    name="libro"
+                  >
+                    <option value="" disabled selected>
+                      Seleccione libro...
+                    </option>
+                    <optgroup label="Nuevo Testamento">
+                      {% for libro in libros %}
+                      <option value="{{ libro.numero }}">
+                        {{ libro.nombre }}
+                      </option>
+                      {% endfor %}
+                    </optgroup>
+                  </select>
                 </div>
-              </div>
-              <button id="btn-estudio" type="button" class="btn btn-primary w-100 mt-2">
-                <i class="unicon-search me-1"></i> Buscar
-              </button>
-            </form>
-          </div>
-        </div>
-      </aside>
-
-      <!-- Main Content Area -->
-      <div class="flex-grow-1" style="min-width: 0;">
-        <!-- Content: Lectura Bíblica -->
-        <div id="content-leer">
-          <div class="panel p-4 bg-white dark:bg-gray-800 rounded-3 border">
-            <h4 class="h5 mb-4 border-bottom pb-2"><i class="unicon-book me-2"></i> Lectura Bíblica</h4>
-            <div id="leer-container" class="d-flex flex-wrap gap-2 align-items-start" style="min-height: 200px;">
-              <div class="w-100 text-center opacity-50 fst-italic">
-                Selecciona una versión, libro y capítulo en la barra lateral y presiona Leer.
-              </div>
+                <!-- Capítulo -->
+                <div class="form-group">
+                  <label
+                    for="leer-capituloSelect"
+                    class="bible-label"
+                    >Capítulo</label
+                  >
+                  <select
+                    class="bible-select"
+                    id="leer-capituloSelect"
+                    name="capitulo"
+                  >
+                    <option value="" disabled selected>---</option>
+                  </select>
+                </div>
+                <button
+                  id="btn-leer"
+                  type="button"
+                  class="btn btn-primary w-100 mt-2"
+                >
+                  <i class="unicon-book me-1"></i> Leer
+                </button>
+              </form>
             </div>
           </div>
-        </div>
-        <!-- Content: Biblia para Estudiar -->
-        <div id="content-estudio" style="display: none;">
-          <div class="panel p-4 bg-white dark:bg-gray-800 rounded-3 border">
-            <div class="d-flex align-items-center justify-content-between mb-4 border-bottom pb-3">
-              <h4 class="h5 mb-0"><i class="unicon-notebook me-2"></i> Florilegio Interlineal</h4>
-              <div class="d-flex gap-2">
-                <i class="unicon-share text-primary cursor-pointer hover-bg-light p-2 rounded-circle" style="font-size: 18px; cursor: pointer;" onclick="shareEstudio()"></i>
-                <i class="unicon-bookmark text-primary cursor-pointer hover-bg-light p-2 rounded-circle" style="font-size: 18px; cursor: pointer;"></i>
-              </div>
-            </div>
-            <div id="interlinear-container" class="d-flex flex-wrap gap-3 align-items-start" style="min-height: 200px;">
-              <div class="w-100 text-center opacity-50 fst-italic">
-                Selecciona las opciones en la barra lateral y presiona Buscar.
-              </div>
-            </div>
 
-            <!-- Contenedor del Editor de Estudio -->
-            <div id="study-editor-wrapper" style="display: none;">
-              <div class="study-editor-header d-flex align-items-center gap-2 mb-3">
-                <h5 class="h6 mb-0 text-primary fw-bold">
-                  <i class="unicon-pen me-1"></i> Bloc de Notas de Estudio
-                </h5>
-                <div class="ms-auto d-flex gap-2">
-                  <button class="btn-export-study btn-export-word shadow-xs" onclick="exportToWord()">
-                    <i class="unicon-file-word text-primary"></i> Word
-                  </button>
-                  <button class="btn-export-study btn-export-pdf shadow-xs" onclick="exportToPDF()">
-                    <i class="unicon-file-medical text-danger"></i> PDF
-                  </button>
-                  <button class="btn-close-study shadow-xs" onclick="closeStudyEditor()">
-                    <i class="unicon-multiply me-1"></i> Cerrar
-                  </button>
+          <!-- Área de contenido Leer -->
+          <div class="col-12" style="flex: 1; min-width: 0">
+            <div
+              class="panel p-4 bg-white dark:bg-gray-800 rounded-3 border h-100"
+            >
+              <h4 class="h5 mb-4 border-bottom pb-2">Lectura Bíblica</h4>
+              <div
+                id="leer-container"
+                class="d-flex flex-wrap gap-2 align-items-start"
+                style="min-height: 200px"
+              >
+                <div class="w-100 text-center opacity-50 fst-italic">
+                  Selecciona una versión, libro y capítulo a tu izquierda y
+                  presiona Leer.
                 </div>
               </div>
-              <div id="quill-editor"></div>
-              <div class="mt-3 text-end">
-                <span class="fs-7 text-gray-500 italic me-3">Nota: Los cambios se guardan localmente mientras el bloc está abierto.</span>
-              </div>
-            </div>
-            <!-- Créditos del proyecto -->
-            <div class="mt-4 pt-3 border-top d-flex align-items-start gap-2 text-gray-400 dark:text-gray-600" style="font-size: 11px; line-height: 1.5;">
-              <i class="unicon-information-circle flex-shrink-0 mt-1" style="font-size: 14px"></i>
-              <span>
-                Este espacio de estudio utiliza datos del proyecto
-                <a href="https://github.com/eliranwong/OpenGNT" target="_blank" rel="noopener noreferrer" class="text-gray-500 dark:text-gray-500 text-decoration-underline fw-medium">OpenGNT</a>,
-                desarrollado por Eliran Wong, integrando la morfología de MorphGNT y el texto de SBLGNT.
-              </span>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- ===================== PESTAÑA 2: BIBLIA PARA ESTUDIAR ===================== -->
+      <div class="biblia-pane" id="tab-estudio" style="display: none">
+        <div class="row">
+          <!-- Panel lateral Estudio -->
+          <div class="col-12" style="flex: 0 0 300px; max-width: 290px">
+            <div class="panel p-3 bg-gray-25 dark:bg-gray-800 rounded-3 border">
+              <h4 class="h5 mb-3 border-bottom pb-2">Opciones de Estudio</h4>
+              <form id="estudio-form" class="vstack gap-3">
+                <!-- Libro -->
+                <div class="form-group">
+                  <label
+                    for="estudio-libroSelect"
+                    class="bible-label"
+                    >Libro</label
+                  >
+                  <select
+                    class="bible-select"
+                    id="estudio-libroSelect"
+                    name="libro"
+                  >
+                    <option value="" disabled selected>
+                      Seleccione libro...
+                    </option>
+                    <optgroup label="Nuevo Testamento">
+                      {% for libro in libros %}
+                      <option value="{{ libro.numero }}">
+                        {{ libro.nombre }}
+                      </option>
+                      {% endfor %}
+                    </optgroup>
+                  </select>
+                </div>
+                <div class="row g-2">
+                  <!-- Capítulo -->
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label
+                        for="estudio-capituloSelect"
+                        class="bible-label"
+                        >Capítulo</label
+                      >
+                      <select
+                        class="bible-select"
+                        id="estudio-capituloSelect"
+                        name="capitulo"
+                      >
+                        <option value="" disabled selected>---</option>
+                      </select>
+                    </div>
+                  </div>
+                  <!-- Versículo (requerido) -->
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label
+                        for="estudio-versiculoSelect"
+                        class="bible-label"
+                        >Versículo</label
+                      >
+                      <select
+                        class="bible-select"
+                        id="estudio-versiculoSelect"
+                        name="versiculo"
+                      >
+                        <option value="" disabled selected>---</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  id="btn-estudio"
+                  type="button"
+                  class="btn btn-primary w-100 mt-2"
+                >
+                  <i class="unicon-search me-1"></i> Buscar
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Área de contenido Estudio Interlineal -->
+          <div class="col-12" style="flex: 1; min-width: 0">
+            <div
+              class="panel p-4 bg-white dark:bg-gray-800 rounded-3 border h-100"
+            >
+              <h4 class="h5 mb-4 border-bottom pb-2">Florilegio Interlineal</h4>
+              <div
+                id="interlinear-container"
+                class="d-flex flex-wrap gap-2 align-items-start"
+                style="min-height: 200px"
+              >
+                <div class="w-100 text-center opacity-50 fst-italic">
+                  Selecciona las opciones a tu izquierda y presiona Buscar.
+                </div>
+              </div>
+
+              <!-- Contenedor del Editor de Estudio -->
+              <div id="study-editor-wrapper">
+                <div
+                  class="study-editor-header d-flex align-items-center gap-2"
+                >
+                  <h5 class="h6 mb-0 text-primary fw-bold">
+                    <i class="unicon-pen me-1"></i> Bloc de Notas de Estudio
+                  </h5>
+
+                  <div class="ms-auto d-flex gap-2">
+                    <button
+                      class="btn-export-study btn-export-word shadow-xs"
+                      onclick="exportToWord()"
+                    >
+                      <i class="unicon-file-word text-primary"></i> Word
+                    </button>
+                    <button
+                      class="btn-export-study btn-export-pdf shadow-xs"
+                      onclick="exportToPDF()"
+                    >
+                      <i class="unicon-file-medical text-danger"></i> PDF
+                    </button>
+                    <button
+                      class="btn-close-study shadow-xs"
+                      onclick="closeStudyEditor()"
+                    >
+                      <i class="unicon-multiply me-1"></i> Cerrar y borrar
+                    </button>
+                  </div>
+                </div>
+                <div id="quill-editor"></div>
+                <div class="mt-3 text-end">
+                  <span class="fs-7 text-gray-500 italic me-3"
+                    >Nota: Los cambios se guardan localmente mientras el bloc
+                    está abierto.</span
+                  >
+                </div>
+              </div>
+              <!-- Créditos del proyecto -->
+              <div
+                class="mt-4 pt-3 border-top d-flex align-items-start gap-2 text-gray-400 dark:text-gray-600"
+                style="font-size: 11px; line-height: 1.5"
+              >
+                <i
+                  class="unicon-information-circle flex-shrink-0 mt-1"
+                  style="font-size: 14px"
+                ></i>
+                <span>
+                  Este espacio de estudio utiliza datos del proyecto
+                  <a
+                    href="https://github.com/eliranwong/OpenGNT"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-gray-500 dark:text-gray-500 text-decoration-underline fw-medium"
+                    >OpenGNT</a
+                  >, desarrollado por Eliran Wong, integrando la morfología de
+                  MorphGNT y el texto de SBLGNT. Agradecemos a la comunidad de
+                  código abierto por facilitar estas herramientas de análisis
+                  lingüístico.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <!-- /tab-content -->
   </div>
 </div>
 
@@ -562,55 +771,79 @@
 </script>
 
 <script>
+  // ─── Función para compartir estudio ───────────────────────────────────────
+  function shareEstudio() {
+    const libro = document.getElementById("estudio-libroSelect")?.options[
+      document.getElementById("estudio-libroSelect")?.selectedIndex
+    ]?.text || '';
+    const capitulo = document.getElementById("estudio-capituloSelect")?.value || '';
+    const versiculo = document.getElementById("estudio-versiculoSelect")?.value || '';
+    
+    const referencia = `${libro} ${capitulo}:${versiculo}`;
+    const url = window.location.href.split('?')[0] + `?libro=${document.getElementById("estudio-libroSelect")?.value}&capitulo=${capitulo}&versiculo=${versiculo}`;
+    
+    if (navigator.share) {
+      navigator.share({
+        title: `Estudio Bíblico - ${referencia}`,
+        text: `Estoy estudiando ${referencia} en Florilegio de la Fe`,
+        url: url,
+      }).catch(err => console.log('Error sharing:', err));
+    } else {
+      // Fallback: copiar al portapapeles
+      const textToCopy = `${referencia} - ${url}`;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        alert('Enlace copiado al portapapeles');
+      }).catch(err => {
+        console.error('Error copying to clipboard:', err);
+      });
+    }
+  }
+
+  // ─── Función para cambiar entre modos (Lectura/Estudio) ────────────────────
+  function switchTab(mode) {
+    const btnLeer = document.getElementById("tab-leer-btn");
+    const btnEstudio = document.getElementById("tab-estudio-btn");
+    const sidebarLeer = document.getElementById("sidebar-leer");
+    const sidebarEstudio = document.getElementById("sidebar-estudio");
+    const contentLeer = document.getElementById("content-leer");
+    const contentEstudio = document.getElementById("content-estudio");
+
+    if (mode === "leer") {
+      // Actualizar botones
+      btnLeer.classList.add("active");
+      btnEstudio.classList.remove("active");
+      // Mostrar/ocultar sidebars
+      sidebarLeer.style.display = "block";
+      sidebarEstudio.style.display = "none";
+      // Mostrar/ocultar contenidos
+      contentLeer.style.display = "block";
+      contentEstudio.style.display = "none";
+    } else {
+      // Actualizar botones
+      btnEstudio.classList.add("active");
+      btnLeer.classList.remove("active");
+      // Mostrar/ocultar sidebars
+      sidebarEstudio.style.display = "block";
+      sidebarLeer.style.display = "none";
+      // Mostrar/ocultar contenidos
+      contentEstudio.style.display = "block";
+      contentLeer.style.display = "none";
+    }
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     const estructuraData = JSON.parse(
       document.getElementById("bible-structure-data").textContent
     );
-
-    // ─── Tab switching manual ──────────────────────────────────────────────────
-    window.switchTab = function(mode) {
-      // Update mode buttons
-      document.getElementById('btn-mode-leer').classList.remove('active');
-      document.getElementById('btn-mode-estudio').classList.remove('active');
-
-      // Update sidebar visibility
-      document.getElementById('sidebar-leer').style.display = 'none';
-      document.getElementById('sidebar-estudio').style.display = 'none';
-
-      // Update content visibility
-      document.getElementById('content-leer').style.display = 'none';
-      document.getElementById('content-estudio').style.display = 'none';
-
-      if (mode === 'leer') {
-        document.getElementById('btn-mode-leer').classList.add('active');
-        document.getElementById('sidebar-leer').style.display = 'block';
-        document.getElementById('content-leer').style.display = 'block';
-      } else {
-        document.getElementById('btn-mode-estudio').classList.add('active');
-        document.getElementById('sidebar-estudio').style.display = 'block';
-        document.getElementById('content-estudio').style.display = 'block';
-      }
-    }
-
-    // Initialize with Lectura tab active
-    switchTab('leer');
-
-    // Share function for estudio
-    window.shareEstudio = function() {
-      const libro = estudioLibroSelect?.options[estudioLibroSelect.selectedIndex]?.text || '';
-      const capitulo = estudioCapituloSelect?.value || '';
-      const versiculo = estudioVersiculoSelect?.value || '';
-      const ref = `${libro} ${capitulo}:${versiculo}`;
-      if (navigator.share) {
-        navigator.share({
-          title: `Estudio: ${ref}`,
-          text: `Estudiando ${ref} en Florilegio`,
-          url: window.location.href
+        // Ocultar todos los paneles
+        document.querySelectorAll(".biblia-pane").forEach(function (p) {
+          p.style.display = "none";
         });
-      } else {
-        prompt("Copia este enlace para compartir:", window.location.href);
-      }
-    };
+        // Activar el botón y panel seleccionado
+        this.classList.add("active");
+        document.getElementById(targetId).style.display = "block";
+      });
+    });
 
     // ─── Helpers ───────────────────────────────────────────────────────────────
     function populateCapitulos(
@@ -1262,7 +1495,7 @@
             const alreadyExists = existingContent.includes(referencia);
             
             if (alreadyExists) {
-                showModalAlert('Versículo existente', 'Este versículo ya está en tu estudio. No se duplicará.');
+                alert('Este versículo ya está en tu estudio. No se duplicará.');
                 return;
             }
             
@@ -1326,20 +1559,20 @@
     }
 
     function closeStudyEditor() {
-      showModalConfirm(
-        'Cerrar Bloc de Notas',
-        '¿Estás seguro de cerrar el editor? Se borrarán todas las notas actuales de este bloque.',
-        function() {
-          const wrapper = document.getElementById("study-editor-wrapper");
-          wrapper.style.display = "none";
+      if (
+        confirm(
+          "¿Estás seguro de cerrar el editor? Se borrarán todas las notas actuales de este bloque."
+        )
+      ) {
+        const wrapper = document.getElementById("study-editor-wrapper");
+        wrapper.style.display = "none";
 
-          if (quill) {
-            quill.setContents([]);
-          }
-          localStorage.removeItem(STUDY_STORAGE_KEY);
-          isEditorOpen = false;
+        if (quill) {
+          quill.setContents([]);
         }
-      );
+        localStorage.removeItem(STUDY_STORAGE_KEY);
+        isEditorOpen = false;
+      }
     }
 
     window.initStudyEditor = initStudyEditor;
@@ -1382,7 +1615,7 @@
       const capituloId = leerCapituloSelect.value;
 
       if (!libroId || !capituloId) {
-        showModalAlert('Selección incompleta', 'Por favor seleccione un Libro y Capítulo.');
+        alert("Por favor seleccione un Libro y Capítulo.");
         return;
       }
 
@@ -1429,11 +1662,13 @@
       const versiculoId = estudioVersiculoSelect.value;
 
       if (!libroId || !capituloId) {
-        showModalAlert('Selección incompleta', 'Por favor seleccione un Libro y Capítulo.');
+        alert("Por favor seleccione un Libro y Capítulo.");
         return;
       }
       if (!versiculoId) {
-        showModalAlert('Selección incompleta', 'El modo de estudio requiere seleccionar un versículo específico.');
+        alert(
+          "El modo de estudio requiere seleccionar un versículo específico."
+        );
         return;
       }
 
@@ -1456,72 +1691,5 @@
       }
     });
   });
-</script>
-
-<!-- Modal personalizado -->
-<div id="flor-modal-overlay" class="flor-modal-overlay" onclick="if(event.target===this)closeModal()">
-  <div class="flor-modal" role="dialog" aria-modal="true">
-    <div class="flor-modal-header">
-      <div id="flor-modal-icon" class="flor-modal-icon"></div>
-      <h3 id="flor-modal-title" class="flor-modal-title"></h3>
-    </div>
-    <div id="flor-modal-body" class="flor-modal-body"></div>
-    <div id="flor-modal-footer" class="flor-modal-footer"></div>
-  </div>
-</div>
-
-<script>
-  function openModal(title, message, iconType, buttons) {
-    const overlay = document.getElementById('flor-modal-overlay');
-    document.getElementById('flor-modal-title').textContent = title;
-    document.getElementById('flor-modal-body').innerHTML = message;
-
-    const iconEl = document.getElementById('flor-modal-icon');
-    iconEl.className = 'flor-modal-icon';
-    if (iconType) {
-      iconEl.classList.add(iconType);
-      iconEl.innerHTML = iconType === 'warning' ? '<i class="unicon-warning-filled"></i>' : '<i class="unicon-information-filled"></i>';
-      iconEl.style.display = 'flex';
-    } else {
-      iconEl.style.display = 'none';
-    }
-
-    const footer = document.getElementById('flor-modal-footer');
-    footer.innerHTML = '';
-    buttons.forEach(function(b) {
-      const btn = document.createElement('button');
-      btn.textContent = b.text;
-      btn.className = 'flor-modal-btn ' + (b.className || 'flor-modal-btn-primary');
-      btn.onclick = function() {
-        if (b.callback) b.callback();
-        closeModal();
-      };
-      footer.appendChild(btn);
-    });
-
-    requestAnimationFrame(function() {
-      overlay.classList.add('open');
-    });
-
-    document.activeElement && document.activeElement.blur();
-  }
-
-  function closeModal() {
-    const overlay = document.getElementById('flor-modal-overlay');
-    overlay.classList.remove('open');
-  }
-
-  function showModalAlert(title, message, iconType) {
-    openModal(title, message, iconType || 'info', [
-      { text: 'OK', className: 'flor-modal-btn-primary' }
-    ]);
-  }
-
-  function showModalConfirm(title, message, onConfirm, iconType) {
-    openModal(title, message, iconType || 'warning', [
-      { text: 'Cancelar', className: 'flor-modal-btn-cancel' },
-      { text: 'Aceptar', className: 'flor-modal-btn-primary', callback: onConfirm }
-    ]);
-  }
 </script>
 {% endblock %}
