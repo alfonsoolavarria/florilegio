@@ -1,37 +1,71 @@
 from django.core.management.base import BaseCommand
 from main_florife.models import Category, Article, Author, Essay
 
+
+MODES = {
+    1: "all",
+    2: "articles",
+    3: "categories",
+    4: "author",
+    5: "essays",
+}
+
+
 class Command(BaseCommand):
-    help = 'Seeds the database with initial mock data'
+    help = 'Seeds the database with initial data. Usage: seed_data [mode]  (1=all, 2=articles, 3=categories, 4=author, 5=essays)'
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            'mode',
+            nargs='?',
+            type=int,
+            default=1,
+            choices=list(MODES.keys()),
+            help='1=all, 2=articles, 3=categories, 4=author, 5=essays'
+        )
 
     def handle(self, *args, **kwargs):
-        self.stdout.write("Seeding data...")
+        mode = kwargs['mode']
+        label = MODES[mode]
+        self.stdout.write(f"Seed mode: {mode} ({label})")
 
-        # Categories mapping
+        if mode == 1 or mode == 3:
+            self._seed_categories()
+        if mode == 1 or mode == 4:
+            self._seed_author()
+        if mode == 1 or mode == 5:
+            self._seed_essays()
+        if mode == 1 or mode == 2:
+            self._seed_articles()
+
+        self.stdout.write(self.style.SUCCESS("Done!"))
+
+    # ─── Categories ────────────────────────────────────────────────────
+
+    def _seed_categories(self):
         categories_data = [
-            {"name": "Teología", "icon": "unicon-捧げ物"},
+            {"name": "Teología", "icon": "unicon-book"},
             {"name": "Historia", "icon": "unicon-historical-monument"},
             {"name": "Biografías", "icon": "unicon-users"},
             {"name": "Interpretación", "icon": "unicon-book-open"},
             {"name": "Familia", "icon": "unicon-home-alt"},
             {"name": "Contemporáneo", "icon": "unicon-archive"},
         ]
-
-        categories = {}
         for cat in categories_data:
             obj, created = Category.objects.get_or_create(
                 name=cat["name"],
                 defaults={"icon": cat["icon"]}
             )
-            categories[cat["name"]] = obj
             if created:
-                self.stdout.write(f"Created category: {cat['name']}")
+                self.stdout.write(f"  Created category: {cat['name']}")
+        # Normalize alias
+        cat_biografias = Category.objects.get(name="Biografías")
+        Category.objects.get_or_create(name="Biografía", defaults={"icon": cat_biografias.icon})
 
-        # Normalizing Biografía vs Biografías
-        categories["Biografía"] = categories["Biografías"]
+    # ─── Author ────────────────────────────────────────────────────────
 
-        # Create Default Author
-        author_obj, _ = Author.objects.get_or_create(
+    def _seed_author(self):
+        author_obj, created = Author.objects.get_or_create(
             name="John Piper",
             defaults={
                 "bio": "John Piper (@JohnPiper) es fundador y maestro de desiringGod.org y ministro del Colegio y Seminario Belén.",
@@ -39,8 +73,20 @@ class Command(BaseCommand):
                 "social_handle": "@JohnPiper"
             }
         )
+        if created:
+            self.stdout.write(f"  Created author: {author_obj.name}")
 
-        # Essays data with h2 and h3 tags for TOC
+    # ─── Essays ────────────────────────────────────────────────────────
+
+    def _seed_essays(self):
+        author = Author.objects.first()
+        if not author:
+            self.stdout.write(self.style.WARNING("  No author found. Run mode 4 first."))
+            return
+
+        def cat(name):
+            return Category.objects.get(name=name)
+
         essays_data = [
             {
                 "title": "La Analogía del Ser en la tradición Tomista",
@@ -89,8 +135,8 @@ class Command(BaseCommand):
                 slug=essay["slug"],
                 defaults={
                     "title": essay["title"],
-                    "author": author_obj,
-                    "category": categories[essay["category"]],
+                    "author": author,
+                    "category": cat(essay["category"]),
                     "image_url": essay["image_url"],
                     "content": essay["content"],
                     "tags": essay["tags"],
@@ -99,6 +145,75 @@ class Command(BaseCommand):
                 }
             )
             if created:
-                self.stdout.write(f"Created essay: {essay['title']}")
+                self.stdout.write(f"  Created essay: {essay['title']}")
 
-        self.stdout.write(self.style.SUCCESS("Database seeded successfully!"))
+    # ─── Articles ──────────────────────────────────────────────────────
+
+    def _seed_articles(self):
+        author = Author.objects.first()
+        if not author:
+            self.stdout.write(self.style.WARNING("  No author found. Run mode 4 first."))
+            return
+
+        def cat(name):
+            return Category.objects.get(name=name)
+
+        articles_data = [
+            {
+                "title": "La Justificación por la Fe: Una Perspectiva Reformada",
+                "slug": "justificacion-por-la-fe",
+                "category": "Teología",
+                "image_url": "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=800",
+                "content": "<h2>Introducción</h2><p>La doctrina de la justificación por la fe es central para la teología reformada y fue redescubierta durante la Reforma Protestante.</p><h3>El testimonio de las Escrituras</h3><p>Pablo en Romanos 3:28 nos dice que el hombre es justificado por la fe sin las obras de la ley.</p><h3>Imputación vs Infusión</h3><p>La perspectiva reformada sostiene que la justicia de Cristo nos es imputada, no infundida.</p><h2>Conclusión</h2><p>La justificación por la fe sola (sola fide) sigue siendo el artículo por el cual la iglesia se mantiene en pie.</p>",
+                "tags": ["justificación", "fe", "reforma"],
+                "is_featured": True,
+                "status": "liberado"
+            },
+            {
+                "title": "San Agustín: Una Vida de Gracia",
+                "slug": "san-agustin-vida-de-gracia",
+                "category": "Biografías",
+                "image_url": "https://images.unsplash.com/photo-1528900921957-64b4725a2b71?w=800",
+                "content": "<h2>Primeros años</h2><p>Agustín de Hipona nació en Tagaste en el año 354 d.C. y su vida temprana estuvo marcada por la búsqueda de la verdad.</p><h3>Conversión</h3><p>En el año 386, Agustín experimentó una conversión radical en un jardín en Milán.</p><h3>Legado</h3><p>Sus obras, especialmente las Confesiones y La Ciudad de Dios, han moldeado el pensamiento occidental.</p>",
+                "tags": ["agustín", "patrística", "gracia"],
+                "is_featured": True,
+                "status": "liberado"
+            },
+            {
+                "title": "El Canon del Nuevo Testamento: Formación y Criterios",
+                "slug": "canon-nuevo-testamento",
+                "category": "Historia",
+                "image_url": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800",
+                "content": "<h2>Los primeros siglos</h2><p>La formación del canon del Nuevo Testamento fue un proceso gradual que tomó varios siglos.</p><h3>Criterios de canonicidad</h3><p>Los padres de la iglesia utilizaron tres criterios principales: apostolicidad, ortodoxia y uso litúrgico.</p><h3>Listas canónicas</h3><p>El fragmento Muratoriano (ca. 170 d.C.) es una de las listas más antiguas de libros del Nuevo Testamento.</p>",
+                "tags": ["canon", "nuevo testamento", "historia"],
+                "is_featured": False,
+                "status": "liberado"
+            },
+            {
+                "title": "Matrimonio y Gracia: Una Visión Sacramental",
+                "slug": "matrimonio-y-gracia",
+                "category": "Familia",
+                "image_url": "https://images.unsplash.com/photo-1519741497674-611481863552?w=800",
+                "content": "<h2>El diseño original</h2><p>Desde el Génesis, el matrimonio es presentado como una institución divina donde dos se convierten en una sola carne.</p><h3>Gracia para el matrimonio</h3><p>La gracia de Dios capacita a las parejas para vivir el amor sacrificial que Cristo modeló.</p><h3>Desafíos contemporáneos</h3><p>En un mundo que redefine el matrimonio, la iglesia está llamada a proclamar y encarnar el diseño de Dios.</p>",
+                "tags": ["matrimonio", "familia", "gracia"],
+                "is_featured": False,
+                "status": "liberado"
+            },
+        ]
+
+        for article in articles_data:
+            obj, created = Article.objects.get_or_create(
+                slug=article["slug"],
+                defaults={
+                    "title": article["title"],
+                    "author": author,
+                    "category": cat(article["category"]),
+                    "image_url": article["image_url"],
+                    "content": article["content"],
+                    "tags": article["tags"],
+                    "is_featured": article["is_featured"],
+                    "status": article["status"]
+                }
+            )
+            if created:
+                self.stdout.write(f"  Created article: {article['title']}")
