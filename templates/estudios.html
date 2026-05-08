@@ -358,6 +358,74 @@
   .dark .flor-modal-btn-cancel:hover {
     background: #4b5563;
   }
+
+  /* ─── Responsive ─────────────────────────────────────────────────── */
+
+  .estudio-sidebar {
+    flex: 0 0 300px;
+    max-width: 300px;
+  }
+
+  .mode-selector-group {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ql-toolbar {
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+  }
+  .ql-toolbar .ql-formats {
+    flex-shrink: 0;
+  }
+
+  .bible-word-block {
+    flex-shrink: 1;
+  }
+
+  @media (max-width: 991.98px) {
+    .estudio-sidebar {
+      flex: none;
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .mode-selector-group .btn {
+      padding: 0.4rem 0.85rem;
+      font-size: 0.7rem;
+    }
+    .ql-container {
+      height: 300px !important;
+    }
+    #study-editor-wrapper {
+      max-height: 400px;
+    }
+    .study-editor-header {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .study-editor-header .ms-auto {
+      width: 100%;
+      justify-content: center;
+    }
+    .bible-word-block {
+      min-width: 75px;
+    }
+    .bible-word-block .greek-text {
+      font-size: 1.5rem !important;
+    }
+  }
+
+  @media (min-width: 576px) and (max-width: 991.98px) {
+    .ql-container {
+      height: 400px !important;
+    }
+    #study-editor-wrapper {
+      max-height: 500px;
+    }
+  }
 </style>
 
 <!-- Section: Header -->
@@ -379,7 +447,7 @@
 <div class="container py-3">
   <div class="row justify-center">
     <div class="col-12 text-center">
-      <div class="d-inline-flex bg-light rounded-pill p-1 border" style="background-color: var(--bs-gray-100) !important;">
+      <div class="d-inline-flex bg-light rounded-pill p-1 border mode-selector-group" style="background-color: var(--bs-gray-100) !important;">
         <button
           type="button"
           class="btn rounded-pill px-4 py-2 fw-semibold active border-0"
@@ -415,7 +483,7 @@
     <!-- Main Layout: Sidebar + Content -->
     <div class="d-flex flex-column flex-lg-row gap-4 mt-4">
       <!-- Sidebar: Navegación (always visible) -->
-      <aside class="w-100" style="flex: 0 0 300px; max-width: 300px;">
+      <aside class="estudio-sidebar w-100">
         <div class="panel p-4 bg-gray-25 dark:bg-gray-800 rounded-3 border sticky-top" style="top: 80px; z-index: 100;">
           <h4 class="h6 mb-3 border-bottom pb-2 text-uppercase letter-spacing-wider" style="font-size: 0.8rem; letter-spacing: 0.1em;">Navegación</h4>
           <!-- Sidebar content changes based on mode -->
@@ -1094,14 +1162,13 @@
       data.forEach((word) => {
         const wordBlock = document.createElement("div");
         wordBlock.className =
-          "panel vstack text-center gap-1 px-3 pt-2 pb-1 border rounded-2 bg-gray-25 dark:bg-gray-900 border-opacity-10";
+          "panel vstack text-center gap-1 px-3 pt-2 pb-1 border rounded-2 bg-gray-25 dark:bg-gray-900 border-opacity-10 bible-word-block";
         wordBlock.style.minWidth = "105px";
         wordBlock.style.flexGrow = "0";
-        wordBlock.style.flexShrink = "0";
         wordBlock.style.cursor = "default";
 
         const greekEl = document.createElement("div");
-        greekEl.className = "fw-bold text-dark dark:text-white";
+        greekEl.className = "fw-bold text-dark dark:text-white greek-text";
         greekEl.style.fontSize = "2.25rem";
         greekEl.textContent = word.griego || "-";
         if (word.raiz_griega)
