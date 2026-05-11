@@ -1,85 +1,359 @@
-{% load static %}
+{% load static %} {% load socialaccount %}
+<style>
+  .user-menu {
+    position: relative;
+  }
+  .user-menu .user-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 220px;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    z-index: 9999;
+    padding: 12px 0;
+  }
+  .uc-dark .user-menu .user-dropdown {
+    background: #1e1e2a;
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  .user-menu .user-dropdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .user-menu .user-dropdown ul li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.15s;
+  }
+  .uc-dark .user-menu .user-dropdown ul li a {
+    color: #ccc;
+  }
+  .user-menu .user-dropdown ul li a:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+  .uc-dark .user-menu .user-dropdown ul li a:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .user-menu .user-dropdown hr {
+    margin: 6px 16px;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  .uc-dark .user-menu .user-dropdown hr {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+</style>
 <!-- Header start -->
-<header class="uc-header header-four uc-navbar-sticky-wrap z-999" data-uc-sticky="start: 200; sel-target: .uc-navbar-container; cls-active: uc-navbar-sticky; animation: uc-animation-slide-top; end: !*;">
-    <nav class="uc-navbar-container fs-custom z-1">
-        <div class="uc-top-navbar panel z-3 dark:bg-gray-800">
-            <div class="container max-w-lg">
-                <div class="uc-navbar items-center min-h-48px text-gray-900 dark:text-white" data-uc-navbar=" animation: uc-animation-slide-top-small; duration: 150;">
-                    <div class="uc-navbar-left gap-2 md:gap-3">
-                        <!-- Mobile Menu Toggle -->
-                        <div id="mobile-menu-toggle" class="d-lg-none">
-                            <a class="text-dark dark:text-white text-none" href="#uc-menu-panel" data-uc-toggle>
-                                <i class="icon unicon-menu fs-4"></i>
-                            </a>
-                        </div>
-                        <!-- Sticky Logo (appears only on scroll) -->
-                        <div class="uc-logo sticky-logo dark:text-white">
-                            <a href="/">
-                                <img class="w-80px sm:w-150px" src="{% static 'images/fin.svg' %}" alt="Logo">
-                            </a>
-                        </div>
-                        <ul class="uc-navbar-nav gap-4 fs-custom fw-medium d-none d-lg-flex" style="--uc-nav-height: 48px">
-                            <li><a href="/"><i class="icon icon-1 unicon-home mr-1"></i> Inicio</a></li>
-                            <li><a href="{% url 'article_list' %}"><i class="icon icon-1 unicon-book mr-1"></i> Artículos</a></li>
-                            <li><a href="{% url 'essay_list' %}"><i class="icon icon-1 unicon-edit mr-1"></i> Ensayos</a></li>
-                            <li><a href="{% url 'estudios' %}"><i class="icon icon-1 unicon-notebook mr-1"></i> Estudio</a></li>
-                            <li><a href="{% url 'apoyo' %}"><i class="icon icon-1 unicon-favorite mr-1"></i> Apoyo</a></li>
-                            <li><a href="{% url 'contact' %}"><i class="icon icon-1 unicon-email mr-1"></i> Contacto</a></li>
-                        </ul>
-                    </div>
-                    <div class="uc-navbar-right gap-2 md:gap-3">
-                        <div class="uc-navbar-item">
-                            <form action="{% url 'search' %}" method="GET" class="expanding-search-form hstack gap-1">
-                                <input class="search-input form-control form-control-sm" type="search" placeholder="Buscar en Florilegio" name="q" value="{{ query|default:'' }}">
-                                <button type="submit" class="search-submit btn btn-primary btn-sm px-2">Buscar</button>
-                                <a class="search-toggle cstack text-none text-dark dark:text-white" href="#" onclick="document.querySelector('.expanding-search-form').classList.toggle('active'); return false;">
-                                    <i class="icon icon-1 fw-bold unicon-search"></i>
-                                </a>
-                            </form>
-                        </div>
-                        <div class="uc-modes-trigger d-none w-32px h-32px border fs-4 fw-medium rounded-circle dark:border-white border-opacity-25 text-dark dark:text-white" data-darkmode-toggle="">
-                            <label class="switch">
-                                <span class="sr-only">Modo oscuro</span>
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
+<header
+  class="uc-header header-four uc-navbar-sticky-wrap z-999"
+  data-uc-sticky="start: 200; sel-target: .uc-navbar-container; cls-active: uc-navbar-sticky; animation: uc-animation-slide-top; end: !*;"
+>
+  <nav class="uc-navbar-container fs-custom z-1">
+    <div class="uc-top-navbar panel z-3 dark:bg-gray-800">
+      <div class="container max-w-lg">
+        <div
+          class="uc-navbar items-center min-h-48px text-gray-900 dark:text-white"
+          data-uc-navbar=" animation: uc-animation-slide-top-small; duration: 150;"
+        >
+          <div class="uc-navbar-left gap-2 md:gap-3">
+            <!-- Mobile Menu Toggle -->
+            <div id="mobile-menu-toggle" class="d-lg-none">
+              <a
+                class="text-dark dark:text-white text-none"
+                href="#uc-menu-panel"
+                data-uc-toggle
+              >
+                <i class="icon unicon-menu fs-4"></i>
+              </a>
             </div>
+            <!-- Sticky Logo (appears only on scroll) -->
+            <div class="uc-logo sticky-logo dark:text-white">
+              <a href="/">
+                <img
+                  class="w-80px sm:w-150px"
+                  src="{% static 'images/fin.svg' %}"
+                  alt="Logo"
+                />
+              </a>
+            </div>
+            <ul
+              class="uc-navbar-nav gap-4 fs-custom fw-medium d-none d-lg-flex"
+              style="--uc-nav-height: 48px"
+            >
+              <li>
+                <a href="/"
+                  ><i class="icon icon-1 unicon-home mr-1"></i> Inicio</a
+                >
+              </li>
+              <li>
+                <a href="{% url 'article_list' %}"
+                  ><i class="icon icon-1 unicon-book mr-1"></i> Artículos</a
+                >
+              </li>
+              <li>
+                <a href="{% url 'essay_list' %}"
+                  ><i class="icon icon-1 unicon-edit mr-1"></i> Ensayos</a
+                >
+              </li>
+              <li>
+                <a href="{% url 'estudios' %}"
+                  ><i class="icon icon-1 unicon-notebook mr-1"></i> Estudio</a
+                >
+              </li>
+              <li>
+                <a href="{% url 'apoyo' %}"
+                  ><i class="icon icon-1 unicon-favorite mr-1"></i> Apoyo</a
+                >
+              </li>
+              <li>
+                <a href="{% url 'contact' %}"
+                  ><i class="icon icon-1 unicon-email mr-1"></i> Contacto</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="uc-navbar-right gap-2 md:gap-3">
+            <div class="uc-navbar-item">
+              <form
+                action="{% url 'search' %}"
+                method="GET"
+                class="expanding-search-form hstack gap-1"
+              >
+                <input
+                  class="search-input form-control form-control-sm"
+                  type="search"
+                  placeholder="Buscar en Florilegio"
+                  name="q"
+                  value="{{ query|default:'' }}"
+                />
+                <button
+                  type="submit"
+                  class="search-submit btn btn-primary btn-sm px-2"
+                >
+                  Buscar
+                </button>
+                <a
+                  class="search-toggle cstack text-none text-dark dark:text-white"
+                  href="#"
+                  onclick="document.querySelector('.expanding-search-form').classList.toggle('active'); return false;"
+                >
+                  <i class="icon icon-1 fw-bold unicon-search"></i>
+                </a>
+              </form>
+            </div>
+            <div
+              class="uc-modes-trigger d-none w-32px h-32px border fs-4 fw-medium rounded-circle dark:border-white border-opacity-25 text-dark dark:text-white"
+              data-darkmode-toggle=""
+            >
+              <label class="switch">
+                <span class="sr-only">Modo oscuro</span>
+                <input type="checkbox" />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <!-- User Menu -->
+            <div class="uc-navbar-item user-menu">
+              {% if user.is_authenticated %}
+              <a
+                class="cstack w-32px h-32px rounded-circle bg-primary text-white text-none fs-7 fw-bold text-decoration-none"
+                href="#"
+                onclick="event.preventDefault(); toggleUserMenu(this);"
+              >
+                {{ user.first_name|first|default:user.email|first|upper }}
+              </a>
+              <div class="user-dropdown uc-hidden">
+                <ul>
+                  <li>
+                    <a href="{% url 'profile' %}"
+                      ><i class="icon unicon-user"></i> Mi Perfil</a
+                    >
+                  </li>
+                  <li><hr /></li>
+                  <li>
+                    <a href="{% url 'logout' %}"
+                      ><i class="icon unicon-logout"></i> Cerrar Sesión</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              {% else %}
+              <a
+                class="cstack w-32px h-32px text-dark dark:text-white text-none"
+                href="#"
+                onclick="event.preventDefault(); toggleUserMenu(this);"
+              >
+                <i class="icon icon-1 fw-bold unicon-user fs-5"></i>
+              </a>
+              <div class="user-dropdown uc-hidden">
+                <ul>
+                  <li>
+                    <a href="{% url 'login' %}"
+                      ><i class="icon unicon-login"></i> Iniciar Sesión</a
+                    >
+                  </li>
+                  <li><hr /></li>
+                  <li>
+                    <a href="{% url 'register' %}"
+                      ><i class="icon unicon-edit"></i> Registrarse con
+                      correo</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="{% provider_login_url 'google' %}"
+                      ><i class="icon unicon-logo-google"></i> Acceder con
+                      Google</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              {% endif %}
+            </div>
+          </div>
         </div>
-    </nav>
+      </div>
+    </div>
+  </nav>
 </header>
 <!-- Header end -->
 
+<script>
+  function toggleUserMenu(el) {
+    var dropdown = el.nextElementSibling;
+    dropdown.classList.toggle("uc-hidden");
+  }
+  document.addEventListener("click", function (e) {
+    var menu = document.querySelector(".user-menu");
+    if (menu && !menu.contains(e.target)) {
+      var open = menu.querySelector(".user-dropdown:not(.uc-hidden)");
+      if (open) open.classList.add("uc-hidden");
+    }
+  });
+</script>
 <!-- Mobile Offcanvas Menu start -->
 <div id="uc-menu-panel" data-uc-offcanvas>
-    <div class="uc-offcanvas-bar bg-white dark:bg-gray-900 border-end p-0">
-        <div class="panel vstack gap-4 p-4">
-            <div class="hstack justify-between items-center">
-                <div class="uc-logo mt-2">
-                    <a href="/">
-                        <img class="w-120px" src="{% static 'images/fin.svg' %}" alt="Logo">
-                    </a>
-                </div>
-                <button id="btn-cerrar-menu" 
-                        class="close-menu-btn fs-4 text-dark dark:text-white"
-                        onclick="document.getElementById('uc-menu-panel').classList.remove('uc-open'); document.getElementById('uc-menu-panel').style.display='none';"
-                        type="button">
-                    <i class="unicon-close"></i>
-                </button>
-            </div>
-        <ul class="uc-nav uc-nav-default fs-5 fw-medium vstack gap-4">
-            <li><a class="text-dark dark:text-gray-200 text-none" href="/"><i class="icon icon-1 unicon-home me-2 text-primary"></i> Inicio</a></li>
-            <li><a class="text-dark dark:text-gray-200 text-none" href="{% url 'article_list' %}"><i class="icon icon-1 unicon-book me-2 text-primary"></i> Artículos</a></li>
-            <li><a class="text-dark dark:text-gray-200 text-none" href="{% url 'essay_list' %}"><i class="icon icon-1 unicon-edit me-2 text-primary"></i> Ensayos</a></li>
-            <li><a class="text-dark dark:text-gray-200 text-none" href="{% url 'estudios' %}"><i class="icon icon-1 unicon-notebook me-2 text-primary"></i> Estudio</a></li>
-            <li><a class="text-dark dark:text-gray-200 text-none" href="{% url 'apoyo' %}"><i class="icon icon-1 unicon-favorite me-2 text-primary"></i> Apoyo</a></li>
-            <li><a class="text-dark dark:text-gray-200 text-none" href="{% url 'contact' %}"><i class="icon icon-1 unicon-email me-2 text-primary"></i> Contacto</a></li>
-        </ul>
+  <div class="uc-offcanvas-bar bg-white dark:bg-gray-900 border-end p-0">
+    <div class="panel vstack gap-4 p-4">
+      <div class="hstack justify-between items-center">
+        <div class="uc-logo mt-2">
+          <a href="/">
+            <img
+              class="w-120px"
+              src="{% static 'images/fin.svg' %}"
+              alt="Logo"
+            />
+          </a>
         </div>
+        <button
+          id="btn-cerrar-menu"
+          class="close-menu-btn fs-4 text-dark dark:text-white"
+          onclick="document.getElementById('uc-menu-panel').classList.remove('uc-open'); document.getElementById('uc-menu-panel').style.display='none';"
+          type="button"
+        >
+          <i class="unicon-close"></i>
+        </button>
+      </div>
+      <ul class="uc-nav uc-nav-default fs-5 fw-medium vstack gap-4">
+        <li>
+          <a class="text-dark dark:text-gray-200 text-none" href="/"
+            ><i class="icon icon-1 unicon-home me-2 text-primary"></i> Inicio</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-dark dark:text-gray-200 text-none"
+            href="{% url 'article_list' %}"
+            ><i class="icon icon-1 unicon-book me-2 text-primary"></i>
+            Artículos</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-dark dark:text-gray-200 text-none"
+            href="{% url 'essay_list' %}"
+            ><i class="icon icon-1 unicon-edit me-2 text-primary"></i>
+            Ensayos</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-dark dark:text-gray-200 text-none"
+            href="{% url 'estudios' %}"
+            ><i class="icon icon-1 unicon-notebook me-2 text-primary"></i>
+            Estudio</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-dark dark:text-gray-200 text-none"
+            href="{% url 'apoyo' %}"
+            ><i class="icon icon-1 unicon-favorite me-2 text-primary"></i>
+            Apoyo</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-dark dark:text-gray-200 text-none"
+            href="{% url 'contact' %}"
+            ><i class="icon icon-1 unicon-email me-2 text-primary"></i>
+            Contacto</a
+          >
+        </li>
+        <li><hr class="my-2" /></li>
+        {% if user.is_authenticated %}
+        <li>
+          <a
+            class="text-dark dark:text-gray-200 text-none"
+            href="{% url 'profile' %}"
+            ><i class="icon icon-1 unicon-user me-2 text-primary"></i> Mi
+            Perfil</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-dark dark:text-gray-200 text-none"
+            href="{% url 'logout' %}"
+            ><i class="icon icon-1 unicon-logout me-2 text-primary"></i> Cerrar
+            Sesión</a
+          >
+        </li>
+        {% else %}
+        <li>
+          <a
+            class="text-dark dark:text-gray-200 text-none"
+            href="{% url 'login' %}"
+            ><i class="icon icon-1 unicon-login me-2 text-primary"></i> Iniciar
+            Sesión</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-dark dark:text-gray-200 text-none"
+            href="{% url 'register' %}"
+            ><i class="icon icon-1 unicon-edit me-2 text-primary"></i>
+            Registrarse con correo</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-dark dark:text-gray-200 text-none"
+            href="{% provider_login_url 'google' %}"
+            ><i class="icon icon-1 unicon-logo-google me-2 text-primary"></i>
+            Acceder con Google</a
+          >
+        </li>
+        {% endif %}
+      </ul>
     </div>
+  </div>
 </div>
 <!-- Mobile Offcanvas Menu end -->
-
-

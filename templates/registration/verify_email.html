@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="panel overflow-hidden bg-gray-25 dark:bg-gray-900 py-6 lg:py-9">
+  <div class="container max-w-lg">
+    <div class="row justify-center">
+      <div class="col-12 col-md-6">
+        <div class="panel bg-white dark:bg-gray-800 p-6 rounded-2 shadow-sm">
+          <h2 class="h4 fw-bold text-center mb-4">Verificar tu correo</h2>
+          <p class="text-center text-gray-500 mb-4">
+            Hemos enviado un código de verificación a <strong>{{ email }}</strong>.
+            Revisa tu bandeja de entrada.
+          </p>
+
+          {% if error %}
+          <div class="alert alert-danger py-2 mb-4">{{ error }}</div>
+          {% endif %}
+
+          <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label text-sm fw-medium">Código de verificación</label>
+              <input
+                type="text"
+                name="code"
+                class="form-control text-center fs-3 fw-bold tracking-wider"
+                placeholder="000000"
+                maxlength="6"
+                required
+                autocomplete="off"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mb-3">
+              Verificar y crear cuenta
+            </button>
+          </form>
+
+          <p class="text-center text-sm text-gray-400">
+            ¿No recibiste el código? Revisa tu carpeta de spam o
+            <a href="{% url 'register' %}" class="text-primary">intenta registrarte de nuevo</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

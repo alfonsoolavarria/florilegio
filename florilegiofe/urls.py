@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from main_florife import views
 from main_florife import views_api_bible
 
@@ -34,6 +34,16 @@ urlpatterns = [
     path("apoyo/", views.apoyo, name="apoyo"),
     path("api/versiculo/", views.api_get_versiculo, name="api_get_versiculo"),
     
+    # Auth URLs
+    path("registro/", views.register_view, name="register"),
+    path("verificar-email/", views.verify_email_view, name="verify_email"),
+    path("iniciar-sesion/", views.login_view, name="login"),
+    path("cerrar-sesion/", views.logout_view, name="logout"),
+    path("perfil/", views.profile_view, name="profile"),
+
+    # Allauth (Google OAuth, etc.)
+    path("accounts/", include("allauth.urls")),
+
     # API Bible Sync Endpoints for the Admin Panel
     path("api/admin/bible-status/", views_api_bible.api_bible_status, name="api_bible_status"),
     path("api/admin/bible-sync/<str:version_key>/setup/", views_api_bible.api_bible_sync_book_setup, name="api_bible_sync_book_setup"),

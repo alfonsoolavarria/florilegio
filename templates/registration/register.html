@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% load socialaccount %}
+{% block content %}
+<div class="panel overflow-hidden bg-gray-25 dark:bg-gray-900 py-6 lg:py-9">
+  <div class="container max-w-lg">
+    <div class="row justify-center">
+      <div class="col-12 col-md-6">
+        <div class="panel bg-white dark:bg-gray-800 p-6 rounded-2 shadow-sm">
+          <h2 class="h4 fw-bold text-center mb-4">Crear Cuenta</h2>
+
+          {% if error %}
+          <div class="alert alert-danger py-2 mb-4">{{ error }}</div>
+          {% endif %}
+
+          <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label text-sm fw-medium"
+                >Nombre (opcional)</label
+              >
+              <input
+                type="text"
+                name="nombre"
+                class="form-control"
+                placeholder="Tu nombre"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-sm fw-medium"
+                >Correo electrónico</label
+              >
+              <input type="email" name="email" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-sm fw-medium">Contraseña</label>
+              <input
+                type="password"
+                name="password1"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-sm fw-medium"
+                >Confirmar contraseña</label
+              >
+              <input
+                type="password"
+                name="password2"
+                class="form-control"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mb-3">
+              Crear Cuenta
+            </button>
+          </form>
+
+          <div class="text-center">
+            <p class="text-sm mb-2">¿Ya tienes cuenta?</p>
+            <a
+              href="{% url 'login' %}"
+              class="btn btn-outline-primary w-100 mb-3"
+              >Iniciar Sesión</a
+            >
+            <a
+              href="{% provider_login_url 'google' %}"
+              class="btn btn-outline-danger w-100"
+            >
+              <i class="icon unicon-google me-1"></i> Acceder con Google
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

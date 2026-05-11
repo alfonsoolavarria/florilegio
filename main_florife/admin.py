@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import Category, Article, Author, ApiBibleSyncStatus, Essay
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
+from allauth.socialaccount.models import SocialAccount
+from .models import Category, Article, Author, ApiBibleSyncStatus, Essay, UserProfile
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -32,4 +35,27 @@ class EssayAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     list_editable = ('status', 'is_featured')
     ordering = ('-created_at',)
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'created_at')
+    search_fields = ('user__username', 'user__email', 'bio')
+
+
+admin.site.unregister(User)
+
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin):
+    list_display = ('email', 'username', 'first_name', 'is_staff', 'social_provider', 'date_joined')
+    list_filter = ('is_staff', 'is_active', 'date_joined')
+    search_fields = ('email', 'username', 'first_name')
+    ordering = ('-date_joined',)
+
+    def social_provider(self, obj):
+        accounts = SocialAccount.objects.filter(user=obj)
+        if accounts:
+            return ', '.join(a.provider for a in accounts)
+        return '—'
+    social_provider.short_description = 'Proveedor'
 
