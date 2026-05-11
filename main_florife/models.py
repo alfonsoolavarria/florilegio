@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Category(models.Model):
     name = models.CharField(max_length=100)  # Nombre de la categoría (ej. Teología)
@@ -133,4 +136,33 @@ class ApiBibleSyncStatus(models.Model):
 
     def __str__(self):
         return f"{self.get_version_display()} (Last synced: {self.last_synced_at.strftime('%Y-%m-%d %H:%M')})"
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    bio = models.TextField(blank=True, null=True, verbose_name="Biografía")
+    avatar_url = models.URLField(max_length=500, blank=True, null=True, verbose_name="URL del avatar")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de registro")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Última actualización")
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name = "Perfil de usuario"
+        verbose_name_plural = "Perfiles de usuarios"
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    if hasattr(instance, 'profile'):
+        instance.profile.save()
+    else:
+        UserProfile.objects.create(user=instance)
 

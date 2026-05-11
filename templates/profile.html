@@ -1,0 +1,47 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<div class="panel overflow-hidden bg-gray-25 dark:bg-gray-900 py-6 lg:py-9">
+    <div class="container max-w-lg">
+        <div class="row justify-center">
+            <div class="col-12 col-md-8">
+                <div class="panel bg-white dark:bg-gray-800 p-6 rounded-2 shadow-sm">
+                    <div class="hstack gap-4 mb-5">
+                        <div class="cstack w-80px h-80px rounded-circle bg-primary text-white fs-1 fw-bold">
+                            {{ profile_user.first_name|first|default:profile_user.email|first|upper }}
+                        </div>
+                        <div>
+                            <h2 class="h4 fw-bold mb-1">{{ profile_user.first_name|default:profile_user.email }}</h2>
+                            <p class="text-gray-500 mb-0">{{ profile_user.email }}</p>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h3 class="h5 fw-semibold mb-3">Información de la cuenta</h3>
+                    <div class="vstack gap-3">
+                        <div class="hstack justify-between py-2 border-bottom">
+                            <span class="text-gray-500">Correo</span>
+                            <span>{{ profile_user.email }}</span>
+                        </div>
+                        <div class="hstack justify-between py-2 border-bottom">
+                            <span class="text-gray-500">Nombre</span>
+                            <span>{{ profile_user.first_name|default:"—" }}</span>
+                        </div>
+                        <div class="hstack justify-between py-2 border-bottom">
+                            <span class="text-gray-500">Usuario</span>
+                            <span>{{ profile_user.username }}</span>
+                        </div>
+                        <div class="hstack justify-between py-2 border-bottom">
+                            <span class="text-gray-500">Miembro desde</span>
+                            <span>{{ profile_user.date_joined|date:"d/m/Y" }}</span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <a href="{% url 'logout' %}" class="btn btn-outline-danger">Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

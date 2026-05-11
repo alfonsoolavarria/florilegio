@@ -1,11 +1,17 @@
 import json
 import re
-from django.shortcuts import render, get_object_or_404
+import random
+import requests
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.db.models import Q
 from django.core.paginator import Paginator
-from .models import Article, Category, LibroBiblia, Essay
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
+from .models import Article, Category, LibroBiblia, Essay
 
 def dashboard(request):
     featured_articles = Article.objects.filter(is_featured=True, status='liberado')[:6]
@@ -141,7 +147,47 @@ def terms(request):
     return render(request, 'terms.html')
 
 def contact(request):
-    return render(request, 'contact.html')
+    sent = False
+    error = None
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre', '').strip()
+        correo = request.POST.get('correo', '').strip()
+        asunto = request.POST.get('asunto', '').strip()
+        mensaje = request.POST.get('mensaje', '').strip()
+        if not all([nombre, correo, asunto, mensaje]):
+            error = 'Todos los campos son obligatorios.'
+        else:
+            api_key = settings.BREVO_API_KEY
+            if api_key:
+                try:
+                    resp = requests.post(
+                        'https://api.brevo.com/v3/smtp/email',
+                        headers={
+                            'api-key': api_key,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        json={
+                            'to': [{'email': 'florilegiodelafe@gmail.com'}],
+                            'subject': f'[Contacto] {asunto}',
+                            'htmlContent': f'<h3>Nuevo mensaje de contacto</h3>'
+                                           f'<p><strong>Nombre:</strong> {nombre}</p>'
+                                           f'<p><strong>Correo:</strong> {correo}</p>'
+                                           f'<p><strong>Asunto:</strong> {asunto}</p>'
+                                           f'<p><strong>Mensaje:</strong></p>'
+                                           f'<p>{mensaje}</p>',
+                            'replyTo': {'email': correo, 'name': nombre},
+                        },
+                        timeout=10,
+                    )
+                    sent = resp.ok
+                except requests.RequestException:
+                    error = 'Error de conexión. Intenta de nuevo.'
+            else:
+                sent = True  # sin Brevo configurado, simular éxito
+            if not sent:
+                error = 'Error al enviar el mensaje. Intenta de nuevo.'
+    return render(request, 'contact.html', {'sent': sent, 'error': error})
 
 def apoyo(request):
     return render(request, 'apoyo.html')
@@ -206,3 +252,133 @@ def api_get_versiculo(request):
             return JsonResponse({'status': 'success', 'modo': 'estudio', 'texto_rv1960': texto_rv1960, 'data': data})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+
+def register_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        nombre = request.POST.get('nombre', '')
+
+        if not email or not password1 or not password2:
+            return render(request, 'registration/register.html', {'error': 'Todos los campos son obligatorios.'})
+        if password1 != password2:
+            return render(request, 'registration/register.html', {'error': 'Las contraseñas no coinciden.'})
+        if User.objects.filter(email=email).exists():
+            return render(request, 'registration/register.html', {'error': 'Ya existe un usuario con ese correo.'})
+        if not re.match(r'^[^@]+@[^@]+\.com$', email):
+            return render(request, 'registration/register.html', {'error': 'Ingresa un correo válido que termine en .com'})
+
+        code = str(random.randint(100000, 999999))
+        request.session['pending_email'] = email
+        request.session['pending_password'] = password1
+        request.session['pending_nombre'] = nombre
+        request.session['pending_code'] = code
+
+        sent = _send_brevo_code(email, code)
+        if not sent:
+            api_key_set = bool(settings.BREVO_API_KEY)
+            template_set = bool(settings.BREVO_TEMPLATE_ID)
+            return render(request, 'registration/register.html', {
+                'error': f'Error al enviar el código. Verifica que BREVO_API_KEY y BREVO_TEMPLATE_ID estén configurados en .env y reinicia el servidor. (API: {"✓" if api_key_set else "✗"}, Template: {"✓" if template_set else "✗"})'
+            })
+
+        return redirect('verify_email')
+    return render(request, 'registration/register.html')
+
+
+def verify_email_view(request):
+    if request.method == 'POST':
+        entered_code = request.POST.get('code', '').strip()
+        stored_code = request.session.get('pending_code')
+        email = request.session.get('pending_email')
+        password = request.session.get('pending_password')
+        nombre = request.session.get('pending_nombre', '')
+
+        if not stored_code or not email:
+            return redirect('register')
+
+        if entered_code != stored_code:
+            return render(request, 'registration/verify_email.html', {
+                'email': email,
+                'error': 'Código incorrecto. Intenta de nuevo.'
+            })
+
+        username = email.split('@')[0]
+        base_username = username
+        counter = 1
+        while User.objects.filter(username=username).exists():
+            username = f"{base_username}{counter}"
+            counter += 1
+
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+            first_name=nombre
+        )
+
+        for key in ['pending_email', 'pending_password', 'pending_nombre', 'pending_code']:
+            request.session.pop(key, None)
+
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(request, user)
+        return redirect('profile')
+
+    email = request.session.get('pending_email')
+    if not email:
+        return redirect('register')
+    return render(request, 'registration/verify_email.html', {'email': email})
+
+
+def _send_brevo_code(email, code):
+    api_key = settings.BREVO_API_KEY
+    template_id = settings.BREVO_TEMPLATE_ID
+    if not api_key or not template_id:
+        return False
+    try:
+        template_id = int(template_id)
+    except (ValueError, TypeError):
+        return False
+    try:
+        resp = requests.post(
+            'https://api.brevo.com/v3/smtp/email',
+            headers={
+                'api-key': api_key,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            json={
+                'to': [{'email': email}],
+                'templateId': int(template_id),
+                'params': {'CODE': code},
+            },
+            timeout=10,
+        )
+        return resp.ok
+    except requests.RequestException:
+        return False
+
+
+def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+            login(request, user)
+            next_url = request.GET.get('next', '/')
+            return redirect(next_url)
+        return render(request, 'registration/login.html', {'error': 'Correo o contraseña inválidos.'})
+    return render(request, 'registration/login.html')
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')
+
+
+@login_required
+def profile_view(request):
+    return render(request, 'profile.html', {'profile_user': request.user})
