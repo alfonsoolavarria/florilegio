@@ -147,3 +147,16 @@ cython_debug/
 
 # OS X
 .DS_Store
+
+# Entorno virtual
+vflofe/
+venv/
+.env
+
+# Archivos estáticos de Django
+staticfiles/
+*.gz
+
+# Python
+__pycache__/
+*.pyc
