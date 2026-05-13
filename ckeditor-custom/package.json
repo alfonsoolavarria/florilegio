@@ -1,0 +1,48 @@
+{
+  "name": "florilegio-ckeditor",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "webpack --mode production"
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-theme-lark": "^47.6.2",
+    "ckeditor5": "^48.1.0",
+    "@ckeditor/ckeditor5-alignment": "^48.1.0",
+    "@ckeditor/ckeditor5-basic-styles": "^48.1.0",
+    "@ckeditor/ckeditor5-block-quote": "^48.1.0",
+    "@ckeditor/ckeditor5-code-block": "^48.1.0",
+    "@ckeditor/ckeditor5-editor-classic": "^48.1.0",
+    "@ckeditor/ckeditor5-emoji": "^48.1.0",
+    "@ckeditor/ckeditor5-essentials": "^48.1.0",
+    "@ckeditor/ckeditor5-find-and-replace": "^48.1.0",
+    "@ckeditor/ckeditor5-font": "^48.1.0",
+    "@ckeditor/ckeditor5-heading": "^48.1.0",
+    "@ckeditor/ckeditor5-highlight": "^48.1.0",
+    "@ckeditor/ckeditor5-horizontal-line": "^48.1.0",
+    "@ckeditor/ckeditor5-image": "^48.1.0",
+    "@ckeditor/ckeditor5-indent": "^48.1.0",
+    "@ckeditor/ckeditor5-link": "^48.1.0",
+    "@ckeditor/ckeditor5-list": "^48.1.0",
+    "@ckeditor/ckeditor5-media-embed": "^48.1.0",
+    "@ckeditor/ckeditor5-paragraph": "^48.1.0",
+    "@ckeditor/ckeditor5-remove-format": "^48.1.0",
+    "@ckeditor/ckeditor5-select-all": "^48.1.0",
+    "@ckeditor/ckeditor5-source-editing": "^48.1.0",
+    "@ckeditor/ckeditor5-special-characters": "^48.1.0",
+    "@ckeditor/ckeditor5-table": "^48.1.0",
+    "@ckeditor/ckeditor5-undo": "^48.1.0",
+    "@ckeditor/ckeditor5-word-count": "^48.1.0"
+  },
+  "devDependencies": {
+    "css-loader": "^7.1.4",
+    "postcss": "^8.5.3",
+    "postcss-loader": "^8.2.1",
+    "raw-loader": "^4.0.2",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1",
+    "@ckeditor/ckeditor5-dev-translations": "^55.5.0",
+    "@ckeditor/ckeditor5-dev-utils": "^55.5.0"
+  }
+}

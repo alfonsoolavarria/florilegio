@@ -71,7 +71,7 @@
     background: transparent;
   }
 
-  /* Editor Quill */
+  /* Editor CKEditor 5 */
   #study-editor-wrapper {
     display: none;
   }
@@ -120,43 +120,13 @@
     border-color: #e44d26;
     color: #e44d26;
   }
-  .ql-container {
+  /* CKEditor 5 */
+  .ck-editor__editable {
+    min-height: 550px;
+    max-height: 700px;
     font-family: "Inter", sans-serif !important;
     font-size: 1.25rem !important;
-    height: 550px;
-    overflow-y: auto;
-    background: #fff;
     line-height: 1.8 !important;
-  }
-  .ql-container .ql-editor {
-    line-height: 1.8 !important;
-    font-size: 1.25rem !important;
-  }
-  .ql-container .ql-editor ul {
-    list-style: none !important;
-    padding-left: 0 !important;
-  }
-  .ql-container .ql-editor ul li::before {
-    content: "" !important;
-    display: none !important;
-  }
-  .ql-container .ql-editor ol {
-    list-style: none !important;
-    padding-left: 0 !important;
-    counter-reset: none !important;
-  }
-  .ql-container .ql-editor ol li::before {
-    content: "" !important;
-    display: none !important;
-  }
-  .dark .ql-toolbar {
-    background: #f8f9fa;
-    border-radius: 8px 8px 0 0;
-  }
-  .dark .ql-container {
-    background: #fff;
-    color: #333; /* El editor suele verse mejor en blanco incluso en dark mode para contraste de texto */
-    border-radius: 0 0 8px 8px;
   }
 
   /* Selects personalizados para Opciones de Lectura y Estudio */
@@ -373,15 +343,6 @@
     justify-content: center;
   }
 
-  .ql-toolbar {
-    overflow-x: auto;
-    overflow-y: hidden;
-    flex-wrap: nowrap;
-  }
-  .ql-toolbar .ql-formats {
-    flex-shrink: 0;
-  }
-
   .bible-word-block {
     flex-shrink: 1;
   }
@@ -398,8 +359,9 @@
       padding: 0.4rem 0.85rem;
       font-size: 0.7rem;
     }
-    .ql-container {
-      height: 300px !important;
+    .ck-editor__editable {
+      min-height: 300px !important;
+      max-height: 400px !important;
     }
     #study-editor-wrapper {
       max-height: 400px;
@@ -421,8 +383,9 @@
   }
 
   @media (min-width: 576px) and (max-width: 991.98px) {
-    .ql-container {
-      height: 400px !important;
+    .ck-editor__editable {
+      min-height: 400px !important;
+      max-height: 500px !important;
     }
     #study-editor-wrapper {
       max-height: 500px;
@@ -628,7 +591,7 @@
           </button>
         </div>
       </div>
-      <div id="quill-editor"></div>
+      <div id="ckeditor-editor"></div>
     </div>
   </div>
 </div>
@@ -1231,7 +1194,7 @@
       btnContainer.appendChild(studyBtnWrapper);
     }
 
-    let quill = null;
+    let ckEditor = null;
     let isEditorOpen = false;
     const STUDY_STORAGE_KEY = "florilegio_temp_note";
     let estudioLibroSelect,
@@ -1263,8 +1226,9 @@
       const words = interlinearContainer.querySelectorAll(".panel.vstack");
       let interlinearHtml = "";
       if (words.length > 0) {
-        interlinearHtml = '<ul style="list-style: none; padding-left: 0;">';
-        words.forEach((w) => {
+        interlinearHtml = '<figure class="table"><table style="width:100%;border-collapse:collapse;"><tbody>';
+        words.forEach((w, idx) => {
+          if (idx % 2 === 0) interlinearHtml += '<tr>';
           const greek = w.querySelector(".fw-bold")?.innerText || "-";
           const spanish = w.querySelector(".text-primary")?.innerText || "-";
           const metaContainer = w.querySelector(".text-gray-500");
@@ -1275,11 +1239,14 @@
           const lowNida =
             metaContainer?.querySelector(".text-info")?.innerText || "";
           let details = `<em>${rmac}</em>`;
-          if (strong) details += ` (Strong: ${strong})`;
-          if (lowNida) details += ` (Nida: ${lowNida})`;
-          interlinearHtml += `<li><strong>${greek}</strong>: ${spanish} – ${details}</li>`;
+          if (strong) details += ` <span style="color:#28a745;">${strong}</span>`;
+          if (lowNida) details += ` <span style="color:#17a2b8;">${lowNida}</span>`;
+          interlinearHtml += `<td style="width:50%;vertical-align:top;border:1px solid #d1d5db;padding:6px 10px;font-size:0.95rem;">
+            <strong>${greek}</strong>: ${spanish} – ${details}
+          </td>`;
+          if (idx % 2 === 1 || idx === words.length - 1) interlinearHtml += '</tr>';
         });
-        interlinearHtml += "</ul>";
+        interlinearHtml += '</tbody></table></figure>';
       } else {
         interlinearHtml =
           "<p><em>(no hay palabras interlineales encontradas)</em></p>";
@@ -1306,37 +1273,113 @@
         const versiculo = estudioVersiculoSelect.value || '';
         const referencia = `${libro} ${capitulo}:${versiculo}`.toUpperCase();
 
-        if (!quill) {
-            quill = new Quill('#quill-editor', {
-                theme: 'snow',
-                placeholder: 'Escribe tus reflexiones, pega textos o realiza tu bosquejo aquí...',
-                modules: {
-                    toolbar: [
-                        [{ 'header': [1, 2, 3, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'align': [] }],
-                        ['blockquote', 'code-block'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        [{ 'color': [] }, { 'background': [] }],
-                        ['clean']
-                    ]
-                }
-            });
+        if (!ckEditor) {
+            FlorilegioEditor
+                .create(document.querySelector('#ckeditor-editor'), {
+                    licenseKey: 'GPL',
+                    toolbar: {
+                        items: [
+                            'undo', 'redo',
+                            '|',
+                            'heading',
+                            '|',
+                            'fontColor', 'fontBackgroundColor', 'fontSize', 'fontFamily',
+                            '|',
+                            'bold', 'italic', 'underline', 'strikethrough', 'code', 'subscript', 'superscript',
+                            '|',
+                            'highlight', 'removeFormat',
+                            '|',
+                            'alignment',
+                            '|',
+                            'bulletedList', 'numberedList', 'todoList',
+                            '|',
+                            'outdent', 'indent',
+                            '|',
+                            'link', 'blockQuote', 'codeBlock',
+                            '|',
+                            'insertTable', 'imageUpload', 'mediaEmbed', 'horizontalLine',
+                            '|',
+                            'emoji', 'specialCharacters',
+                            '|',
+                            'findAndReplace', 'sourceEditing', 'selectAll',
+                            '|',
+                            'wordCount'
+                        ],
+                        shouldNotGroupWhenFull: false
+                    },
+                    alignment: {
+                        options: ['left', 'center', 'right', 'justify']
+                    },
+                    fontSize: {
+                        options: [9, 11, 13, 16, 19, 22, 28, 36, 48]
+                    },
+                    fontFamily: {
+                        options: [
+                            'default',
+                            'Arial, Helvetica, sans-serif',
+                            'Georgia, serif',
+                            'Courier New, Courier, monospace',
+                            'Verdana, Geneva, sans-serif',
+                            'Times New Roman, Times, serif'
+                        ]
+                    },
+                    highlight: {
+                        options: [
+                            { model: 'yellowMarker', class: 'marker-yellow', title: 'Marcador amarillo', color: 'var(--ck-highlight-marker-yellow)', type: 'marker' },
+                            { model: 'greenMarker', class: 'marker-green', title: 'Marcador verde', color: 'var(--ck-highlight-marker-green)', type: 'marker' },
+                            { model: 'pinkMarker', class: 'marker-pink', title: 'Marcador rosa', color: 'var(--ck-highlight-marker-pink)', type: 'marker' },
+                            { model: 'blueMarker', class: 'marker-blue', title: 'Marcador azul', color: 'var(--ck-highlight-marker-blue)', type: 'marker' },
+                            { model: 'redPen', class: 'pen-red', title: 'Texto rojo', color: 'var(--ck-highlight-pen-red)', type: 'pen' },
+                            { model: 'greenPen', class: 'pen-green', title: 'Texto verde', color: 'var(--ck-highlight-pen-green)', type: 'pen' }
+                        ]
+                    },
+                    link: {
+                        addTargetToExternalLinks: true,
+                        defaultProtocol: 'https://'
+                    },
+                    table: {
+                        contentToolbar: [
+                            'tableColumn', 'tableRow', 'mergeTableCells',
+                            'tableCellProperties', 'tableProperties'
+                        ]
+                    },
+                    image: {
+                        toolbar: [
+                            'imageStyle:inline', 'imageStyle:block', 'imageStyle:side',
+                            '|',
+                            'toggleImageCaption', 'imageTextAlternative'
+                        ]
+                    },
+                    heading: {
+                        options: [
+                            { model: 'paragraph', title: 'Párrafo', class: 'ck-heading_paragraph' },
+                            { model: 'heading1', view: 'h1', title: 'Título 1', class: 'ck-heading_heading1' },
+                            { model: 'heading2', view: 'h2', title: 'Título 2', class: 'ck-heading_heading2' },
+                            { model: 'heading3', view: 'h3', title: 'Título 3', class: 'ck-heading_heading3' }
+                        ]
+                    },
+                    placeholder: 'Escribe tus reflexiones, pega textos o realiza tu bosquejo aquí...'
+                })
+                .then(function(editor) {
+                    ckEditor = editor;
 
-            const savedNote = localStorage.getItem(STUDY_STORAGE_KEY);
-            if (savedNote) {
-                quill.root.innerHTML = savedNote;
-            } else {
-                quill.clipboard.dangerouslyPasteHTML(buildReferenceHtml() + `<hr><h2>Mis Notas:</h2><p>Comienza a escribir aquí tus observaciones...</p><br><br>`);
-            }
+                    const savedNote = localStorage.getItem(STUDY_STORAGE_KEY);
+                    if (savedNote) {
+                        ckEditor.setData(savedNote);
+                    } else {
+                        ckEditor.setData(buildReferenceHtml() + `<hr><h2>Mis Notas:</h2><p>Comienza a escribir aquí tus observaciones...</p><br><br>`);
+                    }
 
-            quill.on('text-change', function() {
-                localStorage.setItem(STUDY_STORAGE_KEY, quill.root.innerHTML);
-            });
-            isEditorOpen = true;
-        } else if (wasOpen && quill.getLength() > 1) {
-            // Verificar si el versículo ya existe en el editor
-            const existingContent = quill.root.innerHTML;
+                    ckEditor.model.document.on('change:data', function() {
+                        localStorage.setItem(STUDY_STORAGE_KEY, ckEditor.getData());
+                    });
+                    isEditorOpen = true;
+                })
+                .catch(function(error) {
+                    console.error('Error al inicializar CKEditor:', error);
+                });
+        } else if (wasOpen && ckEditor.getData().trim().length > 0) {
+            const existingContent = ckEditor.getData();
             const alreadyExists = existingContent.includes(referencia);
             
             if (alreadyExists) {
@@ -1344,21 +1387,18 @@
                 return;
             }
             
-            // Append new verse to existing study at the end
             const newContent = `<br>` + buildReferenceHtml(true, true);
-            quill.clipboard.dangerouslyPasteHTML(quill.getLength() - 1, newContent);
+            ckEditor.setData(ckEditor.getData() + newContent);
             
-            localStorage.setItem(STUDY_STORAGE_KEY, quill.root.innerHTML);
+            localStorage.setItem(STUDY_STORAGE_KEY, ckEditor.getData());
             isEditorOpen = true;
-        } else {
-            // Reopening after close (empty), start fresh
-            quill.clipboard.dangerouslyPasteHTML(buildReferenceHtml() + `<hr><h2>Mis Notas:</h2><p>Comienza a escribir aquí tus observaciones...</p><br><br>`);
+        } else if (ckEditor) {
+            ckEditor.setData(buildReferenceHtml() + `<hr><h2>Mis Notas:</h2><p>Comienza a escribir aquí tus observaciones...</p><br><br>`);
             isEditorOpen = true;
         }
     }
 
     async function exportToPDF() {
-      const element = document.getElementById("quill-editor");
       const libro =
         estudioLibroSelect.options[estudioLibroSelect.selectedIndex].text;
       const capitulo = estudioCapituloSelect.value;
@@ -1372,8 +1412,10 @@
         jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
       };
 
-      // El editor puede tener fondo blanco, html2pdf lo respetará
-      html2pdf().set(opt).from(quill.root).save();
+      const editorElement = document.querySelector('.ck-editor__editable');
+      if (editorElement) {
+        html2pdf().set(opt).from(editorElement).save();
+      }
     }
 
     function exportToWord() {
@@ -1383,7 +1425,7 @@
       const versiculo = estudioVersiculoSelect.value;
       const filename = `Estudio_${libro}_${capitulo}_${versiculo}.doc`;
 
-      const content = quill.root.innerHTML;
+      const content = ckEditor ? ckEditor.getData() : '';
       const header =
         "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
         "xmlns:w='urn:schemas-microsoft-com:office:word' " +
@@ -1411,8 +1453,8 @@
           const wrapper = document.getElementById("study-editor-wrapper");
           wrapper.style.display = "none";
 
-          if (quill) {
-            quill.setContents([]);
+          if (ckEditor) {
+            ckEditor.setData('');
           }
           localStorage.removeItem(STUDY_STORAGE_KEY);
 

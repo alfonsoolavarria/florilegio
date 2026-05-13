@@ -147,3 +147,9 @@ cython_debug/
 
 # OS X
 .DS_Store
+
+# CKEditor 5 custom build
+ckeditor-custom/node_modules/
+ckeditor-custom/.cache/
+ckeditor-custom/yarn.lock
+ckeditor-custom/package-lock.json
