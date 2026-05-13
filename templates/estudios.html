@@ -120,6 +120,10 @@
     border-color: #e44d26;
     color: #e44d26;
   }
+  .btn-save-study:hover {
+    border-color: #28a745;
+    color: #28a745;
+  }
   /* CKEditor 5 */
   .ck-editor__editable {
     min-height: 550px;
@@ -221,9 +225,7 @@
     visibility: hidden;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.18s ease, visibility 0.18s ease;
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
+    transition: opacity 0.12s ease, visibility 0.12s ease;
   }
   .flor-modal-overlay.open {
     visibility: visible;
@@ -236,10 +238,9 @@
     max-width: 420px;
     width: 90%;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
-    transform: translateY(24px) scale(0.96);
-    transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(12px) scale(0.97);
+    transition: transform 0.12s ease-out;
     overflow: hidden;
-    will-change: transform;
   }
   .flor-modal-overlay.open .flor-modal {
     transform: translateY(0) scale(1);
@@ -580,6 +581,9 @@
           <i class="unicon-pen me-1"></i> Bloc de Notas de Estudio
         </h5>
         <div class="ms-auto d-flex gap-2">
+          <button class="btn-export-study btn-save-study shadow-xs" onclick="saveStudy()">
+            <i class="unicon-save text-success"></i> Guardar
+          </button>
           <button class="btn-export-study btn-export-word shadow-xs" onclick="exportToWord()">
             <i class="unicon-file-word text-primary"></i> Word
           </button>
@@ -598,6 +602,12 @@
 
 <script id="bible-structure-data" type="application/json">
   {{ estructura_json|safe }}
+</script>
+
+<script>
+  window.USER_IS_AUTHENTICATED = {% if user.is_authenticated %}true{% else %}false{% endif %};
+  window.CSRF_TOKEN = '{{ csrf_token }}';
+  window.PENDING_SAVE_KEY = 'florilegio_pending_save';
 </script>
 
 <script>
@@ -1196,6 +1206,7 @@
 
     let ckEditor = null;
     let isEditorOpen = false;
+    let currentStudyId = sessionStorage.getItem('florilegio_current_study_id') || null;
     const STUDY_STORAGE_KEY = "florilegio_temp_note";
     let estudioLibroSelect,
       estudioCapituloSelect,
@@ -1297,7 +1308,7 @@
                             '|',
                             'link', 'blockQuote', 'codeBlock',
                             '|',
-                            'insertTable', 'imageUpload', 'mediaEmbed', 'horizontalLine',
+                            'insertTable', 'imageUpload', 'horizontalLine',
                             '|',
                             'emoji', 'specialCharacters',
                             '|',
@@ -1363,11 +1374,18 @@
                 .then(function(editor) {
                     ckEditor = editor;
 
-                    const savedNote = localStorage.getItem(STUDY_STORAGE_KEY);
-                    if (savedNote) {
-                        ckEditor.setData(savedNote);
+                    if (wasOpen) {
+                        const savedNote = localStorage.getItem(STUDY_STORAGE_KEY);
+                        if (savedNote) {
+                            ckEditor.setData(savedNote);
+                        } else {
+                            ckEditor.setData(buildReferenceHtml() + `<hr><h2>Mis Notas:</h2><p>Comienza a escribir aquí tus observaciones...</p><br><br>`);
+                        }
                     } else {
                         ckEditor.setData(buildReferenceHtml() + `<hr><h2>Mis Notas:</h2><p>Comienza a escribir aquí tus observaciones...</p><br><br>`);
+                        localStorage.removeItem(STUDY_STORAGE_KEY);
+                        currentStudyId = null;
+                        sessionStorage.removeItem('florilegio_current_study_id');
                     }
 
                     ckEditor.model.document.on('change:data', function() {
@@ -1394,6 +1412,9 @@
             isEditorOpen = true;
         } else if (ckEditor) {
             ckEditor.setData(buildReferenceHtml() + `<hr><h2>Mis Notas:</h2><p>Comienza a escribir aquí tus observaciones...</p><br><br>`);
+            localStorage.removeItem(STUDY_STORAGE_KEY);
+            currentStudyId = null;
+            sessionStorage.removeItem('florilegio_current_study_id');
             isEditorOpen = true;
         }
     }
@@ -1445,6 +1466,83 @@
       document.body.removeChild(fileDownload);
     }
 
+    async function saveStudy(skipRedirectModal = false) {
+      if (!window.USER_IS_AUTHENTICATED) {
+        if (!ckEditor) return;
+        const content = ckEditor.getData().trim();
+        if (!content) return;
+        const libro = estudioLibroSelect.options[estudioLibroSelect.selectedIndex]?.text || '';
+        const capitulo = estudioCapituloSelect.value || '';
+        const versiculo = estudioVersiculoSelect.value || '';
+        sessionStorage.setItem(window.PENDING_SAVE_KEY, JSON.stringify({
+          content, title: `${libro} ${capitulo}:${versiculo}`.trim(),
+          reference: `${libro} ${capitulo}:${versiculo}`.trim()
+        }));
+        if (!skipRedirectModal) {
+          openModal(
+            'Inicia Sesión o Regístrate',
+            '<p style="text-align:center;">Debes iniciar sesión o registrarte para guardar tus estudios.</p>' +
+            '<div style="display:flex;flex-direction:column;gap:10px;margin-top:16px;">' +
+            '<a href="{% url "login" %}?next={{ request.path }}" class="flor-modal-btn flor-modal-btn-primary" style="text-align:center;text-decoration:none;">Iniciar Sesión</a>' +
+            '<a href="{% url "register" %}?next={{ request.path }}" class="flor-modal-btn flor-modal-btn-cancel" style="text-align:center;text-decoration:none;">Registrarse</a>' +
+            '</div>',
+            'info',
+            []
+          );
+        }
+        return;
+      }
+
+      if (!ckEditor) {
+        showModalAlert('Sin contenido', 'No hay un estudio abierto para guardar.');
+        return;
+      }
+
+      const content = ckEditor.getData().trim();
+      if (!content) {
+        showModalAlert('Sin contenido', 'El estudio está vacío. Escribe algo antes de guardar.');
+        return;
+      }
+
+      const libro = estudioLibroSelect.options[estudioLibroSelect.selectedIndex]?.text || '';
+      const capitulo = estudioCapituloSelect.value || '';
+      const versiculo = estudioVersiculoSelect.value || '';
+      const reference = `${libro} ${capitulo}:${versiculo}`.trim();
+
+      const body = {
+        content: content,
+        title: reference,
+        reference: reference
+      };
+      if (currentStudyId) body.study_id = currentStudyId;
+
+      try {
+        const response = await fetch('/api/estudios/guardar/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': window.CSRF_TOKEN
+          },
+          body: JSON.stringify(body)
+        });
+        const result = await response.json();
+        if (result.status === 'success') {
+          currentStudyId = result.study_id;
+          sessionStorage.setItem('florilegio_current_study_id', currentStudyId);
+          const msg = result.updated ? 'Tu estudio se ha actualizado correctamente.' : 'Tu estudio se ha guardado correctamente.';
+          showModalAlert('Estudio Guardado', msg, 'info');
+        } else if (result.status === 'plan_limit_reached') {
+          closeModal();
+          window.location.href = '/planes/';
+        } else {
+          showModalAlert('Error', result.message || 'Ocurrió un error al guardar.', 'warning');
+        }
+      } catch (err) {
+        showModalAlert('Error de red', 'No se pudo conectar con el servidor. Intenta de nuevo.', 'warning');
+        console.error(err);
+      }
+    }
+
     function closeStudyEditor() {
       showModalConfirm(
         'Cerrar Bloc de Notas',
@@ -1457,6 +1555,8 @@
             ckEditor.setData('');
           }
           localStorage.removeItem(STUDY_STORAGE_KEY);
+          currentStudyId = null;
+          sessionStorage.removeItem('florilegio_current_study_id');
 
           // Restaurar botón a "Iniciar Estudio Personal"
           const btnContainer = document.getElementById("study-btn-container");
@@ -1478,6 +1578,7 @@
     window.closeStudyEditor = closeStudyEditor;
     window.exportToPDF = exportToPDF;
     window.exportToWord = exportToWord;
+    window.saveStudy = saveStudy;
 
     function showLoading(container) {
       container.innerHTML =
@@ -1654,6 +1755,41 @@
       { text: 'Cancelar', className: 'flor-modal-btn-cancel' },
       { text: 'Aceptar', className: 'flor-modal-btn-primary', callback: onConfirm }
     ]);
+  }
+
+  // ─── Pending save after login ──────────────────────────────────────
+  if (window.USER_IS_AUTHENTICATED) {
+    const pendingRaw = sessionStorage.getItem(window.PENDING_SAVE_KEY);
+    if (pendingRaw) {
+      try {
+        const pending = JSON.parse(pendingRaw);
+        sessionStorage.removeItem(window.PENDING_SAVE_KEY);
+        (async function() {
+          try {
+            const resp = await fetch('/api/estudios/guardar/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': window.CSRF_TOKEN
+              },
+              body: JSON.stringify(pending)
+            });
+            const result = await resp.json();
+            if (result.status === 'success') {
+              showModalAlert('Estudio Guardado', 'Tu estudio se ha guardado correctamente.', 'info');
+            } else if (result.status === 'plan_limit_reached') {
+              window.location.href = '/planes/';
+            } else {
+              showModalAlert('Error', result.message || 'Ocurrió un error al guardar.', 'warning');
+            }
+          } catch(err) {
+            console.error(err);
+          }
+        })();
+      } catch(e) {
+        sessionStorage.removeItem(window.PENDING_SAVE_KEY);
+      }
+    }
   }
 </script>
 {% endblock %}

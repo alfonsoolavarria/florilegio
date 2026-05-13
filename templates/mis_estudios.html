@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="panel overflow-hidden bg-gray-25 dark:bg-gray-900 py-6 lg:py-9">
+  <div class="container max-w-lg">
+    <div class="row justify-center">
+      <div class="col-12 col-md-10">
+        <div class="panel bg-white dark:bg-gray-800 p-6 rounded-2 shadow-sm">
+          <div class="hstack justify-between mb-3">
+            <h2 class="h4 fw-bold mb-0">
+              <i class="unicon-notebook me-2 text-primary"></i>Mis Estudios
+            </h2>
+            <a href="{% url 'estudios' %}" class="btn btn-outline-primary btn-sm">
+              <i class="unicon-pen me-1"></i> Nuevo Estudio
+            </a>
+          </div>
+
+          <div class="hstack gap-2 mb-3 flex-wrap">
+            <div class="position-relative flex-grow-1" style="min-width:160px;max-width:400px;">
+              <i class="unicon-search position-absolute" style="left:10px;top:50%;transform:translateY(-50%);color:#adb5bd;font-size:14px;"></i>
+              <input type="text" id="study-search" class="form-control form-control-sm ps-5" placeholder="Buscar por referencia…" oninput="filtrarEstudios()">
+            </div>
+            <select id="study-sort" class="form-select form-select-sm" style="width:auto;height:40px;padding-top:3px;padding-bottom:3px;padding-right:28px;" onchange="filtrarEstudios()">
+              <option value="recent">Más recientes</option>
+              <option value="oldest">Más antiguos</option>
+            </select>
+            <span id="study-count" class="text-gray-500 text-sm text-nowrap"></span>
+          </div>
+
+          <div id="study-list">
+          {% if studies %}
+            {% for study in studies %}
+            <div class="study-item vstack gap-1 py-3 border-bottom" data-id="{{ study.id }}" data-reference="{{ study.reference|default:study.title|default:''|lower }}" data-date="{{ study.updated_at|date:'U' }}">
+              <div class="hstack justify-between">
+                <div>
+                  <strong>{{ study.reference|default:study.title|default:"Estudio sin referencia" }}</strong>
+                  <span class="text-gray-500 text-sm ms-2">{{ study.updated_at|date:"d/m/Y H:i" }}</span>
+                </div>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-sm btn-outline-primary" onclick='verEstudio({{ study.id }})'>
+                    <i class="unicon-view me-1"></i> Ver
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick='void(0)'>
+                    <i class="unicon-pen me-1"></i> Editar
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" onclick='descargarPDF({{ study.id }})'>
+                    <i class="unicon-document-download me-1"></i> PDF
+                  </button>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="text-center py-6" id="empty-state">
+              <i class="unicon-notebook fs-1 text-gray-300 mb-3 d-block"></i>
+              <p class="text-gray-500 mb-3">No tienes estudios guardados aún.</p>
+              <a href="{% url 'estudios' %}" class="btn btn-primary">
+                <i class="unicon-pen me-1"></i> Ir a Estudios
+              </a>
+            </div>
+          {% endif %}
+          </div>
+          <div id="no-results" class="text-center py-5" style="display:none;">
+            <p class="text-gray-500 mb-0">No se encontraron estudios con ese criterio.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for viewing study content -->
+<div id="study-view-modal" class="flor-modal-overlay" onclick="if(event.target===this)closeViewModal()" style="display:none;">
+  <div class="flor-modal flor-modal-lg" role="dialog" aria-modal="true">
+    <div class="flor-modal-header">
+      <h3 id="study-view-title" class="flor-modal-title"></h3>
+    </div>
+    <div id="study-view-body" class="flor-modal-body" style="max-height:70vh;overflow-y:auto;"></div>
+    <div class="flor-modal-footer">
+      <button class="flor-modal-btn flor-modal-btn-primary" onclick="closeViewModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .flor-modal-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.45);
+    display: flex; align-items: center; justify-content: center;
+    visibility: hidden; pointer-events: none; opacity: 0;
+    transition: opacity 0.12s ease, visibility 0.12s ease;
+  }
+  .flor-modal-overlay.open {
+    visibility: visible; pointer-events: auto; opacity: 1;
+  }
+  .flor-modal-overlay .flor-modal {
+    background: #fff; border-radius: 12px;
+    max-width: 500px; width: 90%;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.18);
+    transform: translateY(12px) scale(0.97);
+    transition: transform 0.12s ease-out;
+  }
+  .flor-modal-overlay.open .flor-modal {
+    transform: translateY(0) scale(1);
+  }
+  .flor-modal-header {
+    padding: 20px 24px 0;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .flor-modal-title {
+    margin: 0; font-size: 1.1rem; font-weight: 700;
+  }
+  .flor-modal-body {
+    padding: 16px 24px 20px;
+    font-size: 0.95rem; color: #495057;
+  }
+  .flor-modal-body p, .flor-modal-body h1,
+  .flor-modal-body h2, .flor-modal-body h3 {
+    margin-bottom: 0.5rem;
+  }
+  .flor-modal-footer {
+    padding: 0 24px 20px;
+    display: flex; justify-content: flex-end; gap: 8px;
+  }
+  .flor-modal-btn {
+    padding: 8px 20px; border: none; border-radius: 8px;
+    font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  }
+  .flor-modal-btn-primary {
+    background: #0d6efd; color: #fff;
+  }
+  .flor-modal-btn-primary:hover {
+    background: #0b5ed7;
+  }
+  #study-view-modal .flor-modal {
+    max-width: 800px;
+  }
+</style>
+
+<script>
+function filtrarEstudios() {
+  const q = document.getElementById('study-search').value.toLowerCase().trim();
+  const sort = document.getElementById('study-sort').value;
+  const list = document.getElementById('study-list');
+  const items = Array.from(list.querySelectorAll('.study-item'));
+  const noResults = document.getElementById('no-results');
+  const emptyState = document.getElementById('empty-state');
+  const countEl = document.getElementById('study-count');
+
+  if (emptyState) return;
+
+  const filtered = items.filter(el => {
+    const ref = el.dataset.reference || '';
+    return q === '' || ref.includes(q);
+  });
+
+  filtered.sort((a, b) => {
+    const da = parseInt(a.dataset.date);
+    const db = parseInt(b.dataset.date);
+    return sort === 'recent' ? db - da : da - db;
+  });
+
+  filtered.forEach(el => list.appendChild(el));
+
+  const visible = q === '' ? items.length : filtered.length;
+  countEl.textContent = visible + ' estudio' + (visible !== 1 ? 's' : '');
+
+  items.forEach(el => el.style.display = 'none');
+  filtered.forEach(el => el.style.display = '');
+  noResults.style.display = filtered.length === 0 && items.length > 0 ? '' : 'none';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const countEl = document.getElementById('study-count');
+  if (countEl) {
+    const total = document.querySelectorAll('.study-item').length;
+    countEl.textContent = total + ' estudio' + (total !== 1 ? 's' : '');
+  }
+});
+
+async function descargarPDF(studyId) {
+  try {
+    const resp = await fetch('/api/estudios/' + studyId + '/');
+    const data = await resp.json();
+    if (data.status !== 'success') { alert('Error al cargar el estudio.'); return; }
+
+    const container = document.createElement('div');
+    container.innerHTML = data.study.content;
+    container.style.padding = '20px';
+    container.style.fontFamily = 'Inter, sans-serif';
+    container.style.fontSize = '14px';
+    container.style.lineHeight = '1.6';
+    container.style.color = '#000';
+    container.style.background = '#fff';
+    document.body.appendChild(container);
+
+    const opt = {
+      margin: 0.5,
+      filename: (data.study.reference || 'Estudio') + '.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    await html2pdf().set(opt).from(container).save();
+    document.body.removeChild(container);
+  } catch (e) {
+    alert('Error al generar PDF.');
+    console.error(e);
+  }
+}
+
+function verEstudio(studyId) {
+  fetch('/api/estudios/' + studyId + '/')
+    .then(r => r.json())
+    .then(data => {
+      if (data.status === 'success') {
+        document.getElementById('study-view-title').textContent = data.study.reference || 'Estudio';
+        document.getElementById('study-view-body').innerHTML = data.study.content;
+        document.getElementById('study-view-modal').style.display = 'flex';
+        requestAnimationFrame(function() {
+          document.getElementById('study-view-modal').classList.add('open');
+        });
+      } else {
+        alert('Error al cargar el estudio.');
+      }
+    })
+    .catch(() => alert('Error de red.'));
+}
+
+function closeViewModal() {
+  const m = document.getElementById('study-view-modal');
+  m.classList.remove('open');
+  setTimeout(() => { m.style.display = 'none'; }, 200);
+}
+</script>
+{% endblock %}

@@ -139,11 +139,21 @@ class ApiBibleSyncStatus(models.Model):
 
 
 class UserProfile(models.Model):
+    PLAN_CHOICES = [
+        ('free', 'Gratis'),
+        ('premium', 'Premium'),
+        ('pro', 'Pro'),
+    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     bio = models.TextField(blank=True, null=True, verbose_name="Biografía")
     avatar_url = models.URLField(max_length=500, blank=True, null=True, verbose_name="URL del avatar")
+    plan = models.CharField(max_length=20, choices=PLAN_CHOICES, default='free', verbose_name="Plan")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de registro")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Última actualización")
+
+    def study_limit(self):
+        limits = {'free': 3, 'premium': 100, 'pro': None}
+        return limits.get(self.plan, 3)
 
     def __str__(self):
         return self.user.username
@@ -151,6 +161,23 @@ class UserProfile(models.Model):
     class Meta:
         verbose_name = "Perfil de usuario"
         verbose_name_plural = "Perfiles de usuarios"
+
+
+class UserStudy(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='studies')
+    title = models.CharField(max_length=255, blank=True, default='')
+    reference = models.CharField(max_length=255, blank=True, default='')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.title or self.reference or 'Sin título'}"
+
+    class Meta:
+        verbose_name = "Estudio de usuario"
+        verbose_name_plural = "Estudios de usuarios"
+        ordering = ['-updated_at']
 
 
 @receiver(post_save, sender=User)

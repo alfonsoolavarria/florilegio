@@ -11,7 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
-from .models import Article, Category, LibroBiblia, Essay
+from django.views.decorators.http import require_POST
+from .models import Article, Category, LibroBiblia, Essay, UserStudy
 
 def dashboard(request):
     featured_articles = Article.objects.filter(is_featured=True, status='liberado')[:6]
@@ -192,6 +193,10 @@ def contact(request):
 def apoyo(request):
     return render(request, 'apoyo.html')
 
+def planes(request):
+    return render(request, 'planes.html')
+
+
 def estudios(request):
     libros_nt = LibroBiblia.objects.filter(testamento="Nuevo Testamento").order_by('numero')
     estructura_datos = {libro.numero: libro.estructura_capitulos for libro in libros_nt}
@@ -199,6 +204,81 @@ def estudios(request):
         'libros': libros_nt,
         'estructura_json': json.dumps(estructura_datos, cls=DjangoJSONEncoder)
     })
+
+
+@login_required
+def mis_estudios(request):
+    studies = UserStudy.objects.filter(user=request.user).order_by('-updated_at')
+    return render(request, 'mis_estudios.html', {
+        'studies': studies
+    })
+
+
+@login_required
+@require_POST
+def api_save_study(request):
+    data = json.loads(request.body)
+    content = data.get('content', '')
+    title = data.get('title', '')
+    reference = data.get('reference', '')
+    study_id = data.get('study_id')
+    
+    if study_id:
+        study = get_object_or_404(UserStudy, id=study_id, user=request.user)
+        study.content = content
+        study.title = title
+        study.reference = reference
+        study.save()
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Estudio actualizado correctamente.',
+            'study_id': study.id,
+            'updated': True
+        })
+    
+    profile = request.user.profile
+    limit = profile.study_limit()
+    current_count = UserStudy.objects.filter(user=request.user).count()
+    
+    if limit is not None and current_count >= limit:
+        return JsonResponse({
+            'status': 'plan_limit_reached',
+            'message': f'Has alcanzado el límite de {limit} estudios de tu plan. Actualiza tu plan para seguir guardando.',
+            'limit': limit,
+            'plan': profile.plan
+        }, status=403)
+    
+    study = UserStudy.objects.create(
+        user=request.user,
+        title=title,
+        reference=reference,
+        content=content
+    )
+    
+    return JsonResponse({
+        'status': 'success',
+        'message': 'Estudio guardado correctamente.',
+        'study_id': study.id
+    })
+
+
+@login_required
+def api_get_study(request, study_id):
+    try:
+        study = UserStudy.objects.get(id=study_id, user=request.user)
+        return JsonResponse({
+            'status': 'success',
+            'study': {
+                'id': study.id,
+                'title': study.title,
+                'reference': study.reference,
+                'content': study.content,
+                'updated_at': study.updated_at.isoformat()
+            }
+        })
+    except UserStudy.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Estudio no encontrado.'}, status=404)
+
 
 def api_get_versiculo(request):
     tipo = request.GET.get('tipo', 'estudio')
@@ -255,6 +335,7 @@ def api_get_versiculo(request):
 
 
 def register_view(request):
+    next_url = request.GET.get('next') or request.POST.get('next') or '/'
     if request.method == 'POST':
         email = request.POST.get('email')
         password1 = request.POST.get('password1')
@@ -262,19 +343,20 @@ def register_view(request):
         nombre = request.POST.get('nombre', '')
 
         if not email or not password1 or not password2:
-            return render(request, 'registration/register.html', {'error': 'Todos los campos son obligatorios.'})
+            return render(request, 'registration/register.html', {'error': 'Todos los campos son obligatorios.', 'next': next_url})
         if password1 != password2:
-            return render(request, 'registration/register.html', {'error': 'Las contraseñas no coinciden.'})
+            return render(request, 'registration/register.html', {'error': 'Las contraseñas no coinciden.', 'next': next_url})
         if User.objects.filter(email=email).exists():
-            return render(request, 'registration/register.html', {'error': 'Ya existe un usuario con ese correo.'})
+            return render(request, 'registration/register.html', {'error': 'Ya existe un usuario con ese correo.', 'next': next_url})
         if not re.match(r'^[^@]+@[^@]+\.com$', email):
-            return render(request, 'registration/register.html', {'error': 'Ingresa un correo válido que termine en .com'})
+            return render(request, 'registration/register.html', {'error': 'Ingresa un correo válido que termine en .com', 'next': next_url})
 
         code = str(random.randint(100000, 999999))
         request.session['pending_email'] = email
         request.session['pending_password'] = password1
         request.session['pending_nombre'] = nombre
         request.session['pending_code'] = code
+        request.session['pending_next'] = next_url
 
         sent = _send_brevo_code(email, code)
         if not sent:
@@ -285,7 +367,9 @@ def register_view(request):
             })
 
         return redirect('verify_email')
-    return render(request, 'registration/register.html')
+    return render(request, 'registration/register.html', {
+        'next': request.GET.get('next', '/')
+    })
 
 
 def verify_email_view(request):
@@ -319,12 +403,13 @@ def verify_email_view(request):
             first_name=nombre
         )
 
-        for key in ['pending_email', 'pending_password', 'pending_nombre', 'pending_code']:
+        next_url = request.session.get('pending_next', '/')
+        for key in ['pending_email', 'pending_password', 'pending_nombre', 'pending_code', 'pending_next']:
             request.session.pop(key, None)
 
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)
-        return redirect('profile')
+        return redirect(next_url)
 
     email = request.session.get('pending_email')
     if not email:
@@ -362,16 +447,27 @@ def _send_brevo_code(email, code):
 
 
 def login_view(request):
+    next_url = request.GET.get('next') or request.POST.get('next') or '/'
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
         user = authenticate(request, username=email, password=password)
         if user is not None:
             login(request, user)
-            next_url = request.GET.get('next', '/')
             return redirect(next_url)
         return render(request, 'registration/login.html', {'error': 'Correo o contraseña inválidos.'})
     return render(request, 'registration/login.html')
+
+
+@login_required
+@require_POST
+def api_update_avatar(request):
+    data = json.loads(request.body)
+    avatar = data.get('avatar', '')
+    profile = request.user.profile
+    profile.avatar_url = avatar
+    profile.save()
+    return JsonResponse({'status': 'success', 'avatar': avatar})
 
 
 def logout_view(request):
@@ -381,4 +477,14 @@ def logout_view(request):
 
 @login_required
 def profile_view(request):
-    return render(request, 'profile.html', {'profile_user': request.user})
+    import os
+    avatares_dir = os.path.join(settings.BASE_DIR, 'static', 'avatares')
+    avatares = []
+    if os.path.isdir(avatares_dir):
+        for f in sorted(os.listdir(avatares_dir)):
+            if f.lower().endswith(('.webp', '.png', '.jpg', '.jpeg', '.gif')):
+                avatares.append(f)
+    return render(request, 'profile.html', {
+        'profile_user': request.user,
+        'avatares': avatares
+    })

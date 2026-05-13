@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load socialaccount %}
+
+{% block content %}
+<div class="panel overflow-hidden bg-gray-25 dark:bg-gray-900 py-6 lg:py-9">
+  <div class="container max-w-lg">
+    <div class="row justify-center">
+      <div class="col-12 col-md-6">
+        <div class="panel bg-white dark:bg-gray-800 p-6 rounded-2 shadow-sm">
+          <h2 class="h4 fw-bold text-center mb-4">{% trans "Vincula tu cuenta" %}</h2>
+
+          <p class="text-sm text-center text-gray-600 mb-4">
+            {% blocktrans with provider_name=account.get_provider.name %}
+              Estás a punto de usar tu cuenta de {{ provider_name }} para acceder a Florilegio de la Fe.
+              Como paso final, completa el siguiente formulario:
+            {% endblocktrans %}
+          </p>
+
+          {% if form.errors %}
+          <div class="alert alert-danger py-2 mb-4">
+            {{ form.errors }}
+          </div>
+          {% endif %}
+
+          <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label text-sm fw-medium">{% trans "Correo electrónico" %}</label>
+              <input type="email" name="email" class="form-control" value="{{ form.email.value|default:account.email }}" readonly>
+            </div>
+            {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+            {% endif %}
+            <button type="submit" class="btn btn-primary w-100">{% trans "Registrarse" %} &raquo;</button>
+          </form>
+
+          <div class="text-center mt-3">
+            <a href="{% url 'login' %}" class="text-sm">{% trans "¿Ya tienes cuenta? Inicia sesión" %}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

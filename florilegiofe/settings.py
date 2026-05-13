@@ -135,6 +135,7 @@ ACCOUNT_LOGOUT_ON_GET = True
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_ADAPTER = 'main_florife.adapters.FlorilegioSocialAdapter'
 
 # Brevo (email verification)
 BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '')

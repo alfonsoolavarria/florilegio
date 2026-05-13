@@ -1,0 +1,183 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<div class="panel overflow-hidden bg-gray-25 dark:bg-gray-900 py-6 lg:py-9">
+  <div class="container max-w-lg">
+    <div class="text-center mb-6">
+      <h2 class="h3 fw-bold mb-2">Planes de Estudio</h2>
+      <p class="text-gray-500">
+        Elige el plan que mejor se adapte a tu ritmo de estudio
+      </p>
+    </div>
+
+    {% if messages %}
+    <div class="row justify-center mb-4">
+      <div class="col-12 col-md-8">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} py-2 mb-2">
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="row justify-center g-4">
+      <!-- Gratis -->
+      <div class="col-12 col-md-4">
+        <div class="plan-card panel bg-white dark:bg-gray-800 p-5 rounded-3 shadow-sm h-100 d-flex flex-column">
+          <svg class="plan-border" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <rect x="0" y="0" width="100" height="100" fill="none" stroke="#0d6efd" stroke-width="2" stroke-dasharray="0, 400" />
+          </svg>
+          <div class="text-center mb-4">
+            <span class="badge bg-gray-200 text-gray-700 mb-2">GRATIS</span>
+            <h3 class="h5 fw-bold">Plan Gratis</h3>
+            <div class="h2 fw-bold text-primary mt-2">$0</div>
+            <p class="text-gray-500 text-sm">Siempre gratis</p>
+          </div>
+          <ul class="vstack gap-2 mb-4 flex-grow-1" style="list-style:none;padding:0;">
+            <li class="hstack gap-2"><span class="text-gray-500">–</span><span>Hasta 3 estudios guardados</span></li>
+            <li class="hstack gap-2"><span class="text-gray-500">–</span><span>Sin edición en la web</span></li>
+            <li class="hstack gap-2"><span class="text-gray-500">–</span><span>Sin descarga PDF / Word</span></li>
+          </ul>
+          <div class="text-center mt-auto">
+            <span class="plan-btn disabled">Plan actual</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Premium -->
+      <div class="col-12 col-md-4">
+        <div class="plan-card plan-card-premium panel bg-white dark:bg-gray-800 p-5 rounded-3 shadow-sm h-100 d-flex flex-column">
+          <div class="position-absolute top-0 start-50 translate-middle-x badge bg-primary text-white px-3 py-1" style="border-radius:0 0 8px 8px;z-index:2;">RECOMENDADO</div>
+          <svg class="plan-border" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <rect x="0" y="0" width="100" height="100" fill="none" stroke="#0d6efd" stroke-width="2" stroke-dasharray="0, 400" />
+          </svg>
+          <div class="text-center mb-4 pt-2">
+            <span class="badge bg-primary text-white mb-2">PREMIUM</span>
+            <h3 class="h5 fw-bold">Plan Premium</h3>
+            <div class="h2 fw-bold text-primary mt-2">$2.43</div>
+            <p class="text-gray-500 text-sm">Suscripción Mensual</p>
+          </div>
+          <ul class="vstack gap-2 mb-4 flex-grow-1" style="list-style:none;padding:0;">
+            <li class="hstack gap-2"><span class="text-gray-500">–</span><span>Hasta 100 estudios</span></li>
+            <li class="hstack gap-2"><span class="text-gray-500">–</span><span>Exportar a PDF</span></li>
+            <li class="hstack gap-2"><span class="text-gray-500">–</span><span>Exportar a Word</span></li>
+          </ul>
+          <div class="text-center mt-auto">
+            <a href="#" class="plan-btn plan-btn-primary">Elegir Premium</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pro -->
+      <div class="col-12 col-md-4">
+        <div class="plan-card panel bg-white dark:bg-gray-800 p-5 rounded-3 shadow-sm h-100 d-flex flex-column">
+          <svg class="plan-border" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <rect x="0" y="0" width="100" height="100" fill="none" stroke="#0d6efd" stroke-width="2" stroke-dasharray="0, 400" />
+          </svg>
+          <div class="text-center mb-4">
+            <span class="badge bg-dark text-white mb-2">PRO</span>
+            <h3 class="h5 fw-bold">Plan Pro</h3>
+            <div class="h2 fw-bold text-primary mt-2">$5.60</div>
+            <p class="text-gray-500 text-sm">Suscripción Mensual</p>
+          </div>
+          <ul class="vstack gap-2 mb-4 flex-grow-1" style="list-style:none;padding:0;">
+            <li class="hstack gap-2"><span class="text-gray-500">–</span><span>Estudios ilimitados</span></li>
+            <li class="hstack gap-2"><span class="text-gray-500">–</span><span>Exportar a PDF</span></li>
+            <li class="hstack gap-2"><span class="text-gray-500">–</span><span>Exportar a Word</span></li>
+            <li class="hstack gap-2"><span class="text-gray-500">–</span><span>Reabrir y editar estudios</span></li>
+            <li class="hstack gap-2"><span class="text-gray-500">–</span><span>Envío del estudio al correo</span></li>
+          </ul>
+          <div class="text-center mt-auto">
+            <a href="#" class="plan-btn plan-btn-primary">Elegir Pro</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.plan-card {
+  position: relative;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  cursor: default;
+  overflow: hidden;
+}
+.plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+}
+
+.plan-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.plan-card:hover .plan-border {
+  opacity: 1;
+}
+.plan-border rect {
+  fill: none;
+  stroke: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity));
+  stroke-width: 2;
+  stroke-dasharray: 400, 0;
+  transition: all 0.6s ease;
+}
+.plan-card:hover .plan-border rect {
+  stroke-dasharray: 15, 380;
+  stroke-dashoffset: 0;
+}
+
+.plan-btn {
+  display: inline-block;
+  padding: 0.55rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  border: 2px solid rgba(var(--bs-primary-rgb), var(--bs-bg-opacity));
+  background: transparent;
+  color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity));
+  text-decoration: none;
+  min-width: 140px;
+}
+.plan-btn-primary {
+  background: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity));
+  color: #fff;
+}
+.plan-btn-primary:hover {
+  background: transparent;
+  color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity));
+}
+.plan-btn.disabled {
+  border-color: #adb5bd;
+  color: #adb5bd;
+  cursor: default;
+  opacity: 0.7;
+}
+
+.dark .plan-card {
+  background: #1f2937;
+}
+.dark .plan-btn-primary {
+  background: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity));
+  border-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity));
+  color: #fff;
+}
+.dark .plan-btn-primary:hover {
+  background: transparent;
+  color: rgba(var(--bs-primary-rgb), 0.8);
+  border-color: rgba(var(--bs-primary-rgb), 0.8);
+}
+.dark .plan-btn.disabled {
+  border-color: #6b7280;
+  color: #6b7280;
+}
+</style>
+{% endblock %}
