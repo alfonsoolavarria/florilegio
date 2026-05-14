@@ -31,8 +31,12 @@ urlpatterns = [
     path("terminos/", views.terms, name="terms"),
     path("contacto/", views.contact, name="contact"),
     path("estudios/", views.estudios, name="estudios"),
+    path("planes/", views.planes, name="planes"),
+    path("mis-estudios/", views.mis_estudios, name="mis_estudios"),
     path("apoyo/", views.apoyo, name="apoyo"),
     path("api/versiculo/", views.api_get_versiculo, name="api_get_versiculo"),
+    path("api/estudios/guardar/", views.api_save_study, name="api_save_study"),
+    path("api/estudios/<int:study_id>/", views.api_get_study, name="api_get_study"),
     
     # Auth URLs
     path("registro/", views.register_view, name="register"),
@@ -40,6 +44,7 @@ urlpatterns = [
     path("iniciar-sesion/", views.login_view, name="login"),
     path("cerrar-sesion/", views.logout_view, name="logout"),
     path("perfil/", views.profile_view, name="profile"),
+    path("api/perfil/avatar/", views.api_update_avatar, name="update_avatar"),
 
     # Allauth (Google OAuth, etc.)
     path("accounts/", include("allauth.urls")),

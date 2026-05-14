@@ -163,6 +163,13 @@
             <!-- User Menu -->
             <div class="uc-navbar-item user-menu">
               {% if user.is_authenticated %}
+              {% if user.profile.avatar_url %}
+              <a href="#" onclick="event.preventDefault(); toggleUserMenu(this);">
+                <img src="{% static 'avatares/' %}{{ user.profile.avatar_url }}"
+                     class="rounded-circle" style="width:32px;height:32px;object-fit:cover;"
+                     alt="Avatar">
+              </a>
+              {% else %}
               <a
                 class="cstack w-32px h-32px rounded-circle bg-primary text-white text-none fs-7 fw-bold text-decoration-none"
                 href="#"
@@ -170,11 +177,17 @@
               >
                 {{ user.first_name|first|default:user.email|first|upper }}
               </a>
+              {% endif %}
               <div class="user-dropdown uc-hidden">
                 <ul>
                   <li>
                     <a href="{% url 'profile' %}"
                       ><i class="icon unicon-user"></i> Mi Perfil</a
+                    >
+                  </li>
+                  <li>
+                    <a href="{% url 'mis_estudios' %}"
+                      ><i class="icon unicon-notebook"></i> Mis Estudios</a
                     >
                   </li>
                   <li><hr /></li>
@@ -316,6 +329,14 @@
             href="{% url 'profile' %}"
             ><i class="icon icon-1 unicon-user me-2 text-primary"></i> Mi
             Perfil</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-dark dark:text-gray-200 text-none"
+            href="{% url 'mis_estudios' %}"
+            ><i class="icon icon-1 unicon-notebook me-2 text-primary"></i> Mis
+            Estudios</a
           >
         </li>
         <li>

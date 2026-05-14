@@ -17,3 +17,19 @@ formato que hemos trabajado hoy. ¿Hay algo más en lo que pueda ayudarte?
 
 Para los iconos:
 python manage.py sync_bible_data --import_file categories_backup.json
+
+
+----- guardado de estudios
+
+actualmente:
+Acción	Comportamiento	study_id
+Iniciar Estudio Personal	Crea estudio nuevo desde 0	Se resetea
+Guardar (primera vez)	Crea registro en BD	Se guarda
+Guardar (siguientes)	Actualiza el mismo estudio	Se mantiene
+Copiar al Estudio	Agrega el nuevo versículo al estudio abierto	Se mantiene
+Cerrar editor	Limpia todo para empezar fresco	Se resetea
+
+funciona asi: 
+si el editor está abierto y seleccionas otro versículo, 
+aparece "Copiar al Estudio" que agrega el nuevo versículo al mismo estudio existente sin 
+resetear el study_id. No inicia uno nuevo.

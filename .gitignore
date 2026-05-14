@@ -148,6 +148,7 @@ cython_debug/
 # OS X
 .DS_Store
 
+
 # Entorno virtual
 vflofe/
 venv/
@@ -160,3 +161,10 @@ staticfiles/
 # Python
 __pycache__/
 *.pyc
+=======
+# CKEditor 5 custom build
+ckeditor-custom/node_modules/
+ckeditor-custom/.cache/
+ckeditor-custom/yarn.lock
+ckeditor-custom/package-lock.json
+
