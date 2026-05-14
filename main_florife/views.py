@@ -194,7 +194,11 @@ def apoyo(request):
     return render(request, 'apoyo.html')
 
 def planes(request):
-    return render(request, 'planes.html')
+    return render(request, 'planes.html', {
+        'paypal_client_id': settings.PAYPAL_CLIENT_ID,
+        'paypal_plan_premium': settings.PAYPAL_PLAN_PREMIUM,
+        'paypal_plan_pro': settings.PAYPAL_PLAN_PRO,
+    })
 
 
 def estudios(request):
@@ -278,6 +282,16 @@ def api_get_study(request, study_id):
         })
     except UserStudy.DoesNotExist:
         return JsonResponse({'status': 'error', 'message': 'Estudio no encontrado.'}, status=404)
+
+
+def api_get_strong(request, numero):
+    from .models import StrongConcord
+    try:
+        results = StrongConcord.objects.filter(strong_numbers__contains=[numero])
+        data = [{'topic': r.topic, 'definition': r.definition} for r in results]
+        return JsonResponse({'status': 'success', 'data': data})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
 
 def api_get_versiculo(request):
@@ -457,6 +471,23 @@ def login_view(request):
             return redirect(next_url)
         return render(request, 'registration/login.html', {'error': 'Correo o contraseña inválidos.'})
     return render(request, 'registration/login.html')
+
+
+@login_required
+@require_POST
+def api_paypal_activate(request):
+    data = json.loads(request.body)
+    subscription_id = data.get('subscription_id')
+    plan = data.get('plan')
+
+    if not subscription_id or plan not in ('premium', 'pro'):
+        return JsonResponse({'status': 'error', 'message': 'Datos inválidos.'}, status=400)
+
+    profile = request.user.profile
+    profile.plan = plan
+    profile.save()
+
+    return JsonResponse({'status': 'success', 'plan': plan, 'subscription_id': subscription_id})
 
 
 @login_required
