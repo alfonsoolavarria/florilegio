@@ -59,10 +59,9 @@ Y luego actualiza el script en planes.html para leer desde Django en vez de valo
 
 --- NUMERO STRONG con definicion de diccionario VINE ----
 
+con BibliaKoine.db en el directorio raíz del proyecto en el servidor (donde está manage.py), y luego ejecutar:
 python manage.py import_strong_concord
-Comandos disponibles:
-- python manage.py extract_strong_numbers — extrae/pobla strong_numbers en datos existentes
-- python manage.py import_strong_concord — importa todo desde SQLite a PostgreSQL (incluye extracción automática)
+python manage.py extract_strong_numbers
 
 hay algunos numero duplicados pero es porque una numro strong puede significar varias cosas segun el contexto
 por ejemplo el 2784 "HERALDO, SER" "PROCLAMAR" "PUBLICAR" tiene 3 registros porque se usa de diversas maneras
