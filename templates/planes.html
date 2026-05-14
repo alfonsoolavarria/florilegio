@@ -1,4 +1,5 @@
-{% extends "base.html" %} {% load static %} {% block content %}
+{% extends "base.html" %} {% load static %}
+{% block content %}
 <div class="panel overflow-hidden bg-gray-25 dark:bg-gray-900 py-6 lg:py-9">
   <div class="container max-w-lg">
     <div class="text-center mb-6">
@@ -63,7 +64,8 @@
             <li class="hstack gap-2"><span class="text-gray-500">–</span><span>Exportar a Word</span></li>
           </ul>
           <div class="text-center mt-auto">
-            <a href="#" class="plan-btn plan-btn-primary">Elegir Premium</a>
+            <div id="paypal-premium-container" class="w-100"></div>
+            <a href="#" class="plan-btn plan-btn-primary paypal-premium-trigger" onclick="event.preventDefault();renderPayPalButton('premium')">Elegir Premium</a>
           </div>
         </div>
       </div>
@@ -88,7 +90,8 @@
             <li class="hstack gap-2"><span class="text-gray-500">–</span><span>Envío del estudio al correo</span></li>
           </ul>
           <div class="text-center mt-auto">
-            <a href="#" class="plan-btn plan-btn-primary">Elegir Pro</a>
+            <div id="paypal-pro-container" class="w-100"></div>
+            <a href="#" class="plan-btn plan-btn-primary paypal-pro-trigger" onclick="event.preventDefault();renderPayPalButton('pro')">Elegir Pro</a>
           </div>
         </div>
       </div>
@@ -180,4 +183,61 @@
   color: #6b7280;
 }
 </style>
+
+<script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+
+<script>
+window.PAYPAL_PLANS = {
+  premium: '{{ paypal_plan_premium }}',
+  pro: '{{ paypal_plan_pro }}'
+};
+
+var paypalRendered = {};
+
+function renderPayPalButton(plan) {
+  var container = document.getElementById('paypal-' + plan + '-container');
+  var trigger = document.querySelector('.paypal-' + plan + '-trigger');
+
+  if (paypalRendered[plan]) return;
+
+  trigger.style.display = 'none';
+  container.style.display = 'block';
+
+  paypal.Buttons({
+    style: { shape: 'rect', color: 'gold', layout: 'vertical', label: 'subscribe' },
+    createSubscription: function(data, actions) {
+      return actions.subscription.create({ plan_id: window.PAYPAL_PLANS[plan] });
+    },
+    onApprove: function(data, actions) {
+      fetch('/api/paypal/subscription/activate/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+          subscription_id: data.subscriptionID,
+          plan: plan
+        })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(result) {
+        if (result.status === 'success') {
+          alert('¡Suscripción activada! Tu plan ha sido actualizado.');
+          location.reload();
+        } else {
+          alert('Error al activar la suscripción: ' + (result.message || 'Intenta de nuevo.'));
+        }
+      })
+      .catch(function() { alert('Error de red al activar la suscripción.'); });
+    },
+    onError: function(err) {
+      console.error('PayPal Error:', err);
+      alert('Ocurrió un error con PayPal. Intenta de nuevo.');
+    }
+  }).render('#paypal-' + plan + '-container');
+
+  paypalRendered[plan] = true;
+}
+</script>
 {% endblock %}

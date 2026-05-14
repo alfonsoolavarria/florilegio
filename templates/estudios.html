@@ -132,6 +132,9 @@
     font-size: 1.25rem !important;
     line-height: 1.8 !important;
   }
+  .ck-sticky-panel__content {
+    top: 80px !important;
+  }
 
   /* Selects personalizados para Opciones de Lectura y Estudio */
   .bible-select {
@@ -355,6 +358,50 @@
     }
   }
 
+  /* Destello para resultados Strong */
+  .strong-flash {
+    animation: strongFlash 1.4s ease-out;
+    border-color: #800020 !important;
+    box-shadow: 0 0 0 3px rgba(128,0,32,0.2);
+  }
+  .strong-flash.strong-flash-done {
+    animation: none;
+    box-shadow: none;
+    border-color: var(--bs-border-color, #dee2e6) !important;
+    transition: all 0.6s ease;
+  }
+  @keyframes strongFlash {
+    0%   { box-shadow: 0 0 0 6px rgba(128,0,32,0.35); transform: translateY(-4px); }
+    50%  { box-shadow: 0 0 0 3px rgba(128,0,32,0.2); transform: translateY(0); }
+    100% { box-shadow: 0 0 0 3px rgba(128,0,32,0.2); }
+  }
+  .dark .strong-flash {
+    border-color: #a03050 !important;
+  }
+
+  /* Mejora de legibilidad para definiciones Strong */
+  .strong-definition {
+    column-count: 2;
+    column-gap: 2rem;
+    column-rule: 1px solid rgba(128,0,32,0.1);
+    padding: 0.25rem 0.5rem;
+    orphans: 3;
+    widows: 3;
+  }
+  .strong-definition > div {
+    break-inside: avoid-column;
+    padding-top: 0.35rem !important;
+    margin-top: 0 !important;
+  }
+  .strong-definition > div + div {
+    border-top: 1px solid rgba(128,0,32,0.07);
+    margin-top: 0.5rem !important;
+    padding-top: 0.6rem !important;
+  }
+  .strong-item-body {
+    padding: 0.5rem 0.75rem 0.75rem !important;
+  }
+
   @media (max-width: 575.98px) {
     .mode-selector-group .btn {
       padding: 0.4rem 0.85rem;
@@ -572,6 +619,8 @@
 <!-- Full-width Study Editor Section -->
 <div class="bg-white dark:bg-gray-900 border-top">
   <div class="container-fluid px-4 ps-lg-10 py-4">
+    <!-- Resultados de Strong/Vine -->
+    <div id="strong-results" class="vstack gap-2 mb-3" style="display: none;"></div>
     <!-- Dynamic study button (above editor) -->
     <div id="study-btn-container" class="w-100 text-center mb-3"></div>
     <!-- Contenedor del Editor de Estudio -->
@@ -584,10 +633,10 @@
           <button class="btn-export-study btn-save-study shadow-xs" onclick="saveStudy()">
             <i class="unicon-save text-success"></i> Guardar
           </button>
-          <button class="btn-export-study btn-export-word shadow-xs" onclick="exportToWord()">
+          <button class="btn-export-study btn-export-word shadow-xs" onclick="void(0)" style="opacity:0.5;cursor:default;">
             <i class="unicon-file-word text-primary"></i> Word
           </button>
-          <button class="btn-export-study btn-export-pdf shadow-xs" onclick="exportToPDF()">
+          <button class="btn-export-study btn-export-pdf shadow-xs" onclick="void(0)" style="opacity:0.5;cursor:default;">
             <i class="unicon-file-medical text-danger"></i> PDF
           </button>
           <button class="btn-close-study shadow-xs" onclick="closeStudyEditor()">
@@ -1167,7 +1216,7 @@
           word.rmac || ""
         }</span>`;
         if (word.strong)
-          htmlMeta += `<br><span class="text-success fw-medium" data-tooltip="Strong: ${word.strong}">${word.strong}</span>`;
+          htmlMeta += `<br><span class="text-success fw-medium strong-link" data-strong="${word.strong}" style="cursor:pointer;">${word.strong}</span>`;
         if (word.low_nida_number)
           htmlMeta += `<br><span class="text-info fw-medium" data-tooltip="Low-Nida: ${word.low_nida_number}">${word.low_nida_number}</span>`;
         metaEl.innerHTML = htmlMeta;
@@ -1671,6 +1720,7 @@
       }
 
       showLoading(interlinearContainer);
+      document.getElementById("strong-results").style.display = "none";
 
       try {
         const url = `/api/versiculo/?tipo=estudio&version=rva2015&libro=${libroId}&capitulo=${capituloId}&versiculo=${versiculoId}`;
@@ -1686,6 +1736,98 @@
         interlinearContainer.innerHTML =
           '<div class="alert alert-danger w-100 mt-3">Hubo un error de red conectando con el servidor.</div>';
         console.error(err);
+      }
+    });
+
+    function escHtml(str) {
+      if (!str) return "";
+      const d = document.createElement("div");
+      d.textContent = str;
+      return d.innerHTML;
+    }
+
+    function formatDefinition(text) {
+      const esc = escHtml(text);
+      // Color references: { Book Chap:Verse} -> maroon
+      const withRefs = esc.replace(
+        /\{\s*\d*[A-Z]\w+[\s_]\d+:\d+[a-z]?/g,
+        '<span class="text-primary fw-medium" style="color:#800020 !important;">$&</span>'
+      );
+      // Bold cross-references after Véase/Véanse
+      const withBoldXref = withRefs.replace(
+        /([Vv][eé]anse?|VÉASE|VÉANSE)\s+([^.]*\.)/g,
+        (match, prefix, rest) => {
+          const bolded = rest.replace(/[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ0-9º()]+/g, '<strong>$&</strong>');
+          return match.replace(rest, bolded);
+        }
+      );
+      // Split on major sections: letter + ". " at word boundary or start
+      const parts = withBoldXref.split(/(?:^|\b)([A-Z])\.\s+/);
+      const formatted = [];
+      for (let i = 0; i < parts.length; i++) {
+        let p = parts[i];
+        if (!p) continue;
+        if (p.length === 1 && i + 1 < parts.length) {
+          const marker = p;
+          let content = parts[++i];
+          content = content.replace(/^(\w+)/, '<span class="fw-bold text-dark dark:text-white">$1</span>');
+          const body = content
+            .replace(/(\d+)\.\s+/g, '<br><span class="fw-semibold" style="font-size:0.925rem;">$1.</span> ')
+            .replace(/\b([a-z]\))\s+/g, '<br><span class="fst-italic" style="margin-left:1.5em;">$1</span> ');
+          formatted.push(
+            `<div class="mt-2 pt-1"><span class="fw-bold text-dark dark:text-white">${marker}.</span>&nbsp;${body}</div>`
+          );
+        } else {
+          const body = p
+            .replace(/(\d+)\.\s+/g, '<br><span class="fw-semibold" style="font-size:0.925rem;">$1.</span> ')
+            .replace(/\b([a-z]\))\s+/g, '<br><span class="fst-italic" style="margin-left:1.5em;">$1</span> ');
+          formatted.push(`<div class="mt-1">${body}</div>`);
+        }
+      }
+      return formatted.join("");
+    }
+
+    // Click en números Strong
+    document.addEventListener("click", async function (e) {
+      const el = e.target.closest(".strong-link");
+      if (!el) return;
+      const raw = el.dataset.strong;
+      const num = parseInt(raw.replace(/^G/i, ""));
+      if (isNaN(num)) return;
+
+      const container = document.getElementById("strong-results");
+      container.style.display = "block";
+      container.innerHTML =
+        '<div class="text-center py-4"><span class="spinner-border spinner-border-sm text-primary"></span> <span class="small text-gray-500">Cargando definición...</span></div>';
+
+      try {
+        const res = await fetch(`/api/strong/${num}/`);
+        const json = await res.json();
+        if (json.status === "success" && json.data.length) {
+          const items = json.data
+            .map(
+              (r) => `
+              <div class="strong-item-body${json.data.length > 1 ? ' border-bottom' : ''}">
+                <h6 class="fw-bold text-dark dark:text-white mb-3" style="font-size:1.05rem;">${escHtml(r.topic)}</h6>
+                <div class="text-gray-600 dark:text-gray-400 strong-definition" style="line-height:1.75;font-size:0.925rem;">${formatDefinition(r.definition)}</div>
+              </div>`
+            )
+            .join("");
+          container.innerHTML = `
+            <div class="panel bg-white dark:bg-gray-800 rounded-2 border overflow-hidden strong-flash">
+              <div class="px-3 py-2 bg-primary bg-opacity-10 border-bottom d-flex align-items-center gap-2">
+                <span class="badge bg-primary fw-medium font-monospace">${escHtml(raw)}</span>
+                <span class="fw-semibold text-primary text-uppercase" style="letter-spacing:0.08em;font-size:13px;">Estudio de Palabra</span>
+              </div>
+              ${items}
+            </div>`;
+          container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setTimeout(() => container.classList.add('strong-flash-done'), 1200);
+        } else {
+          container.innerHTML = `<div class="alert alert-warning py-3 mb-0 small">No se encontraron definiciones para <strong>${escHtml(raw)}</strong></div>`;
+        }
+      } catch (err) {
+        container.innerHTML = `<div class="alert alert-danger py-3 mb-0 small">Error al consultar Strong: ${escHtml(raw)}</div>`;
       }
     });
   });

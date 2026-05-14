@@ -3,6 +3,23 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+
+class StrongConcord(models.Model):
+    topic = models.CharField(max_length=255, primary_key=True)
+    definition = models.TextField(blank=True, null=True)
+    is_strong = models.BooleanField(default=False)
+    is_concord = models.BooleanField(default=False)
+    strong_numbers = models.JSONField(default=list, blank=True)
+
+    class Meta:
+        db_table = 'strong_concord'
+        verbose_name = 'Strong/Vine'
+        verbose_name_plural = 'Strong/Vine'
+
+    def __str__(self):
+        return self.topic
+
+
 class Category(models.Model):
     name = models.CharField(max_length=100)  # Nombre de la categoría (ej. Teología)
     icon = models.CharField(max_length=100, default="unicon-book")  # Clase del icono para mostrar en la web

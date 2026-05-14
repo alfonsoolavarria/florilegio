@@ -37,6 +37,7 @@ urlpatterns = [
     path("api/versiculo/", views.api_get_versiculo, name="api_get_versiculo"),
     path("api/estudios/guardar/", views.api_save_study, name="api_save_study"),
     path("api/estudios/<int:study_id>/", views.api_get_study, name="api_get_study"),
+    path("api/strong/<int:numero>/", views.api_get_strong, name="api_get_strong"),
     
     # Auth URLs
     path("registro/", views.register_view, name="register"),
@@ -45,6 +46,7 @@ urlpatterns = [
     path("cerrar-sesion/", views.logout_view, name="logout"),
     path("perfil/", views.profile_view, name="profile"),
     path("api/perfil/avatar/", views.api_update_avatar, name="update_avatar"),
+    path("api/paypal/subscription/activate/", views.api_paypal_activate, name="api_paypal_activate"),
 
     # Allauth (Google OAuth, etc.)
     path("accounts/", include("allauth.urls")),

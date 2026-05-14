@@ -19,7 +19,7 @@ Para los iconos:
 python manage.py sync_bible_data --import_file categories_backup.json
 
 
------ guardado de estudios
+----- guardado de estudios ----
 
 actualmente:
 Acción	Comportamiento	study_id
@@ -33,3 +33,37 @@ funciona asi:
 si el editor está abierto y seleccionas otro versículo, 
 aparece "Copiar al Estudio" que agrega el nuevo versículo al mismo estudio existente sin 
 resetear el study_id. No inicia uno nuevo.
+
+---- suscripciones con paypal
+1. Obtener Client ID
+- Ve a https://developer.paypal.com/dashboard
+- My Apps & Credentials → Create App (elige "Merchant")
+- Copia el Client ID
+2. Crear Planes de Suscripción
+- En el mismo dashboard, ve a Billing Plans → Create Plan
+- Crea Plan Premium: $2.43/mes, nómbralo "Florilegio Premium"
+- Crea Plan Pro: $5.60/mes, nómbralo "Florilegio Pro"
+- Cada plan te dará un Plan ID (algo como P-XXXXXXXX)
+3. Configurar en el proyecto
+En templates/planes.html reemplaza:
+- TU_CLIENT_ID_AQUI → tu PayPal Client ID
+- ID_PLAN_PREMIUM_AQUI → el Plan ID de Premium
+- ID_PLAN_PRO_AQUI → el Plan ID de Pro
+O mejor aún, agrega estas variables a tu .env:
+PAYPAL_CLIENT_ID=tu_client_id
+PAYPAL_PLAN_PREMIUM=P-XXXXXXXXXX
+PAYPAL_PLAN_PRO=P-XXXXXXXXXX
+Y luego actualiza el script en planes.html para leer desde Django en vez de valores fijos. 
+¿Quieres que lo haga así con variables de entorno?
+
+
+--- NUMERO STRONG con definicion de diccionario VINE ----
+
+python manage.py import_strong_concord
+Comandos disponibles:
+- python manage.py extract_strong_numbers — extrae/pobla strong_numbers en datos existentes
+- python manage.py import_strong_concord — importa todo desde SQLite a PostgreSQL (incluye extracción automática)
+
+hay algunos numero duplicados pero es porque una numro strong puede significar varias cosas segun el contexto
+por ejemplo el 2784 "HERALDO, SER" "PROCLAMAR" "PUBLICAR" tiene 3 registros porque se usa de diversas maneras
+entonces la query es mandarlos todos
