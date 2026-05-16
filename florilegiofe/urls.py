@@ -21,6 +21,12 @@ from main_florife import views_api_bible
 from main_florife.admin_views import admin_bible_import, admin_import_rv1960_strongs, admin_import_strong_concord, admin_import_louw_nida
 
 urlpatterns = [
+    # Importar versiones bíblicas desde JSON (admin) — antes que admin.site.urls
+    path("admin/bible-import/", admin_bible_import, name="admin_bible_import"),
+    path("admin/import-rv1960-strongs/", admin_import_rv1960_strongs, name="admin_import_rv1960_strongs"),
+    path("admin/import-strong-concord/", admin_import_strong_concord, name="admin_import_strong_concord"),
+    path("admin/import-louw-nida/", admin_import_louw_nida, name="admin_import_louw_nida"),
+
     path('admin/', admin.site.urls),
     path("", views.dashboard, name="index"),
     path("articulos/", views.article_list, name="article_list"),
@@ -53,12 +59,6 @@ urlpatterns = [
 
     # Allauth (Google OAuth, etc.)
     path("accounts/", include("allauth.urls")),
-
-    # Importar versiones bíblicas desde JSON (admin)
-    path("admin/bible-import/", admin_bible_import, name="admin_bible_import"),
-    path("admin/import-rv1960-strongs/", admin_import_rv1960_strongs, name="admin_import_rv1960_strongs"),
-    path("admin/import-strong-concord/", admin_import_strong_concord, name="admin_import_strong_concord"),
-    path("admin/import-louw-nida/", admin_import_louw_nida, name="admin_import_louw_nida"),
 
     # API Bible Sync Endpoints for the Admin Panel
     path("api/admin/bible-status/", views_api_bible.api_bible_status, name="api_bible_status"),
