@@ -1,0 +1,33 @@
+{% extends "admin/index.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div id="content-main">
+  <div class="module">
+    <h2>{% translate 'Importar Datos' %}</h2>
+    <ul class="actionlist" style="margin-bottom: 24px;">
+      <li style="padding: 6px 0;">
+        <a href="{% url 'admin_bible_import' %}" class="addlink" style="font-size: 13px;">
+          Importar Versiones Bíblicas (JSON)
+        </a>
+      </li>
+      <li style="padding: 6px 0;">
+        <a href="{% url 'admin_import_rv1960_strongs' %}" class="addlink" style="font-size: 13px;">
+          Importar RV1960 con Strong (AT)
+        </a>
+      </li>
+      <li style="padding: 6px 0;">
+        <a href="{% url 'admin_import_strong_concord' %}" class="addlink" style="font-size: 13px;">
+          Importar Definiciones de Strong
+        </a>
+      </li>
+      <li style="padding: 6px 0;">
+        <a href="{% url 'admin_import_louw_nida' %}" class="addlink" style="font-size: 13px;">
+          Importar Dominio Semántico Louw-Nida
+        </a>
+      </li>
+    </ul>
+  </div>
+  {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+</div>
+{% endblock %}
