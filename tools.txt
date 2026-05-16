@@ -66,3 +66,50 @@ python manage.py extract_strong_numbers
 hay algunos numero duplicados pero es porque una numro strong puede significar varias cosas segun el contexto
 por ejemplo el 2784 "HERALDO, SER" "PROCLAMAR" "PUBLICAR" tiene 3 registros porque se usa de diversas maneras
 entonces la query es mandarlos todos
+
+---Versiones:
+Versiones importadas
+ID	Nombre	Versículos
+spa_r09	Reina Valera 1909	31,102
+spa_bes	Biblia Española Interconfesional	31,101
+spa_blm	La Biblia de las Américas (LBLA)	38,058
+spa_pdt	Palabra de Dios para Todos	31,081
+spa_rvg	Reina Valera Gómez	31,102
+BSB	Berean Standard Bible	31,086
+
+---- Antiguo testamento
+
+1. Botón en el Admin
+URL: /admin/import-rv1960-strongs/
+Enlace en la página de "Importar Versiones Bíblicas" (/admin/bible-import/) para que sea fácil de encontrar.
+
+2. Vista admin (admin_views.py:63-102)
+
+Muestra:
+- Si el archivo rvs_strongs_ot.json existe y cuántos mapeos contiene
+- Cuántas palabras hebreas tienen español asignado actualmente
+- Un botón "Importar RV1960 con Strong's" que ejecuta populate_espanol_hebreo --force
+
+3. Template (templates/admin/import_rv1960_strongs.html)
+
+Sigue el mismo estilo visual que la página de importación de versiones.
+
+Para producción
+En producción:
+# 1. Copiar el JSON (o generarlo de nuevo)
+# El archivo rvs_strongs_ot.json está en el proyecto
+# 2. Ir al admin y hacer clic en el botón
+/admin/import-rv1960-strongs/
+O vía línea de comandos:
+python manage.py populate_espanol_hebreo --force
+
+Nota: El scraper (scrape_rvs_strongs.py) solo necesita ejecutarse si quieres 
+regenerar rvs_strongs_ot.json. En producción basta con copiar ese archivo y usar el botón del admin.
+
+
+----- Strong hebreo y griego
+En el admin:
+- URL: /admin/import-strong-concord/
+- Link desde la página de importación de biblias (/admin/bible-import/)
+- Muestra el estado de ambos archivos JSON (hebreo + griego) y el conteo actual en strong_concord
+- Al hacer clic, ejecuta import_strong_from_json que limpia y recarga los datos

@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from main_florife import views
 from main_florife import views_api_bible
+from main_florife.admin_views import admin_bible_import, admin_import_rv1960_strongs, admin_import_strong_concord, admin_import_louw_nida
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +30,7 @@ urlpatterns = [
     path("articulo/<slug:slug>/", views.article_detail, name="article_detail"),
     path("privacidad/", views.privacy, name="privacy"),
     path("terminos/", views.terms, name="terms"),
+    path("creditos/", views.credits, name="credits"),
     path("contacto/", views.contact, name="contact"),
     path("estudios/", views.estudios, name="estudios"),
     path("planes/", views.planes, name="planes"),
@@ -38,6 +40,7 @@ urlpatterns = [
     path("api/estudios/guardar/", views.api_save_study, name="api_save_study"),
     path("api/estudios/<int:study_id>/", views.api_get_study, name="api_get_study"),
     path("api/strong/<int:numero>/", views.api_get_strong, name="api_get_strong"),
+    path("palabra/<str:idioma>/<str:pk>/", views.palabra_detalle, name="palabra_detalle"),
     
     # Auth URLs
     path("registro/", views.register_view, name="register"),
@@ -50,6 +53,12 @@ urlpatterns = [
 
     # Allauth (Google OAuth, etc.)
     path("accounts/", include("allauth.urls")),
+
+    # Importar versiones bíblicas desde JSON (admin)
+    path("admin/bible-import/", admin_bible_import, name="admin_bible_import"),
+    path("admin/import-rv1960-strongs/", admin_import_rv1960_strongs, name="admin_import_rv1960_strongs"),
+    path("admin/import-strong-concord/", admin_import_strong_concord, name="admin_import_strong_concord"),
+    path("admin/import-louw-nida/", admin_import_louw_nida, name="admin_import_louw_nida"),
 
     # API Bible Sync Endpoints for the Admin Panel
     path("api/admin/bible-status/", views_api_bible.api_bible_status, name="api_bible_status"),

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="uc-section panel overflow-hidden px-2 mt-9">
+    <div class="container max-w-lg">
+        <div class="uc-section-header text-center mb-6 lg:mb-9">
+            <h1 class="h2 lg:h1 fw-bold mb-4">Créditos</h1>
+            <p class="text-gray-600 dark:text-gray-400">Recursos y herramientas que hacen posible Florilegio de la Fe</p>
+        </div>
+
+        <div class="uc-section-body theology-content">
+            <h3>Desarrollo y Dirección</h3>
+            <p><strong>AO Lab</strong> — Desarrollo de software, análisis de datos, infraestructura y diseño de la plataforma.</p>
+
+            <hr>
+
+            <h3>Textos Bíblicos</h3>
+            <p>Los textos bíblicos disponibles en esta plataforma son <strong>gratuitos</strong> y provienen de las siguientes fuentes:</p>
+            <ul>
+                <li><strong><a href="https://ebible.org" target="_blank" rel="noopener noreferrer">eBible.org</a></strong> — Textos de las versiones RV1909, LBLA, BES, PDT, RVG y BSB, disponibles bajo licencias abiertas.</li>
+                <li><strong><a href="https://live.bible.is" target="_blank" rel="noopener noreferrer">Bible.is / Digital Bible Platform</a></strong> — Texto de la NBLA (Nueva Biblia de las Américas), utilizado bajo los términos de su licencia.</li>
+                <li><strong><a href="https://github.com/eliranwong/OpenGNT" target="_blank" rel="noopener noreferrer">OpenGNT</a></strong> — Texto griego del Nuevo Testamento, morfología (MorphGNT) y datos interlineales, desarrollado por Eliran Wong.</li>
+                <li><strong><a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener noreferrer">Open Scriptures Hebrew Bible (OSHB)</a></strong> — Texto hebreo del Antiguo Testamento (Westminster Leningrad Codex), lematización y morfología, desarrollado por el Open Scriptures Hebrew Bible Project (Daniel Owens, David Troidl y colaboradores). Licencia <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.</li>
+            </ul>
+
+            <hr>
+
+            <h3>Infraestructura y Tecnología</h3>
+            <ul>
+                <li><strong><a href="https://aws.amazon.com" target="_blank" rel="noopener noreferrer">Amazon Web Services (AWS)</a></strong> — Hosting, bases de datos y almacenamiento.</li>
+                <li><strong><a href="https://ckeditor.com" target="_blank" rel="noopener noreferrer">CKEditor 5</a></strong> — Editor de texto enriquecido para los blocs de estudio.</li>
+                <li><strong><a href="https://www.djangoproject.com" target="_blank" rel="noopener noreferrer">Django</a></strong> — Framework web backend.</li>
+                <li><strong><a href="https://www.postgresql.org" target="_blank" rel="noopener noreferrer">PostgreSQL</a></strong> — Base de datos.</li>
+            </ul>
+
+            <hr>
+
+            <h3>Modelo de Negocio</h3>
+            <p>Los textos bíblicos en Florilegio de la Fe son y serán siempre <strong>gratuitos</strong>. Lo que el usuario paga al adquirir una suscripción o membresía cubre exclusivamente:</p>
+            <ul>
+                <li>El software de análisis y herramientas de estudio (editor interlineal, bloc de notas, resaltado de palabras, etc.).</li>
+                <li>El procesamiento y análisis de datos morfológicos y lingüísticos.</li>
+                <li>La infraestructura de hosting en AWS (servidores, bases de datos, almacenamiento, ancho de banda).</li>
+                <li>El desarrollo continuo de nuevas funcionalidades.</li>
+            </ul>
+            <p>No pagas por la Palabra de Dios, pagas por las herramientas que te ayudan a estudiarla.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

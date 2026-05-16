@@ -4,6 +4,22 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
+class VineConcord(models.Model):
+    topic = models.CharField(max_length=255, primary_key=True)
+    definition = models.TextField(blank=True, null=True)
+    is_strong = models.BooleanField(default=False)
+    is_concord = models.BooleanField(default=False)
+    strong_numbers = models.JSONField(default=list, blank=True)
+
+    class Meta:
+        db_table = 'vine_concord'
+        verbose_name = 'Vine/Concord'
+        verbose_name_plural = 'Vine/Concord'
+
+    def __str__(self):
+        return self.topic
+
+
 class StrongConcord(models.Model):
     topic = models.CharField(max_length=255, primary_key=True)
     definition = models.TextField(blank=True, null=True)
@@ -13,11 +29,26 @@ class StrongConcord(models.Model):
 
     class Meta:
         db_table = 'strong_concord'
-        verbose_name = 'Strong/Vine'
-        verbose_name_plural = 'Strong/Vine'
+        verbose_name = 'Strong'
+        verbose_name_plural = 'Strong'
 
     def __str__(self):
         return self.topic
+
+
+class LouwNidaConcord(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    termino_griego = models.TextField(blank=True, null=True)
+    definicion_completa = models.TextField(blank=True, null=True)
+    glosa_principal = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'louw_nida_concord'
+        verbose_name = 'Louw-Nida'
+        verbose_name_plural = 'Louw-Nida'
+
+    def __str__(self):
+        return f'{self.id} - {self.termino_griego or ""}'
 
 
 class Category(models.Model):
@@ -116,6 +147,30 @@ class Morfologia(models.Model):
 
     def __str__(self):
         return f"{self.palabra.ognt_sort} -> {self.rmac}"
+
+class PalabraHebreo(models.Model):
+    oshb_id = models.CharField(max_length=50, primary_key=True)
+    libro = models.IntegerField()
+    capitulo = models.IntegerField()
+    versiculo = models.IntegerField()
+    orden = models.IntegerField()
+
+class TraduccionHebreo(models.Model):
+    palabra = models.OneToOneField(PalabraHebreo, on_delete=models.CASCADE, related_name='traduccion_hebreo')
+    hebreo = models.CharField(max_length=255)
+    raiz_hebrea = models.CharField(max_length=255, null=True, blank=True)
+    espanol = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.palabra.oshb_id} -> {self.hebreo}"
+
+class MorfologiaHebreo(models.Model):
+    palabra = models.OneToOneField(PalabraHebreo, on_delete=models.CASCADE, related_name='morfologia_hebreo')
+    morph_code = models.CharField(max_length=50)
+    strong = models.CharField(max_length=20, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.palabra.oshb_id} -> {self.morph_code}"
 
 class LibroBiblia(models.Model):
     numero = models.IntegerField(unique=True)

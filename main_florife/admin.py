@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from allauth.socialaccount.models import SocialAccount
-from .models import Category, Article, Author, ApiBibleSyncStatus, Essay, UserProfile, UserStudy
+from .models import Category, Article, Author, ApiBibleSyncStatus, Essay, UserProfile, UserStudy, LouwNidaConcord
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -47,6 +47,12 @@ class UserStudyAdmin(admin.ModelAdmin):
     list_filter = ('created_at',)
     search_fields = ('user__username', 'user__email', 'title', 'reference', 'content')
     ordering = ('-updated_at',)
+
+
+@admin.register(LouwNidaConcord)
+class LouwNidaConcordAdmin(admin.ModelAdmin):
+    list_display = ('id', 'termino_griego', 'glosa_principal')
+    search_fields = ('id', 'termino_griego', 'glosa_principal', 'definicion_completa')
 
 
 admin.site.unregister(User)

@@ -3,13 +3,13 @@ import sqlite3
 import os
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from main_florife.models import StrongConcord
+from main_florife.models import VineConcord
 
 STRONG_RE = re.compile(r'\([^{}()]+?,\s*(\d+)\)')
 
 
 class Command(BaseCommand):
-    help = 'Importa datos de Strong/Vine desde BibliaKoine.db SQLite a PostgreSQL'
+    help = 'Importa datos de Vine desde BibliaKoine.db SQLite a PostgreSQL'
 
     def handle(self, *args, **options):
         db_path = os.path.join(settings.BASE_DIR, "BibliaKoine.db")
@@ -29,16 +29,16 @@ class Command(BaseCommand):
         self.stdout.write(f'Leídos {len(rows)} registros de SQLite.')
 
         # Limpiar datos existentes en PostgreSQL
-        count_before = StrongConcord.objects.count()
+        count_before = VineConcord.objects.count()
         if count_before > 0:
             self.stdout.write(f'Limpiando {count_before} registros existentes en PostgreSQL...')
-            StrongConcord.objects.all().delete()
+            VineConcord.objects.all().delete()
 
         objects = []
         for topic, definition, is_strong, is_concord in rows:
             m = STRONG_RE.search(definition) if definition else None
             strong_numbers = [int(m[1])] if m else []
-            objects.append(StrongConcord(
+            objects.append(VineConcord(
                 topic=topic,
                 definition=definition,
                 is_strong=bool(is_strong),
@@ -48,9 +48,9 @@ class Command(BaseCommand):
 
         chunk_size = 5000
         for i in range(0, len(objects), chunk_size):
-            StrongConcord.objects.bulk_create(objects[i:i + chunk_size])
+            VineConcord.objects.bulk_create(objects[i:i + chunk_size])
             self.stdout.write(f'  - Insertados {min(i + chunk_size, len(objects))}...')
 
         self.stdout.write(self.style.SUCCESS(
-            f'¡Éxito! {len(objects)} registros de Strong/Vine importados correctamente.'
+            f'¡Éxito! {len(objects)} registros de Vine importados correctamente.'
         ))
