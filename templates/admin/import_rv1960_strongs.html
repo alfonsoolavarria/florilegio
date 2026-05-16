@@ -1,0 +1,122 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+<style>
+  .status-card {
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 8px;
+    padding: 20px 24px;
+    background: var(--body-bg, #fff);
+    margin-bottom: 16px;
+  }
+  .status-card h3 {
+    margin: 0 0 8px;
+    font-size: 15px;
+  }
+  .status-card .meta {
+    font-size: 13px;
+    color: var(--body-quiet-color, #666);
+    line-height: 1.6;
+  }
+  .badge-ok {
+    color: #417690;
+    font-weight: 600;
+  }
+  .badge-missing {
+    color: #ba2121;
+  }
+  .btn-import {
+    background: #417690;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.15s;
+  }
+  .btn-import:hover {
+    background: #205067;
+  }
+  .btn-import:disabled {
+    background: #999;
+    cursor: not-allowed;
+  }
+  .messages .success {
+    background: #dff0d8;
+    border: 1px solid #c1d9b3;
+    color: #3c763d;
+    padding: 10px 15px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  .messages .error {
+    background: #f2dede;
+    border: 1px solid #ebccd1;
+    color: #a94442;
+    padding: 10px 15px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <h1>Importar RV1960 con Números Strong (AT)</h1>
+  <p>Carga los mapeos palabra→Strong del Antiguo Testamento usando la Reina Valera 1960 como texto fuente.</p>
+
+  {% if messages %}
+  <div class="messages">
+    {% for msg in messages %}
+    <div class="{{ msg.tags }}">{{ msg }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="status-card">
+    <h3>Archivo de datos: <code>rvs_strongs_ot.json</code></h3>
+    <div class="meta">
+      {% if file_exists %}
+        <span class="badge-ok">Archivo presente</span> &middot;
+        {{ file_size|filesizeformat }} &middot;
+        {{ strongs_count }} mapeos palabra→Strong
+      {% else %}
+        <span class="badge-missing">Archivo no encontrado</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="status-card">
+    <h3>Estado actual en base de datos</h3>
+    <div class="meta">
+      <span class="badge-ok">{{ imported_count }}</span> de
+      {{ total_count }} palabras hebreas con español asignado
+    </div>
+  </div>
+
+  <div class="status-card">
+    <h3>Importar / Actualizar</h3>
+    <div class="meta" style="margin-bottom: 12px;">
+      Esto actualizará <strong>TraduccionHebreo.espanol</strong> para todas las palabras del AT
+      usando el mapeo Strong→RV1960 del archivo JSON.
+    </div>
+    <form method="post" onsubmit="document.getElementById('btn-import').disabled = true; document.getElementById('btn-import').textContent = 'Importando...'; return true;">
+      {% csrf_token %}
+      <button type="submit" id="btn-import" class="btn-import"
+        {% if not file_exists %}disabled title="Primero genera rvs_strongs_ot.json con scrape_rvs_strongs.py"{% endif %}>
+        Importar RV1960 con Strong's
+      </button>
+    </form>
+  </div>
+
+  <p style="margin-top: 24px; font-size: 12px; color: #666;">
+    <a href="{% url 'admin:index' %}">&larr; Volver al panel de administración</a>
+  </p>
+</div>
+{% endblock %}

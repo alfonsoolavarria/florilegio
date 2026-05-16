@@ -147,6 +147,9 @@ def privacy(request):
 def terms(request):
     return render(request, 'terms.html')
 
+def credits(request):
+    return render(request, 'credits.html')
+
 def contact(request):
     sent = False
     error = None
@@ -202,10 +205,13 @@ def planes(request):
 
 
 def estudios(request):
+    libros_ot = LibroBiblia.objects.filter(testamento="Antiguo Testamento").order_by('numero')
     libros_nt = LibroBiblia.objects.filter(testamento="Nuevo Testamento").order_by('numero')
-    estructura_datos = {libro.numero: libro.estructura_capitulos for libro in libros_nt}
+    libros_todos = list(libros_ot) + list(libros_nt)
+    estructura_datos = {libro.numero: libro.estructura_capitulos for libro in libros_todos}
     return render(request, 'estudios.html', {
-        'libros': libros_nt,
+        'libros_ot': libros_ot,
+        'libros_nt': libros_nt,
         'estructura_json': json.dumps(estructura_datos, cls=DjangoJSONEncoder)
     })
 
@@ -285,13 +291,335 @@ def api_get_study(request, study_id):
 
 
 def api_get_strong(request, numero):
-    from .models import StrongConcord
+    from .models import VineConcord
+
     try:
-        results = StrongConcord.objects.filter(strong_numbers__contains=[numero])
+        results = VineConcord.objects.filter(strong_numbers__contains=[numero])
         data = [{'topic': r.topic, 'definition': r.definition} for r in results]
         return JsonResponse({'status': 'success', 'data': data})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+
+def palabra_detalle(request, idioma, pk):
+    from .models import (
+        StrongConcord, VineConcord,
+        PalabraBiblia, TraduccionLiteral, Morfologia,
+        PalabraHebreo, TraduccionHebreo, MorfologiaHebreo,
+        LouwNidaConcord
+    )
+
+    word_data = {}
+    strong_def = None
+    vine_defs = []
+    louw_nida_def = None
+    strong_num = None
+
+    try:
+        if idioma == 'griego':
+            palabra = PalabraBiblia.objects.select_related(
+                'traduccion', 'morfologia'
+            ).get(ognt_sort=pk)
+            word_data = {
+                'original': palabra.traduccion.griego if hasattr(palabra, 'traduccion') else '',
+                'translation': palabra.traduccion.espanol if hasattr(palabra, 'traduccion') else '',
+                'root': palabra.traduccion.raiz_griega if hasattr(palabra, 'traduccion') else '',
+                'morph_code': palabra.morfologia.rmac if hasattr(palabra, 'morfologia') else '',
+                'morph_desc': palabra.morfologia.descripcion_rmac if hasattr(palabra, 'morfologia') else '',
+                'low_nida': palabra.morfologia.low_nida_number if hasattr(palabra, 'morfologia') else '',
+                'ref': f'{palabra.libro}:{palabra.capitulo}:{palabra.versiculo}',
+            }
+            strong_num = palabra.morfologia.strong if hasattr(palabra, 'morfologia') else None
+        elif idioma == 'hebreo':
+            palabra = PalabraHebreo.objects.select_related(
+                'traduccion_hebreo', 'morfologia_hebreo'
+            ).get(oshb_id=pk)
+            word_data = {
+                'original': palabra.traduccion_hebreo.hebreo if hasattr(palabra, 'traduccion_hebreo') else '',
+                'translation': palabra.traduccion_hebreo.espanol if hasattr(palabra, 'traduccion_hebreo') else '',
+                'root': palabra.traduccion_hebreo.raiz_hebrea if hasattr(palabra, 'traduccion_hebreo') else '',
+                'morph_code': palabra.morfologia_hebreo.morph_code if hasattr(palabra, 'morfologia_hebreo') else '',
+                'morph_desc': describir_morfologia_hebrea(palabra.morfologia_hebreo.morph_code) if hasattr(palabra, 'morfologia_hebreo') and palabra.morfologia_hebreo.morph_code else '',
+                'low_nida': '',
+                'ref': f'{palabra.libro}:{palabra.capitulo}:{palabra.versiculo}',
+            }
+            strong_num = palabra.morfologia_hebreo.strong if hasattr(palabra, 'morfologia_hebreo') else None
+
+    except (PalabraBiblia.DoesNotExist, PalabraHebreo.DoesNotExist):
+        return render(request, 'palabra_detalle.html', {
+            'error': 'Palabra no encontrada',
+            'idioma': idioma,
+        })
+
+    if strong_num:
+        strong_prefix = strong_num[0].upper()
+        strong_key = strong_num if strong_prefix in ('G', 'H') else f'{idioma[0].upper()}{strong_num}'
+        strong_def = StrongConcord.objects.filter(topic=strong_key).first()
+
+        num_part = ''.join(c for c in strong_num if c.isdigit())
+        if num_part:
+            vine_defs = list(VineConcord.objects.filter(strong_numbers__contains=[int(num_part)]))
+
+    if idioma == 'griego' and word_data.get('low_nida'):
+        ln_id = word_data['low_nida'].removeprefix('LN-').strip()
+        louw_nida_def = LouwNidaConcord.objects.filter(id=ln_id).first()
+
+    word_data['strong_num'] = strong_num
+
+    return render(request, 'palabra_detalle.html', {
+        'idioma': idioma,
+        'word': word_data,
+        'strong_def': strong_def,
+        'vine_defs': vine_defs,
+        'louw_nida_def': louw_nida_def,
+    })
+
+
+def _desc_nombre(rest):
+    GENERO = {'m': 'masculino', 'f': 'femenino', 'c': 'común', 'b': 'ambos'}
+    NUMERO = {'s': 'singular', 'p': 'plural', 'd': 'dual'}
+    ESTADO = {'a': 'absoluto', 'c': 'constructo', 'd': 'determinado'}
+    features = []
+    while rest:
+        c = rest[0]
+        is_last = len(rest) == 1
+        if is_last and c in ESTADO:
+            features.append(ESTADO[c])
+        elif len(rest) >= 2 and rest[:2] == 'cb':
+            features.append('común/ambos')
+            rest = rest[1:]
+        elif c in GENERO:
+            features.append(GENERO[c])
+        elif c in NUMERO:
+            features.append(NUMERO[c])
+        elif c in ESTADO:
+            features.append(ESTADO[c])
+        else:
+            features.append(c)
+        rest = rest[1:]
+    return ', '.join(features)
+
+
+def _desc_verbo(rest):
+    VERBO_RAIZ = {
+        'q': 'Qal', 'n': 'Niphal', 'p': 'Piel', 'h': 'Hiphil',
+        't': 'Hithpael', 'o': 'Poel', 'm': 'Polel',
+    }
+    VERBO_FORMA = {
+        'p': 'perfecto', 'i': 'imperfecto', 'j': 'yusivo',
+        'h': 'cohortativo', 'q': 'participio', 'w': 'consecutivo',
+        'v': 'consecutivo perfecto', 'c': 'infinitivo constructo',
+        'a': 'infinitivo absoluto', 'r': 'participio',
+    }
+    GENERO = {'m': 'masculino', 'f': 'femenino'}
+    NUMERO = {'s': 'singular', 'p': 'plural'}
+    PERSONA = {'1': '1ª', '2': '2ª', '3': '3ª'}
+    ESTADO = {'a': 'absoluto', 'c': 'constructo', 'd': 'determinado'}
+
+    partes = []
+    r = rest.lower() if rest else ''
+
+    if r and r[0] in VERBO_RAIZ:
+        partes.append(VERBO_RAIZ[r[0]])
+        rest = rest[1:]
+        r = r[1:]
+    if r and r[0] in VERBO_FORMA:
+        frm = VERBO_FORMA[r[0]]
+        partes.append(frm)
+        rest = rest[1:]
+        r = r[1:]
+
+        if frm == 'participio':
+            if rest and rest[0] in GENERO:
+                partes.append(GENERO[rest[0]])
+                rest = rest[1:]
+            if rest and rest[0] in NUMERO:
+                partes.append(NUMERO[rest[0]])
+                rest = rest[1:]
+            if rest and rest[0] in ESTADO:
+                partes.append(ESTADO[rest[0]])
+                rest = rest[1:]
+        else:
+            if rest and rest[0] in PERSONA:
+                partes.append(PERSONA[rest[0]])
+                rest = rest[1:]
+            if rest and rest[0] in GENERO:
+                partes.append(GENERO[rest[0]])
+                rest = rest[1:]
+            if rest and rest[0] in NUMERO:
+                partes.append(NUMERO[rest[0]])
+                rest = rest[1:]
+    return ', '.join(partes)
+
+
+def _desc_pronombre(rest):
+    GENERO = {'m': 'masculino', 'f': 'femenino', 'c': 'común'}
+    NUMERO = {'s': 'singular', 'p': 'plural'}
+    PERSONA = {'1': '1ª', '2': '2ª', '3': '3ª'}
+    parts = []
+    if rest.startswith('p'):
+        rest = rest[1:]
+        if rest and rest[0] in PERSONA:
+            parts.append(PERSONA[rest[0]])
+            rest = rest[1:]
+        if rest and rest[0] in GENERO:
+            parts.append(GENERO[rest[0]])
+            rest = rest[1:]
+        if rest and rest[0] in NUMERO:
+            parts.append(NUMERO[rest[0]])
+            rest = rest[1:]
+    elif rest.startswith('dx'):
+        parts.append('demostrativo')
+        rest = rest[2:]
+        if rest and rest[0] in GENERO:
+            parts.append(GENERO[rest[0]])
+            rest = rest[1:]
+        if rest and rest[0] in NUMERO:
+            parts.append(NUMERO[rest[0]])
+            rest = rest[1:]
+    elif rest.startswith('in'):
+        parts.append('interrogativo')
+    elif rest.startswith('r'):
+        parts.append('relativo')
+    return ', '.join(parts)
+
+
+def _desc_adjetivo(rest):
+    GENERO = {'m': 'masculino', 'f': 'femenino', 'c': 'común', 'b': 'ambos'}
+    NUMERO = {'s': 'singular', 'p': 'plural', 'd': 'dual'}
+    ESTADO = {'a': 'absoluto', 'c': 'constructo', 'd': 'determinado'}
+    features = []
+    while rest:
+        c = rest[0]
+        is_last = len(rest) == 1
+        if is_last and c in ESTADO:
+            features.append(ESTADO[c])
+        elif len(rest) >= 2 and rest[:2] == 'ob':
+            features.append('ob')
+            rest = rest[1:]
+        elif c in GENERO:
+            features.append(GENERO[c])
+        elif c in NUMERO:
+            features.append(NUMERO[c])
+        elif c in ESTADO:
+            features.append(ESTADO[c])
+        else:
+            features.append(c)
+        rest = rest[1:]
+    return ', '.join(features)
+
+
+def describir_morfologia_hebrea(morph):
+    if not morph:
+        return ''
+
+    code = morph
+    if code.startswith('H'):
+        code = code[1:]
+
+    PREFIJOS = {
+        'C': 'conjunción',
+        'R': 'preposición',
+        'D': 'artículo definido',
+        'T': 'marcador de objeto directo',
+        'M': 'interrogativo',
+        'B': 'preposición "en"',
+        'K': 'preposición "como"',
+        'L': 'preposición "a/para"',
+        'W': 'conjunción',
+    }
+
+    TIPOS_POS = {
+        'N': ('sustantivo', _desc_nombre),
+        'V': ('verbo', _desc_verbo),
+        'A': ('adjetivo', _desc_adjetivo),
+        'P': ('pronombre', _desc_pronombre),
+    }
+
+    PREFIJO_COMPUESTO = {
+        'Td': 'marcador de objeto directo + artículo',
+    }
+
+    parts = code.split('/')
+    desc_parts = []
+
+    for idx, part in enumerate(parts):
+        if part in PREFIJO_COMPUESTO:
+            desc_parts.append(PREFIJO_COMPUESTO[part])
+            continue
+
+        if part in ('R', 'D', 'C', 'M', 'B', 'K', 'L', 'W') and idx < len(parts) - 1:
+            desc_parts.append(PREFIJOS.get(part, part))
+            continue
+
+        if part in ('C', 'D', 'M') and idx == len(parts) - 1 and len(parts) == 1:
+            desc_parts.append(PREFIJOS.get(part, part))
+            continue
+
+        if part in ('R',) and idx == len(parts) - 1:
+            desc_parts.append('preposición')
+            continue
+        if part == 'D' and idx == len(parts) - 1:
+            desc_parts.append('artículo definido')
+            continue
+        if part == 'C':
+            desc_parts.append('conjunción')
+            continue
+
+        if part.startswith('Sp'):
+            rest = part[2:]
+            suf = ['pronombre sufijo']
+            PERSONA = {'1': '1ª', '2': '2ª', '3': '3ª'}
+            GENERO = {'m': 'masculino', 'f': 'femenino'}
+            NUMERO = {'s': 'singular', 'p': 'plural'}
+            if rest and rest[0] in PERSONA:
+                suf.append(PERSONA[rest[0]])
+                rest = rest[1:]
+            if rest and rest[0] in GENERO:
+                suf.append(GENERO[rest[0]])
+                rest = rest[1:]
+            if rest and rest[0] in NUMERO:
+                suf.append(NUMERO[rest[0]])
+                rest = rest[1:]
+            desc_parts.append(', '.join(suf))
+            continue
+
+        if part == 'Sd':
+            desc_parts.append('artículo determinado')
+            continue
+        if part == 'Sh':
+            desc_parts.append('interrogativo')
+            continue
+        if part == 'To':
+            desc_parts.append('marcador de objeto directo')
+            continue
+        if part == 'Tn':
+            desc_parts.append('marcador de objeto directo')
+            continue
+        if part == 'Ti':
+            desc_parts.append('marcador de objeto directo')
+            continue
+        if part == 'Np':
+            desc_parts.append('nombre propio')
+            continue
+        if part in ('Ngmpa', 'Ngmsa', 'Ngfp', 'Ngfs'):
+            desc_parts.append('gentilicio')
+            continue
+
+        first = part[0] if part else ''
+        if first in TIPOS_POS:
+            pos_name, parser = TIPOS_POS[first]
+            rest = part[1:]
+            result = parser(rest)
+            if result:
+                desc_parts.append(f'{pos_name}: {result}')
+            else:
+                desc_parts.append(pos_name)
+        else:
+            if part:
+                desc_parts.append(part)
+
+    return ', '.join(desc_parts)
 
 
 def api_get_versiculo(request):
@@ -320,30 +648,60 @@ def api_get_versiculo(request):
         else:
             if not versiculo:
                 return JsonResponse({'status': 'error', 'message': 'El modo estudio requiere un versiculo especifico.'}, status=400)
-            palabras = PalabraBiblia.objects.filter(
-                libro=libro, 
-                capitulo=capitulo, 
-                versiculo=versiculo
-            ).select_related('traduccion', 'morfologia').order_by('ognt_sort')
-            data = []
-            for p in palabras:
-                data.append({
-                    'ognt_sort': p.ognt_sort,
-                    'espanol': p.traduccion.espanol if hasattr(p, 'traduccion') else '',
-                    'griego': p.traduccion.griego if hasattr(p, 'traduccion') else '',
-                    'raiz_griega': p.traduccion.raiz_griega if hasattr(p, 'traduccion') else '',
-                    'rmac': p.morfologia.rmac if hasattr(p, 'morfologia') else '',
-                    'descripcion_rmac': p.morfologia.descripcion_rmac if hasattr(p, 'morfologia') else '',
-                    'low_nida_number': p.morfologia.low_nida_number if hasattr(p, 'morfologia') else '',
-                    'strong': p.morfologia.strong if hasattr(p, 'morfologia') else '',
-                })
+            libro_int = int(libro)
+            is_ot = libro_int <= 39
+            if is_ot:
+                from .models import PalabraHebreo
+                palabras = PalabraHebreo.objects.filter(
+                    libro=libro,
+                    capitulo=capitulo,
+                    versiculo=versiculo
+                ).select_related('traduccion_hebreo', 'morfologia_hebreo').order_by('orden')
+                data = []
+                for p in palabras:
+                    data.append({
+                        'idioma': 'hebreo',
+                        'oshb_id': p.oshb_id,
+                        'espanol': p.traduccion_hebreo.espanol if hasattr(p, 'traduccion_hebreo') else '',
+                        'hebreo': p.traduccion_hebreo.hebreo if hasattr(p, 'traduccion_hebreo') else '',
+                        'raiz_hebrea': p.traduccion_hebreo.raiz_hebrea if hasattr(p, 'traduccion_hebreo') else '',
+                        'morph_code': p.morfologia_hebreo.morph_code if hasattr(p, 'morfologia_hebreo') else '',
+                        'descripcion_morfologia': describir_morfologia_hebrea(p.morfologia_hebreo.morph_code) if hasattr(p, 'morfologia_hebreo') and p.morfologia_hebreo.morph_code else '',
+                        'strong': p.morfologia_hebreo.strong if hasattr(p, 'morfologia_hebreo') else '',
+                        'rmac': '',
+                        'descripcion_rmac': '',
+                        'low_nida_number': '',
+                        'griego': '',
+                    })
+            else:
+                palabras = PalabraBiblia.objects.filter(
+                    libro=libro,
+                    capitulo=capitulo,
+                    versiculo=versiculo
+                ).select_related('traduccion', 'morfologia').order_by('ognt_sort')
+                data = []
+                for p in palabras:
+                    data.append({
+                        'idioma': 'griego',
+                        'ognt_sort': p.ognt_sort,
+                        'espanol': p.traduccion.espanol if hasattr(p, 'traduccion') else '',
+                        'griego': p.traduccion.griego if hasattr(p, 'traduccion') else '',
+                        'raiz_griega': p.traduccion.raiz_griega if hasattr(p, 'traduccion') else '',
+                        'rmac': p.morfologia.rmac if hasattr(p, 'morfologia') else '',
+                        'descripcion_rmac': p.morfologia.descripcion_rmac if hasattr(p, 'morfologia') else '',
+                        'low_nida_number': p.morfologia.low_nida_number if hasattr(p, 'morfologia') else '',
+                        'strong': p.morfologia.strong if hasattr(p, 'morfologia') else '',
+                        'hebreo': '',
+                        'raiz_hebrea': '',
+                        'morph_code': '',
+                    })
             texto_rv1960 = ""
             try:
                 v_obj = VersiculoBiblia.objects.get(version='rv1960', libro=libro, capitulo=capitulo, versiculo=versiculo)
                 texto_rv1960 = v_obj.texto
             except VersiculoBiblia.DoesNotExist:
                 pass
-            return JsonResponse({'status': 'success', 'modo': 'estudio', 'texto_rv1960': texto_rv1960, 'data': data})
+            return JsonResponse({'status': 'success', 'modo': 'estudio', 'idioma': 'hebreo' if is_ot else 'griego', 'texto_rv1960': texto_rv1960, 'data': data})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 

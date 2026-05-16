@@ -1,0 +1,156 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+<style>
+  .version-card {
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 8px;
+    padding: 16px 20px;
+    background: var(--body-bg, #fff);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .version-card + .version-card {
+    margin-top: 12px;
+  }
+  .version-info h3 {
+    margin: 0 0 4px;
+    font-size: 15px;
+  }
+  .version-info .meta {
+    font-size: 12px;
+    color: var(--body-quiet-color, #666);
+  }
+  .version-actions form {
+    margin: 0;
+  }
+  .btn-import {
+    background: #417690;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.15s;
+  }
+  .btn-import:hover {
+    background: #205067;
+  }
+  .btn-import:disabled {
+    background: #999;
+    cursor: not-allowed;
+  }
+  .badge-ok {
+    color: #417690;
+    font-weight: 600;
+  }
+  .badge-missing {
+    color: #ba2121;
+  }
+  .messages {
+    margin-bottom: 20px;
+  }
+  .messages .success {
+    background: #dff0d8;
+    border: 1px solid #c1d9b3;
+    color: #3c763d;
+    padding: 10px 15px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    font-size: 13px;
+  }
+  .messages .error {
+    background: #f2dede;
+    border: 1px solid #ebccd1;
+    color: #a94442;
+    padding: 10px 15px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    font-size: 13px;
+  }
+  .loading {
+    display: none;
+  }
+  .loading.active {
+    display: inline-block;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <h1>Importar Versiones Bíblicas</h1>
+  <p>Selecciona una versión para importar los datos desde los archivos JSON en <code>/data/</code>.</p>
+
+  {% if messages %}
+  <div class="messages">
+    {% for msg in messages %}
+    <div class="{{ msg.tags }}">{{ msg }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div style="margin-top: 24px;">
+    {% for v in versions %}
+    <div class="version-card">
+      <div class="version-info">
+        <h3>{{ v.name }}</h3>
+        <div class="meta">
+          <code>{{ v.id }}</code> &middot;
+          {{ v.file_name }}
+          {% if v.file_exists %}
+            &middot; {{ v.file_size|filesizeformat }}
+          {% endif %}
+          &middot;
+          {% if v.imported_count > 0 %}
+            <span class="badge-ok">{{ v.imported_count }} versículos importados</span>
+          {% else %}
+            <span class="badge-missing">No importado</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="version-actions">
+        <form method="post" onsubmit="return confirm('¿Importar {{ v.name }} ({{ v.id }})?\nEsto borrará los registros anteriores de esta versión.')">
+          {% csrf_token %}
+          <input type="hidden" name="version_id" value="{{ v.id }}">
+          {% if v.file_exists %}
+            <button type="submit" class="btn-import"
+              {% if v.imported_count > 0 %}title="Reimportar (borrará y volverá a insertar)"{% endif %}>
+              {% if v.imported_count > 0 %}Reimportar{% else %}Importar{% endif %}
+            </button>
+          {% else %}
+            <button type="button" class="btn-import" disabled title="Archivo no encontrado en /data/">
+              Sin archivo
+            </button>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div style="margin-top: 24px; padding: 16px 20px; border: 1px solid var(--border-color, #ccc); border-radius: 8px; background: var(--body-bg, #fff);">
+    <h3 style="margin: 0 0 8px; font-size: 14px;">Herramientas relacionadas</h3>
+    <p style="font-size: 13px; color: var(--body-quiet-color, #666); margin: 0 0 8px;">
+      <a href="{% url 'admin_import_rv1960_strongs' %}" style="text-decoration: underline;">
+        Importar RV1960 con Números Strong (AT)
+      </a>
+      &mdash; Carga los mapeos palabra→Strong del Antiguo Testamento usando RV1960.
+    </p>
+    <p style="font-size: 13px; color: var(--body-quiet-color, #666); margin: 0;">
+      <a href="{% url 'admin_import_strong_concord' %}" style="text-decoration: underline;">
+        Importar Definiciones de Strong (strong_concord)
+      </a>
+      &mdash; Carga las definiciones de Strong (hebreo + griego) desde JSON a la tabla strong_concord.
+    </p>
+  </div>
+
+  <p style="margin-top: 24px; font-size: 12px; color: #666;">
+    <a href="{% url 'admin:index' %}">&larr; Volver al panel de administración</a>
+  </p>
+</div>
+{% endblock %}

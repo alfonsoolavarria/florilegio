@@ -1,0 +1,136 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+<style>
+  .status-card {
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 8px;
+    padding: 20px 24px;
+    background: var(--body-bg, #fff);
+    margin-bottom: 16px;
+  }
+  .status-card h3 {
+    margin: 0 0 8px;
+    font-size: 15px;
+  }
+  .status-card .meta {
+    font-size: 13px;
+    color: var(--body-quiet-color, #666);
+    line-height: 1.6;
+  }
+  .badge-ok {
+    color: #417690;
+    font-weight: 600;
+  }
+  .badge-missing {
+    color: #ba2121;
+  }
+  .btn-import {
+    background: #417690;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.15s;
+  }
+  .btn-import:hover {
+    background: #205067;
+  }
+  .btn-import:disabled {
+    background: #999;
+    cursor: not-allowed;
+  }
+  .messages .success {
+    background: #dff0d8;
+    border: 1px solid #c1d9b3;
+    color: #3c763d;
+    padding: 10px 15px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  .messages .error {
+    background: #f2dede;
+    border: 1px solid #ebccd1;
+    color: #a94442;
+    padding: 10px 15px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <h1>Importar Definiciones de Strong</h1>
+  <p>Carga las definiciones de Strong desde <strong>strong_hebreo.json</strong> y <strong>strong_griego.json</strong> a la tabla <code>strong_concord</code>.</p>
+
+  {% if messages %}
+  <div class="messages">
+    {% for msg in messages %}
+    <div class="{{ msg.tags }}">{{ msg }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="status-card">
+    <h3><code>strong_hebreo.json</code></h3>
+    <div class="meta">
+      {% if heb_exists %}
+        <span class="badge-ok">Archivo presente</span> &middot;
+        {{ heb_size|filesizeformat }} &middot;
+        {{ heb_count }} entradas
+      {% else %}
+        <span class="badge-missing">Archivo no encontrado</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="status-card">
+    <h3><code>strong_griego.json</code></h3>
+    <div class="meta">
+      {% if gri_exists %}
+        <span class="badge-ok">Archivo presente</span> &middot;
+        {{ gri_size|filesizeformat }} &middot;
+        {{ gri_count }} entradas
+      {% else %}
+        <span class="badge-missing">Archivo no encontrado</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="status-card">
+    <h3>Estado actual en <code>strong_concord</code></h3>
+    <div class="meta">
+      <span class="badge-ok">{{ imported_count }}</span> registros totales &middot;
+      {{ h_count }} hebreo (H*) &middot;
+      {{ g_count }} griego (G*)
+    </div>
+  </div>
+
+  <div class="status-card">
+    <h3>Importar / Actualizar</h3>
+    <div class="meta" style="margin-bottom: 12px;">
+      Eliminará todos los registros existentes en <code>strong_concord</code> y los reemplazará
+      con los datos de los dos archivos JSON.
+    </div>
+    <form method="post" onsubmit="document.getElementById('btn-import').disabled = true; document.getElementById('btn-import').textContent = 'Importando...'; return true;">
+      {% csrf_token %}
+      <button type="submit" id="btn-import" class="btn-import"
+        {% if not heb_exists or not gri_exists %}disabled title="Faltan archivos JSON"{% endif %}>
+        Importar Definiciones de Strong
+      </button>
+    </form>
+  </div>
+
+  <p style="margin-top: 24px; font-size: 12px; color: #666;">
+    <a href="{% url 'admin:index' %}">&larr; Volver al panel de administración</a>
+  </p>
+</div>
+{% endblock %}
