@@ -18,7 +18,6 @@ BOOK_NUMBER_MAP = {
 }
 
 NS = {'osis': 'http://www.bibletechnologies.net/2003/OSIS/namespace'}
-
 STRONG_RE = re.compile(r'(\d+)')
 
 
@@ -50,9 +49,10 @@ class Command(BaseCommand):
 
         self.stdout.write(f'Encontrados {len(xml_files)} libros XML para importar')
 
-        palabra_objects = []
-        traduccion_objects = []
-        morfologia_objects = []
+        self.stdout.write('Borrando datos antiguos...')
+        MorfologiaHebreo.objects.all().delete()
+        TraduccionHebreo.objects.all().delete()
+        PalabraHebreo.objects.all().delete()
 
         total_words = 0
 
@@ -65,18 +65,22 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.WARNING(f'Saltando {filename}: libro no mapeado'))
                 continue
 
-            self.stdout.write(f'Procesando {filename} (libro {libro_num})...')
+            self.stdout.write(f'Procesando {filename} (libro {libro_num})...', ending=' ')
+            self.stdout.flush()
 
             tree = ET.parse(filepath)
             root = tree.getroot()
 
             book_div = root.find('.//osis:div[@type="book"]', NS)
             if book_div is None:
-                self.stdout.write(self.style.WARNING(f'  No se encontro div type="book" en {filename}, saltando'))
+                self.stdout.write(self.style.WARNING('No se encontro div type="book", saltando'))
                 continue
 
             chapters = book_div.findall('osis:chapter', NS)
 
+            palabra_objects = []
+            traduccion_objects = []
+            morfologia_objects = []
             word_count = 0
 
             for chapter_elem in chapters:
@@ -131,26 +135,13 @@ class Command(BaseCommand):
                         ))
 
                         word_count += 1
-                        total_words += 1
 
-            self.stdout.write(f'  {word_count} palabras procesadas')
+            with transaction.atomic():
+                PalabraHebreo.objects.bulk_create(palabra_objects, batch_size=5000)
+                TraduccionHebreo.objects.bulk_create(traduccion_objects, batch_size=5000)
+                MorfologiaHebreo.objects.bulk_create(morfologia_objects, batch_size=5000)
 
-        self.stdout.write(f'\nTotal: {total_words} palabras en {len(xml_files)} libros')
-        self.stdout.write('Guardando en base de datos...')
+            total_words += word_count
+            self.stdout.write(self.style.SUCCESS(f'{word_count} palabras'))
 
-        with transaction.atomic():
-            self.stdout.write('  Borrando datos antiguos...')
-            MorfologiaHebreo.objects.all().delete()
-            TraduccionHebreo.objects.all().delete()
-            PalabraHebreo.objects.all().delete()
-
-            self.stdout.write(f'  Insertando {len(palabra_objects)} PalabraHebreo...')
-            PalabraHebreo.objects.bulk_create(palabra_objects, batch_size=5000)
-
-            self.stdout.write(f'  Insertando {len(traduccion_objects)} TraduccionHebreo...')
-            TraduccionHebreo.objects.bulk_create(traduccion_objects, batch_size=5000)
-
-            self.stdout.write(f'  Insertando {len(morfologia_objects)} MorfologiaHebreo...')
-            MorfologiaHebreo.objects.bulk_create(morfologia_objects, batch_size=5000)
-
-        self.stdout.write(self.style.SUCCESS('¡Importacion completada con exito!'))
+        self.stdout.write(self.style.SUCCESS(f'\n¡Importacion completada! {total_words} palabras en {len(xml_files)} libros'))
