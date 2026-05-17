@@ -113,3 +113,9 @@ En el admin:
 - Link desde la página de importación de biblias (/admin/bible-import/)
 - Muestra el estado de ambos archivos JSON (hebreo + griego) y el conteo actual en strong_concord
 - Al hacer clic, ejecuta import_strong_from_json que limpia y recarga los datos
+
+
+En producción, para el AT:
+debo relanzar el primero y luego el segundo y seguir revisando a ver si ya que do en prod
+python manage.py import_morphhb biblia/morphhb
+python manage.py populate_espanol_hebreo
