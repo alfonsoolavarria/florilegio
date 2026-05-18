@@ -15,7 +15,7 @@ import { List, TodoList } from '@ckeditor/ckeditor5-list';
 import { BlockQuote } from '@ckeditor/ckeditor5-block-quote';
 import { CodeBlock } from '@ckeditor/ckeditor5-code-block';
 import { Indent, IndentBlock } from '@ckeditor/ckeditor5-indent';
-import { Image, ImageCaption, ImageStyle, ImageToolbar, ImageUpload } from '@ckeditor/ckeditor5-image';
+
 import { Table, TableToolbar, TableCellProperties, TableProperties } from '@ckeditor/ckeditor5-table';
 import { MediaEmbed } from '@ckeditor/ckeditor5-media-embed';
 import { HorizontalLine } from '@ckeditor/ckeditor5-horizontal-line';
@@ -26,6 +26,8 @@ import { Undo } from '@ckeditor/ckeditor5-undo';
 import { WordCount } from '@ckeditor/ckeditor5-word-count';
 import { SpecialCharacters, SpecialCharactersEssentials } from '@ckeditor/ckeditor5-special-characters';
 import { Emoji } from '@ckeditor/ckeditor5-emoji';
+import esTranslations from 'ckeditor5/dist/translations/es.js';
+import InsertTableOverride from './inserttableoverride';
 
 class FlorilegioEditor extends ClassicEditorBase {}
 
@@ -51,11 +53,7 @@ FlorilegioEditor.builtinPlugins = [
     CodeBlock,
     Indent,
     IndentBlock,
-    Image,
-    ImageCaption,
-    ImageStyle,
-    ImageToolbar,
-    ImageUpload,
+
     Table,
     TableToolbar,
     TableCellProperties,
@@ -69,11 +67,13 @@ FlorilegioEditor.builtinPlugins = [
     WordCount,
     SpecialCharacters,
     SpecialCharactersEssentials,
-    Emoji
+    Emoji,
+    InsertTableOverride
 ];
 
 FlorilegioEditor.defaultConfig = {
     licenseKey: 'GPL',
+    translations: esTranslations,
     toolbar: {
         items: [
             'undo', 'redo',
@@ -94,7 +94,7 @@ FlorilegioEditor.defaultConfig = {
             '|',
             'link', 'blockQuote', 'codeBlock',
             '|',
-            'insertTable', 'imageUpload', 'mediaEmbed', 'horizontalLine',
+            'insertTable', 'mediaEmbed', 'horizontalLine',
             '|',
             'emoji', 'specialCharacters',
             '|',
@@ -110,14 +110,7 @@ FlorilegioEditor.defaultConfig = {
         contentToolbar: [
             'tableColumn', 'tableRow', 'mergeTableCells',
             'tableCellProperties', 'tableProperties'
-        ]
-    },
-    image: {
-        toolbar: [
-            'imageStyle:inline', 'imageStyle:block', 'imageStyle:side',
-            '|',
-            'toggleImageCaption', 'imageTextAlternative'
-        ]
+        ],
     },
     heading: {
         options: [

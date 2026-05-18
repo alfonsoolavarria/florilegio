@@ -132,14 +132,101 @@
   }
   /* CKEditor 5 */
   .ck-editor__editable {
-    min-height: 550px;
-    max-height: 700px;
+    min-height: 800px;
+    max-height: 1000px;
     font-family: "Inter", sans-serif !important;
     font-size: 1.25rem !important;
     line-height: 1.8 !important;
   }
   .ck-sticky-panel__content {
     top: 80px !important;
+  }
+
+  /* ─── Editor layout: toolbar a la derecha ──────────────────────────── */
+  #study-editor-wrapper .ck-editor {
+    display: flex !important;
+    flex-direction: row !important;
+  }
+  #study-editor-wrapper .ck-editor__top {
+    order: 2;
+    flex: 0 0 260px;
+    max-width: 260px;
+    border-left: 1px solid var(--bs-border-color, #dee2e6);
+    border-top: none !important;
+    padding: 8px;
+    position: relative;
+    z-index: 100;
+  }
+  /* Los dropdowns de color, tabla, etc. no se cortan */
+  #study-editor-wrapper .ck-editor__top .ck-toolbar {
+    overflow: visible !important;
+  }
+  #study-editor-wrapper .ck-editor__top .ck-toolbar .ck-toolbar__items {
+    overflow: visible !important;
+  }
+
+  #study-editor-wrapper .ck-editor__top .ck-sticky-panel {
+    position: static !important;
+    will-change: auto !important;
+  }
+  #study-editor-wrapper .ck-editor__top .ck-sticky-panel__content {
+    position: static !important;
+    top: auto !important;
+  }
+  #study-editor-wrapper .ck-editor__top .ck-toolbar {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 3px !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+  }
+  #study-editor-wrapper .ck-editor__top .ck-toolbar .ck-toolbar__items {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 3px !important;
+  }
+  #study-editor-wrapper .ck-editor__top .ck-toolbar .ck-toolbar__items .ck-button {
+    min-width: 36px !important;
+    min-height: 36px !important;
+    padding: 4px !important;
+    flex: 0 0 auto;
+  }
+  #study-editor-wrapper .ck-editor__main {
+    order: 1;
+    flex: 1;
+  }
+  /* Ocultar separadores */
+  #study-editor-wrapper .ck-toolbar .ck-toolbar__items .ck-toolbar-separator {
+    display: none;
+  }
+  /* Quitar dropdown de desbordamiento (solo el que agrupa items sobrantes) */
+  #study-editor-wrapper .ck-toolbar .ck-toolbar-dropdown {
+    display: none !important;
+  }
+  @media (max-width: 991.98px) {
+    #study-editor-wrapper .ck-editor {
+      flex-direction: column !important;
+    }
+    #study-editor-wrapper .ck-editor__top {
+      order: 1;
+      flex: none;
+      max-width: none;
+      border-left: none;
+      border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+    }
+    #study-editor-wrapper .ck-editor__top .ck-toolbar {
+      flex-direction: row !important;
+    }
+    #study-editor-wrapper .ck-editor__top .ck-toolbar .ck-toolbar__items {
+      flex-direction: row !important;
+    }
+    #study-editor-wrapper .ck-toolbar .ck-toolbar-dropdown {
+      display: none !important;
+    }
+    #study-editor-wrapper .ck-editor__top {
+      overflow: visible;
+    }
   }
 
   /* Selects personalizados para Opciones de Lectura y Estudio */
@@ -559,19 +646,15 @@
       font-size: 0.7rem;
     }
     .ck-editor__editable {
-      min-height: 300px !important;
-      max-height: 400px !important;
+      min-height: 400px !important;
+      max-height: 600px !important;
     }
     #study-editor-wrapper {
-      max-height: 400px;
+      max-height: none;
     }
     .study-editor-header {
       flex-wrap: wrap;
       gap: 0.5rem;
-    }
-    .study-editor-header .ms-auto {
-      width: 100%;
-      justify-content: center;
     }
     .bible-word-block {
       min-width: 75px;
@@ -588,13 +671,37 @@
 
   @media (min-width: 576px) and (max-width: 991.98px) {
     .ck-editor__editable {
-      min-height: 400px !important;
-      max-height: 500px !important;
+      min-height: 600px !important;
+      max-height: 800px !important;
     }
     #study-editor-wrapper {
-      max-height: 500px;
+      max-height: none;
     }
   }
+
+  /* ─── Sidebar collapse ──────────────────────────────────────────── */
+  #main-layout.hidden {
+    display: none !important;
+  }
+  .editor-hamburger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    color: var(--bs-gray-600, #6c757d);
+    transition: all 0.2s;
+    line-height: 1;
+    margin-right: 0.5rem;
+  }
+  .editor-hamburger:hover {
+    background: var(--bs-gray-200, #e9ecef);
+    color: var(--bs-primary, #0d6efd);
+  }
+
 </style>
 
 <!-- Section: Header -->
@@ -660,8 +767,8 @@
     </div>
 
     <!-- Main Layout: Sidebar + Content -->
-    <div class="d-flex flex-column flex-lg-row gap-4 mt-4">
-      <!-- Sidebar: Navegación (always visible) -->
+    <div id="main-layout" class="d-flex flex-column flex-lg-row gap-4 mt-4">
+      <!-- Sidebar: Navegación -->
       <aside class="estudio-sidebar w-100">
         <div
           class="panel p-4 bg-gray-25 dark:bg-gray-800 rounded-3 border sticky-top"
@@ -1147,9 +1254,14 @@
     <!-- Contenedor del Editor de Estudio -->
     <div id="study-editor-wrapper" style="display: none">
       <div class="study-editor-header d-flex align-items-center gap-2 mb-3">
-        <h5 class="h6 mb-0 text-primary fw-bold">
-          <i class="unicon-pen me-1"></i> Bloc de Notas de Estudio
-        </h5>
+        <div class="d-flex align-items-center">
+          <button type="button" class="editor-hamburger" onclick="toggleSidebar()" title="Mostrar navegación y palabras">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <h5 class="h6 mb-0 text-primary fw-bold">
+            <i class="unicon-pen me-1"></i> Bloc de Notas de Estudio
+          </h5>
+        </div>
         <div class="ms-auto d-flex gap-2">
           <button
             class="btn-export-study btn-save-study shadow-xs"
@@ -1179,7 +1291,11 @@
           </button>
         </div>
       </div>
-      <div id="ckeditor-editor"></div>
+      <div class="d-flex flex-column flex-lg-row gap-0">
+        <div class="flex-grow-1" style="min-width:0">
+          <div id="ckeditor-editor"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -1802,6 +1918,7 @@
         : '<i class="unicon-pen me-2"></i> Iniciar Estudio Personal';
 
       studyBtn.onclick = function () {
+        console.log("Iniciar estudio clicked, alreadyOpen=", alreadyOpen);
         initStudyEditor(alreadyOpen);
       };
 
@@ -1889,6 +2006,7 @@
       const wrapper = document.getElementById("study-editor-wrapper");
       wrapper.style.display = "block";
       wrapper.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.getElementById("main-layout").classList.add("hidden");
 
       const libro =
         estudioLibroSelect.options[estudioLibroSelect.selectedIndex]?.text ||
@@ -1937,7 +2055,6 @@
               "codeBlock",
               "|",
               "insertTable",
-              "imageUpload",
               "horizontalLine",
               "|",
               "emoji",
@@ -1949,7 +2066,7 @@
               "|",
               "wordCount",
             ],
-            shouldNotGroupWhenFull: false,
+            shouldNotGroupWhenFull: true,
           },
           alignment: {
             options: ["left", "center", "right", "justify"],
@@ -2025,16 +2142,7 @@
               "tableCellProperties",
               "tableProperties",
             ],
-          },
-          image: {
-            toolbar: [
-              "imageStyle:inline",
-              "imageStyle:block",
-              "imageStyle:side",
-              "|",
-              "toggleImageCaption",
-              "imageTextAlternative",
-            ],
+
           },
           heading: {
             options: [
@@ -2289,6 +2397,9 @@
           currentStudyId = null;
           sessionStorage.removeItem("florilegio_current_study_id");
 
+          // Restaurar main-layout
+          document.getElementById("main-layout").classList.remove("hidden");
+
           // Restaurar botón a "Iniciar Estudio Personal"
           const btnContainer = document.getElementById("study-btn-container");
           btnContainer.innerHTML = "";
@@ -2307,6 +2418,14 @@
         }
       );
     }
+
+    window.toggleSidebar = function () {
+      const ml = document.getElementById("main-layout");
+      ml.classList.toggle("hidden");
+      if (!ml.classList.contains("hidden")) {
+        ml.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    };
 
     window.initStudyEditor = initStudyEditor;
     window.closeStudyEditor = closeStudyEditor;
