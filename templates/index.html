@@ -4,20 +4,22 @@
   class="hero-brand-section panel overflow-hidden bg-gray-25 dark:bg-gray-900"
 >
   <div class="container py-6 lg:py-9">
-    <div class="row justify-center text-center">
-      <div class="col-12 col-md-8">
-        <div class="uc-logo text-gray-900 dark:text-white">
-          <a href="/">
-            <img
-              class="text-dark dark:text-white mx-auto hero-logo"
-              src="{% static 'images/fin.svg' %}"
-              alt="Florilegio de la Fe"
-              data-uc-svg
-            />
-          </a>
-        </div>
-        <p class="mt-4 fs-5 text-gray-600 dark:text-gray-400 italic">
-          "Profundizando en la intimidad con Dios"
+      <div class="row justify-center text-center">
+        <div class="col-12 col-md-8">
+          <div class="uc-logo text-gray-900 dark:text-white">
+            <a href="/">
+              <img
+                class="text-dark dark:text-white mx-auto hero-logo"
+                src="{% static 'images/fin.svg' %}"
+                alt="Florilegio de la Fe"
+                data-uc-svg
+              />
+            </a>
+          </div>
+          <p class="mt-4 fs-4 italic text-center" id="typewriter-text">
+          <span class="text-animation-title">Profundizando en la intimidad con Dios</span>
+          <span class="text-animation-title">Estudiando la Biblia continuamente</span>
+          <span class="text-animation-title">Orando a Dios siempre</span>
         </p>
       </div>
     </div>
@@ -256,4 +258,123 @@
   </div>
 </div>
 
+<script>
+(function() {
+  var container = document.getElementById('typewriter-text');
+  if (!container) return;
+  var titles = container.querySelectorAll('.text-animation-title');
+  if (!titles.length) return;
+
+  var phrases = [];
+  titles.forEach(function(t) { phrases.push(t.textContent.trim()); });
+
+  var currentIndex = 0;
+  var currentTitle = null;
+  var activeAnimations = [];
+  var timer = null;
+
+  function sleep(ms) { return new Promise(function(r) { timer = setTimeout(r, ms); }); }
+
+  function splitText(title, text) {
+    title.innerHTML = '';
+    var chars = Array.from(text);
+    chars.forEach(function(c) {
+      var span = document.createElement('span');
+      span.className = 'text-animation-unit';
+      span.textContent = c === ' ' ? '\u00A0' : c;
+      title.appendChild(span);
+    });
+  }
+
+  function animateEnter(title, delay) {
+    var units = title.querySelectorAll('.text-animation-unit');
+    var anims = [];
+    units.forEach(function(unit, i) {
+      var a = unit.animate([
+        { opacity: 0, transform: 'translateY(18px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ], {
+        delay: delay + i * 17,
+        duration: 504,
+        easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+        fill: 'forwards'
+      });
+      anims.push(a);
+    });
+    return anims;
+  }
+
+  function animateExit(title) {
+    var units = title.querySelectorAll('.text-animation-unit');
+    var anims = [];
+    units.forEach(function(unit, i) {
+      var a = unit.animate([
+        { opacity: 1, transform: 'translateY(0)' },
+        { opacity: 0, transform: 'translateY(-14px)' }
+      ], {
+        delay: i * 10,
+        duration: 302,
+        easing: 'cubic-bezier(0.7, 0, 0.84, 0)',
+        fill: 'forwards'
+      });
+      anims.push(a);
+    });
+    return anims;
+  }
+
+  function cancelAll() {
+    activeAnimations.forEach(function(a) { a.cancel(); });
+    activeAnimations = [];
+    if (timer) { clearTimeout(timer); timer = null; }
+  }
+
+  async function runLoop() {
+    cancelAll();
+    var firstText = phrases[0];
+    var firstTitle = document.createElement('span');
+    firstTitle.className = 'text-animation-title';
+    firstTitle.style.cssText = 'display:inline-block';
+    container.innerHTML = '';
+    container.appendChild(firstTitle);
+    splitText(firstTitle, firstText);
+    currentTitle = firstTitle;
+
+    var enterAnims = animateEnter(firstTitle, 200);
+    activeAnimations.push.apply(activeAnimations, enterAnims);
+    await Promise.all(enterAnims.map(function(a) { return a.finished; }));
+    activeAnimations = [];
+
+    while (true) {
+      await sleep(2500);
+
+      var exitAnims = animateExit(currentTitle);
+      activeAnimations.push.apply(activeAnimations, exitAnims);
+      await Promise.all(exitAnims.map(function(a) { return a.finished; }));
+      activeAnimations = [];
+
+      await sleep(85);
+
+      currentIndex = (currentIndex + 1) % phrases.length;
+      var nextText = phrases[currentIndex];
+      var nextTitle = document.createElement('span');
+      nextTitle.className = 'text-animation-title';
+      nextTitle.style.cssText = 'display:inline-block';
+      splitText(nextTitle, nextText);
+
+      container.innerHTML = '';
+      container.appendChild(nextTitle);
+      currentTitle = nextTitle;
+
+      var nextEnterAnims = animateEnter(nextTitle, 0);
+      activeAnimations.push.apply(activeAnimations, nextEnterAnims);
+      await Promise.all(nextEnterAnims.map(function(a) { return a.finished; }));
+      activeAnimations = [];
+
+      await sleep(320);
+    }
+  }
+
+  runLoop();
+})();
+</script>
 {% endblock %}

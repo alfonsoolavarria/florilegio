@@ -194,7 +194,11 @@ def contact(request):
     return render(request, 'contact.html', {'sent': sent, 'error': error})
 
 def apoyo(request):
-    return render(request, 'apoyo.html')
+    return render(request, 'apoyo.html', {
+        'paypal_client_id': settings.PAYPAL_CLIENT_ID,
+        'paypal_plan_donation_monthly': settings.PAYPAL_PLAN_DONATION_MONTHLY,
+        'paypal_plan_donation_annual': settings.PAYPAL_PLAN_DONATION_ANNUAL,
+    })
 
 def planes(request):
     return render(request, 'planes.html', {
