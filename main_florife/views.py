@@ -32,7 +32,7 @@ def article_list(request):
     if category_id:
         selected_category = get_object_or_404(Category, id=category_id)
         articles = articles.filter(category=selected_category)
-    paginator = Paginator(articles, 9)
+    paginator = Paginator(articles, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'article-list.html', {
