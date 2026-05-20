@@ -32,7 +32,7 @@ def article_list(request):
     if category_id:
         selected_category = get_object_or_404(Category, id=category_id)
         articles = articles.filter(category=selected_category)
-    paginator = Paginator(articles, 9)
+    paginator = Paginator(articles, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'article-list.html', {
@@ -194,7 +194,11 @@ def contact(request):
     return render(request, 'contact.html', {'sent': sent, 'error': error})
 
 def apoyo(request):
-    return render(request, 'apoyo.html')
+    return render(request, 'apoyo.html', {
+        'paypal_client_id': settings.PAYPAL_CLIENT_ID,
+        'paypal_plan_donation_monthly': settings.PAYPAL_PLAN_DONATION_MONTHLY,
+        'paypal_plan_donation_annual': settings.PAYPAL_PLAN_DONATION_ANNUAL,
+    })
 
 def planes(request):
     return render(request, 'planes.html', {

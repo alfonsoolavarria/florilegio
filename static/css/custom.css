@@ -14,7 +14,7 @@ body {
 }
 
 .hero-logo {
-    max-width: 650px;
+    max-width: 750px;
     width: 100%;
 }
 
@@ -112,18 +112,25 @@ body {
     display: none !important;
 }
 
+.header-four .uc-navbar-sticky {
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+
 .uc-navbar-sticky .uc-top-navbar {
-    background-color: rgba(247, 243, 237, 0.95) !important;
-    backdrop-filter: blur(10px);
-    border-bottom: 2px solid #000;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    background-color: rgba(247, 243, 237, 0.15) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+    box-shadow: none;
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
 .dark .uc-navbar-sticky .uc-top-navbar {
-    background-color: rgba(0, 0, 0, 0.95) !important;
-    border-bottom: 2px solid #fff;
+    background-color: rgba(0, 0, 0, 0.15) !important;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
 }
 
 /* Ensure sticky logo is visible when sticky */
@@ -136,6 +143,159 @@ body {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateX(-10px); }
     to { opacity: 1; transform: translateX(0); }
+}
+
+/* Article Grid Layout */
+.article-grid-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.article-grid-left {
+    flex: 1 1 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.article-grid-right {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.article-grid-bottom-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.article-grid-bottom-row > * {
+    flex: 1 1 calc(50% - 0.5rem);
+    min-width: 0;
+}
+@media (min-width: 992px) {
+    .article-grid-left {
+        flex: 0 0 calc(66.666% - 0.5rem);
+    }
+    .article-grid-right {
+        flex: 0 0 calc(33.333% - 0.5rem);
+    }
+}
+
+.article-grid-section .post-card-featured,
+.article-grid-section .post-card-vertical,
+.article-grid-section .post-card-grid {
+    border: 1px solid rgba(0,0,0,0.05);
+}
+.article-grid-section .post-card-featured:hover,
+.article-grid-section .post-card-vertical:hover,
+.article-grid-section .post-card-grid:hover {
+    border-color: rgba(var(--bs-primary-rgb), 0.2);
+}
+.article-grid-section .post-card-featured > div {
+    padding: 0.75rem !important;
+}
+.article-grid-section .post-card-featured > div.vstack {
+    gap: 0.25rem !important;
+}
+
+/* Pagination */
+.pagination-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.1);
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+.pagination-btn:hover {
+    border-color: var(--bs-primary);
+    color: var(--bs-primary);
+    background: rgba(var(--bs-primary-rgb), 0.05);
+}
+.pagination-btn.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+}
+.pagination-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+}
+.pagination-num:hover {
+    background: rgba(0,0,0,0.05);
+    color: var(--bs-primary);
+}
+.pagination-num.active {
+    background: var(--bs-primary);
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Featured Articles Grid */
+.featured-grid-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.featured-grid-left {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.featured-grid-right {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+@media (min-width: 992px) {
+    .featured-grid-left {
+        flex: 0 0 calc(66.666% - 0.5rem);
+    }
+    .featured-grid-right {
+        flex: 0 0 calc(33.333% - 0.5rem);
+    }
+}
+.featured-grid-bottom-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.featured-grid-bottom-row > * {
+    flex: 1 1 calc(50% - 0.5rem);
+    min-width: 0;
+}
+.featured-grid-section .post-card-featured,
+.featured-grid-section .post-card-vertical,
+.featured-grid-section .post-card-grid {
+    border: 1px solid rgba(0,0,0,0.05);
+}
+.featured-grid-section .post-card-featured:hover,
+.featured-grid-section .post-card-vertical:hover,
+.featured-grid-section .post-card-grid:hover {
+    border-color: rgba(var(--bs-primary-rgb), 0.2);
+}
+.featured-grid-section .post-card-featured > div {
+    padding: 0.75rem !important;
+}
+.featured-grid-section .post-card-featured > div.vstack {
+    gap: 0.25rem !important;
 }
 
 /* Category Grid */
@@ -227,15 +387,44 @@ body {
 /* Hero Brand Section & Decorative Divider */
 .hero-brand-section {
     position: relative;
-    background-color: #f7f3ed !important; /* Slightly darker ivory for better contrast */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-    padding-bottom: 8rem !important; /* increased space for organic transition */
+    background-color: #f7f3ed !important;
+    padding-bottom: 10rem !important;
     border-bottom: none;
-    overflow: visible; /* Allow ornament to bleed out */
+    overflow: visible;
+}
+
+.hero-brand-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.45);
+    z-index: 1;
+    pointer-events: none;
+}
+.dark .hero-brand-section::before {
+    background: rgba(0, 0, 0, 0.45);
+}
+.hero-brand-section > * {
+    position: relative;
+    z-index: 2;
 }
 
 .hero-brand-section p {
     font-family: 'PT Serif', serif;
+    color: #1a1a1a !important;
+    font-size: 23.5px !important;
+}
+#typewriter-text {
+    margin-left: -100px;
+}
+.text-animation-unit {
+    display: inline-block;
+    white-space: pre;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transform-origin: 50% 55%;
+    opacity: 0;
+    transform: translateY(18px);
 }
 
 /* Logo Entrance Animation - Safari Compatible */
@@ -303,47 +492,8 @@ body {
     transition: all 0.4s ease;
 }
 
-/* Botanical Illustration Ornament */
-.hero-brand-section::after {
-    content: '';
-    position: absolute;
-    bottom: -40px;
-    right: 10%;
-    width: 250px;
-    height: 250px;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%232c2c2c' stroke-width='1.5' stroke-linecap='round' opacity='0.15'%3E%3Cpath d='M100 180 C100 140 80 120 60 100 M100 180 C100 140 120 120 140 100 M100 150 C100 110 70 90 50 70 M100 150 C100 110 130 90 150 70'/%3E%3Ccircle cx='60' cy='100' r='5'/%3E%3Ccircle cx='140' cy='100' r='5'/%3E%3Ccircle cx='50' cy='70' r='4'/%3E%3Ccircle cx='150' cy='70' r='4'/%3E%3Cpath d='M100 180 L100 50 M100 50 C100 30 80 20 100 10 C120 20 100 30 100 50'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: contain;
-    background-repeat: no-repeat;
-    z-index: 6;
-    pointer-events: none;
-}
-
-/* Redefined Botanical Background Instead of Pattern */
-.hero-brand-section::before {
-    content: none; /* Removed the previous diagonal pattern */
-}
-
 .dark .decorative-divider {
     background: #0d0d0d;
-}
-
-.dark .hero-brand-section::after {
-    stroke: #ffffff;
-    opacity: 0.1;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round' opacity='0.1'%3E%3Cpath d='M100 180 C100 140 80 120 60 100 M100 180 C100 140 120 120 140 100 M100 150 C100 110 70 90 50 70 M100 150 C100 110 130 90 150 70'/%3E%3Ccircle cx='60' cy='100' r='5'/%3E%3Ccircle cx='140' cy='100' r='5'/%3E%3Ccircle cx='50' cy='70' r='4'/%3E%3Ccircle cx='150' cy='70' r='4'/%3E%3Cpath d='M100 180 L100 50 M100 50 C100 30 80 20 100 10 C120 20 100 30 100 50'/%3E%3C/g%3E%3C/svg%3E");
-}
-/* Suble decoration line instead of the blue one */
-.hero-brand-section::after {
-    content: '';
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 3px;
-    background: var(--color-primary);
-    opacity: 0.2;
-    border-radius: 2px;
 }
 
 

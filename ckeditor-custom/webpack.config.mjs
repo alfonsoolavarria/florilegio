@@ -28,7 +28,8 @@ export default {
     plugins: [
         new CKEditorTranslationsPlugin({
             language: 'es',
-            additionalLanguages: 'all'
+            additionalLanguages: 'all',
+            corePackage: 'ckeditor5'
         })
     ],
     resolve: {

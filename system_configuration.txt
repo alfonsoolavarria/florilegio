@@ -1,0 +1,184 @@
+======================================================================
+  FLORILEGIO — CONFIGURACIÓN COMPLETA DEL SISTEMA DESDE CERO
+======================================================================
+
+Requisitos: Python 3.11+, virtualenv activado, archivos JSON y CSV en
+sus ubicaciones (strong_hebreo.json, strong_griego.json, louw_nida.json,
+biblia/morphhb/, data/*.json, etc.)
+
+Todos los comandos se ejecutan desde el directorio raíz del proyecto
+(contiene manage.py).
+
+======================================================================
+  PASO 1 — MIGRACIONES (crea todas las tablas)
+======================================================================
+
+python manage.py migrate
+
+Esto crea las tablas faltantes, incluyendo:
+  - strong_concord      (migración 0023)
+  - louw_nida_concord   (migración 0024)
+
+======================================================================
+  PASO 2 — COLECTAR ARCHIVOS ESTÁTICOS (solo producción)
+======================================================================
+
+python manage.py collectstatic --noinput
+
+======================================================================
+  PASO 3 — IMPORTAR VERSIONES BÍBLICAS (Admin Django)
+======================================================================
+
+Abrir navegador → /admin/ → sección "Importar Datos"
+  → "Importar Versiones Bíblicas (JSON)"
+
+Importar cada versión con su botón "Importar/Actualizar":
+
+  Versión          | Botón / Acción
+  -----------------|-----------------------------------------------
+  BSB              | "Importar BSB"
+  nbla             | "Importar nbla"
+  rv1960           | "Importar rv1960"
+  spa_bes (BES)    | "Importar spa_bes"
+  spa_blm (LBLA)   | "Importar spa_blm"
+  spa_pdt (PDT)    | "Importar spa_pdt"
+  spa_r09 (RV1909) | "Importar spa_r09"
+  spa_rvg (RVG)    | "Importar spa_rvg"
+
+(Opcional — también se puede importar rv1960 desde CLI:)
+  python manage.py import_rv1960
+
+======================================================================
+  PASO 4 — IMPORTAR RV1960 CON STRONG (AT)
+======================================================================
+
+Admin Django → /admin/ → "Importar Datos"
+  → "Importar RV1960 con Strong (AT)"
+  → Botón "Importar RV1960 con Strong"
+
+Esto ejecuta: python manage.py populate_espanol_hebreo
+Llena las traducciones al español de las palabras hebreas.
+
+Nota: Si PalabraHebreo está vacío (PASO 6 no se ha ejecutado),
+el comando reportará 0 palabras procesadas. Ejecutar después del PASO 6.
+
+======================================================================
+  PASO 5 — IMPORTAR GRIEGO (NT interlineal)
+======================================================================
+
+python manage.py import_biblia
+
+Lee los archivos CSV de biblia/:
+  - base_biblia.csv              → PalabraBiblia
+  - interlinear_traduccion_literal.csv → TraduccionLiteral
+  - morfologia.csv               → Morfologia
+  - lownida.csv                  → low_nida_number
+
+POBLACIÓN: ~140,000 palabras griegas del NT.
+
+======================================================================
+  PASO 6 — IMPORTAR HEBREO (AT interlineal)
+======================================================================
+
+python manage.py import_morphhb biblia/morphhb
+
+Lee los archivos XML de biblia/morphhb/wlc/ y crea:
+  - PalabraHebreo
+  - TraduccionHebreo
+  - MorfologiaHebreo
+
+POBLACIÓN: ~350,000+ palabras hebreas del AT.
+DURACIÓN: 2-5 minutos. No cancelar.
+MEMORIA: Procesa un libro a la vez. Instancia t2.medium+ recomendada.
+
+======================================================================
+  PASO 7 — POBLAR ESPAÑOL EN PALABRAS HEBREAS
+======================================================================
+
+python manage.py populate_espanol_hebreo
+
+(Se puede ejecutar antes desde el Admin — PASO 4 — pero si no había
+datos en PalabraHebreo, reporta 0. Ejecutar ahora tras el PASO 6.)
+
+======================================================================
+  PASO 8 — IMPORTAR DEFINICIONES DE STRONG
+======================================================================
+
+Admin Django → /admin/ → "Importar Datos"
+  → "Importar Definiciones de Strong"
+  → Botón "Importar Definiciones de Strong"
+
+Requiere: strong_hebreo.json y strong_griego.json en el proyecto.
+POBLACIÓN: ~14,000 registros en strong_concord.
+
+======================================================================
+  PASO 9 — IMPORTAR DOMINIO SEMÁNTICO LOUW-NIDA
+======================================================================
+
+Admin Django → /admin/ → "Importar Datos"
+  → "Importar Dominio Semántico Louw-Nida"
+  → Botón "Importar Definiciones de Louw-Nida"
+
+Requiere: louw_nida.json en el proyecto.
+POBLACIÓN: ~6,600 registros en louw_nida_concord.
+
+======================================================================
+  PASO 10 — GENERAR LIBROS BÍBLICOS
+======================================================================
+
+python manage.py generar_libros
+
+Crea los 66 registros de LibroBiblia con estructura de capítulos
+basada en los versículos ya importados (PASO 3).
+
+Este paso es necesario para que el selector de libros en el interlinear
+(estudios.html) muestre todos los libros agrupados por categoría
+(Pentateuco, Históricos, Poesía, Profetas, Evangelios, etc.).
+
+SI FALLA: Si algún libro se omite es porque no hay versículos
+en VersiculoBiblia para ese libro. Verificar PASO 3.
+
+======================================================================
+  PASO 11 — SEMILLA DE DATOS (contenido editorial)
+======================================================================
+
+python manage.py seed_data
+
+Crea categorías, autor, artículos y ensayos de ejemplo.
+Ejecutar con argumento específico si se desea solo una parte:
+
+  python manage.py seed_data 1   → todo (por defecto)
+  python manage.py seed_data 2   → solo artículos
+  python manage.py seed_data 3   → solo categorías
+  python manage.py seed_data 4   → solo autor
+  python manage.py seed_data 5   → solo ensayos
+
+======================================================================
+  VERIFICACIÓN FINAL
+======================================================================
+
+python manage.py shell -c "
+from main_florife.models import *
+print(f'Versículos:      {VersiculoBiblia.objects.count()}')
+print(f'Palabras Griegas:{PalabraBiblia.objects.count()}')
+print(f'Palabras Hebreas:{PalabraHebreo.objects.count()}')
+print(f'Libros:          {LibroBiblia.objects.count()} ({LibroBiblia.objects.filter(testamento=\"Antiguo Testamento\").count()} AT + {LibroBiblia.objects.filter(testamento=\"Nuevo Testamento\").count()} NT)')
+print(f'Strong Concord:  {StrongConcord.objects.count()}')
+print(f'Louw-Nida:       {LouwNidaConcord.objects.count()}')
+print(f'Vine Concord:    {VineConcord.objects.count()}')
+"
+
+======================================================================
+  ORDEN RESUMIDO
+======================================================================
+
+  1. python manage.py migrate
+  2. python manage.py collectstatic --noinput
+  3. Admin → Importar Versiones Bíblicas (importar TODAS)
+  4. python manage.py import_biblia
+  5. python manage.py import_morphhb biblia/morphhb
+  6. Admin → Importar RV1960 con Strong (AT)
+  7. Admin → Importar Definiciones de Strong
+  8. Admin → Importar Dominio Semántico Louw-Nida
+  9. python manage.py generar_libros
+  10. python manage.py seed_data

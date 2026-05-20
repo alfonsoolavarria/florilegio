@@ -21,18 +21,136 @@
     <div class="decorative-divider"></div>
 </div>
 
-<!-- Section: Categories Selection -->
-<div class="category-grid-section py-6 lg:py-8 bg-white dark:bg-gray-900">
+<!-- Section: Article Grid -->
+<div class="article-grid-section py-6 lg:py-9">
     <div class="container max-w-lg">
+        <div class="section-header text-center mb-5">
+            <h2 class="h3 fw-bold">
+                {% if selected_category %}
+                    {{ selected_category.name }}
+                {% else %}
+                    Artículos Recientes
+                {% endif %}
+            </h2>
+        </div>
+        <div class="article-grid-layout">
+            <div class="article-grid-left">
+                {% for article in page_obj %}
+                    {% if forloop.first %}
+                    <article class="post-card-featured panel vstack gap-3 bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-xs hover:shadow-sm transition-all duration-300">
+                        <figure class="featured-image m-0 ratio ratio-16x9 overflow-hidden bg-gray-200">
+                            <img class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
+                            <a href="{% url 'article_detail' article.slug %}" class="position-cover"></a>
+                        </figure>
+                        <div class="p-3 lg:p-4 vstack gap-2">
+                            <span class="fs-7 text-primary text-uppercase fw-medium">{{ article.category }}</span>
+                            <h3 class="h4 m-0">
+                                <a href="{% url 'article_detail' article.slug %}" class="text-none">{{ article.title }}</a>
+                            </h3>
+                            <p class="fs-6 text-gray-600 dark:text-gray-400 d-none sm:d-block">Breve descripción del artículo para atraer al lector...</p>
+                            <a href="{% url 'article_detail' article.slug %}" class="uc-link mt-1 dark:text-white">Leer más</a>
+                        </div>
+                    </article>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj|length > 3 %}
+                <div class="article-grid-bottom-row">
+                    {% for article in page_obj %}
+                        {% if forloop.counter > 3 %}
+                        <article class="post-card-grid panel vstack gap-2 bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-xs hover:shadow-sm transition-all duration-300">
+                            <figure class="featured-image m-0 ratio ratio-16x9 overflow-hidden bg-gray-200">
+                                <img class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
+                                <a href="{% url 'article_detail' article.slug %}" class="position-cover"></a>
+                            </figure>
+                            <div class="p-3 vstack gap-1">
+                                <span class="fs-7 text-primary text-uppercase fw-medium">{{ article.category }}</span>
+                                <h3 class="h6 m-0">
+                                    <a href="{% url 'article_detail' article.slug %}" class="text-none">{{ article.title }}</a>
+                                </h3>
+                                <a href="{% url 'article_detail' article.slug %}" class="uc-link fs-7 mt-1 dark:text-white">Leer más</a>
+                            </div>
+                        </article>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="article-grid-right">
+                {% for article in page_obj %}
+                    {% if forloop.counter == 2 or forloop.counter == 3 %}
+                    <article class="post-card-vertical panel vstack gap-2 bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-xs hover:shadow-sm transition-all duration-300">
+                        <figure class="featured-image m-0 ratio ratio-4x3 overflow-hidden bg-gray-200">
+                            <img class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
+                            <a href="{% url 'article_detail' article.slug %}" class="position-cover"></a>
+                        </figure>
+                        <div class="p-3 vstack gap-1">
+                            <span class="fs-7 text-primary text-uppercase fw-medium">{{ article.category }}</span>
+                            <h3 class="h5 m-0">
+                                <a href="{% url 'article_detail' article.slug %}" class="text-none">{{ article.title }}</a>
+                            </h3>
+                            <a href="{% url 'article_detail' article.slug %}" class="uc-link fs-7 mt-1 dark:text-white">Leer más</a>
+                        </div>
+                    </article>
+                    {% endif %}
+                {% empty %}
+                <div class="w-100 text-center py-9">
+                    <i class="unicon-search-alt opacity-20 display-1 mb-4"></i>
+                    <h3 class="h4">No se encontraron artículos</h3>
+                    <p>Pruebe seleccionando otra categoría.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="pagination-panel mt-6 lg:mt-8">
+            <nav class="d-flex items-center justify-center gap-2" aria-label="Pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&categoria={{ selected_category.id }}{% endif %}" class="pagination-btn pagination-prev" title="Anterior">
+                        <i class="unicon-chevron-left"></i>
+                    </a>
+                {% else %}
+                    <span class="pagination-btn pagination-prev disabled"><i class="unicon-chevron-left"></i></span>
+                {% endif %}
+
+                <div class="pagination-numbers d-flex items-center gap-1">
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <span class="pagination-num active">{{ num }}</span>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <a href="?page={{ num }}{% if selected_category %}&categoria={{ selected_category.id }}{% endif %}" class="pagination-num">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if selected_category %}&categoria={{ selected_category.id }}{% endif %}" class="pagination-btn pagination-next" title="Siguiente">
+                        <i class="unicon-chevron-right"></i>
+                    </a>
+                {% else %}
+                    <span class="pagination-btn pagination-next disabled"><i class="unicon-chevron-right"></i></span>
+                {% endif %}
+            </nav>
+            <p class="text-center fs-7 text-gray-500 mt-3 mb-0">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Section: Categories Selection -->
+<div class="category-grid-section py-6 lg:py-8 bg-gray-25 dark:bg-gray-100 dark:bg-opacity-5">
+    <div class="container max-w-lg">
+        <div class="section-header text-center mb-5">
+            <h2 class="h3 fw-bold">Explora por Categorías</h2>
+        </div>
         <div class="row child-cols-12 sm:child-cols-6 lg:child-cols-3 g-4">
             {% for cat in categories %}
             <div>
                 <a href="?categoria={{ cat.id }}" class="category-card panel vstack items-center justify-center p-4 lg:p-6 text-none bg-white dark:bg-gray-800 position-relative overflow-hidden z-1 border rounded-3 shadow-xs hover:shadow-sm hover:border-primary transition-all duration-300 group {% if selected_category.id == cat.id %}border-primary border-2 shadow-sm{% endif %}">
-                    <!-- Marca de Agua (Fondo Sutil Estilo Boceto) -->
                     <div class="position-absolute bottom-0 end-0 z-n1 text-primary opacity-10 group-hover:opacity-15 transition-all duration-500" style="color: rgb(178 176 175) !important; transform: translate(15%, 25%) rotate(-15deg); pointer-events: none;">
                         <i class="{{ cat.icon|default:'unicon-book' }}" style="font-size: 11rem; line-height: 1"></i>
                     </div>
-
                     <div class="category-icon">
                         <i class="{{ cat.icon|default:'unicon-book' }}"></i>
                     </div>
@@ -41,15 +159,12 @@
                 </a>
             </div>
             {% endfor %}
-            <!-- Option to clear filter -->
             {% if selected_category %}
             <div>
                 <a href="?" class="category-card panel vstack items-center justify-center p-4 lg:p-6 text-none bg-gray-50 dark:bg-gray-800 position-relative overflow-hidden z-1 border rounded-3 shadow-xs hover:shadow-sm transition-all duration-300 group">
-                    <!-- Marca de Agua (Fondo Sutil Estilo Boceto) -->
                     <div class="position-absolute bottom-0 end-0 z-n1 text-primary opacity-10 group-hover:opacity-15 transition-all duration-500" style="color: rgb(178 176 175) !important; transform: translate(15%, 25%) rotate(-15deg); pointer-events: none;">
                         <i class="unicon-grid" style="font-size: 11rem; line-height: 1"></i>
                     </div>
-
                     <div class="category-icon">
                         <i class="unicon-grid"></i>
                     </div>
@@ -59,66 +174,6 @@
             </div>
             {% endif %}
         </div>
-    </div>
-</div>
-
-<!-- Section: Article Grid -->
-<div class="article-grid-section py-6 lg:py-9 bg-gray-25 dark:bg-gray-100 dark:bg-opacity-5">
-    <div class="container max-w-lg">
-        <div class="row g-4 lg:g-6">
-            {% for article in page_obj %}
-            <div class="col-12 col-md-6 col-lg-4">
-                <article class="post type-post panel uc-transition-toggle vstack gap-2 lg:gap-3 bg-white dark:bg-gray-900 p-3 rounded-3 shadow-sm h-100">
-                    <figure class="featured-image m-0 ratio ratio-16x9 rounded-2 overflow-hidden bg-gray-25 dark:bg-gray-800">
-                        <img class="media-cover image uc-transition-scale-up uc-transition-opaque" src="{{ article.image.url }}" alt="{{ article.title }}">
-                        <a href="{% url 'article_detail' article.slug %}" class="position-cover"></a>
-                    </figure>
-                    <div class="post-header panel vstack gap-narrow">
-                        <div class="post-category">
-                            <span class="fs-xs text-uppercase fw-bold text-primary">{{ article.category }}</span>
-                        </div>
-                        <h3 class="h5 m-0 lh-base">
-                            <a class="text-none" href="{% url 'article_detail' article.slug %}">{{ article.title }}</a>
-                        </h3>
-                        <p class="fs-7 text-gray-600 dark:text-gray-400 line-clamp-2">Breve descripción del artículo para atraer al lector...</p>
-                        <div class="hstack justify-between items-center mt-auto pt-2 border-top">
-                            <span class="fs-xs opacity-50">{{ article.created_at|date:"d M, Y" }}</span>
-                            <a href="{% url 'article_detail' article.slug %}" class="uc-link fs-xs fw-bold dark:text-white">LEER MÁS</a>
-                        </div>
-                    </div>
-                </article>
-            </div>
-            {% empty %}
-            <div class="col-12 text-center py-9">
-                <i class="unicon-search-alt opacity-20 display-1 mb-4"></i>
-                <h3 class="h4">No se encontraron artículos</h3>
-                <p>Pruebe seleccionando otra categoría.</p>
-            </div>
-            {% endfor %}
-        </div>
-
-        <!-- Pagination -->
-        {% if page_obj.has_other_pages %}
-        <div class="pagination-panel mt-6 lg:mt-9">
-            <nav class="nav-x justify-center gap-1" aria-label="Pagination">
-                {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&categoria={{ selected_category.id }}{% endif %}" class="btn btn-sm btn-icon border rounded-circle"><i class="unicon-chevron-left"></i></a>
-                {% endif %}
-
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                        <span class="btn btn-sm btn-icon bg-primary text-white rounded-circle shadow-sm">{{ num }}</span>
-                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                        <a href="?page={{ num }}{% if selected_category %}&categoria={{ selected_category.id }}{% endif %}" class="btn btn-sm btn-icon border rounded-circle">{{ num }}</a>
-                    {% endif %}
-                {% endfor %}
-
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}{% if selected_category %}&categoria={{ selected_category.id }}{% endif %}" class="btn btn-sm btn-icon border rounded-circle"><i class="unicon-chevron-right"></i></a>
-                {% endif %}
-            </nav>
-        </div>
-        {% endif %}
     </div>
 </div>
 {% endblock %}
