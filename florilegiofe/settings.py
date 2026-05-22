@@ -143,6 +143,9 @@ BREVO_SENDER_EMAIL = os.environ.get('BREVO_SENDER_EMAIL', 'noreply@florilegiofe.
 BREVO_SENDER_NAME = os.environ.get('BREVO_SENDER_NAME', 'Florilegio de la Fe')
 BREVO_TEMPLATE_ID = os.environ.get('BREVO_TEMPLATE_ID', '')
 
+# YouVersion
+YVP_APP_KEY = os.environ.get('YVP_APP_KEY', 'vPQyIxSLnLbnPgg8Avm1T24kVIgyoaUpyLAUw6dll2BFqoXJ')
+
 # PayPal
 PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID', '')
 PAYPAL_PLAN_PREMIUM = os.environ.get('PAYPAL_PLAN_PREMIUM', '')

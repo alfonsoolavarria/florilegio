@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from main_florife import views
 from main_florife import views_api_bible
+from main_florife import views_youversion
 from main_florife.admin_views import admin_bible_import, admin_import_rv1960_strongs, admin_import_strong_concord, admin_import_louw_nida
 
 urlpatterns = [
@@ -65,4 +66,8 @@ urlpatterns = [
     path("api/admin/bible-sync/<str:version_key>/setup/", views_api_bible.api_bible_sync_book_setup, name="api_bible_sync_book_setup"),
     path("api/admin/bible-sync/<str:version_key>/sync/<int:libro_num>/<int:capitulo_num>/", views_api_bible.api_bible_sync_chapter, name="api_bible_sync_chapter"),
     path("api/admin/bible-sync/<str:version_key>/finish/", views_api_bible.api_bible_finish_sync, name="api_bible_finish_sync"),
+
+    # YouVersion Platform API
+    path("api/youversion/bibles/", views_youversion.youversion_bibles, name="youversion_bibles"),
+    path("api/youversion/chapter/", views_youversion.youversion_chapter, name="youversion_chapter"),
 ]
