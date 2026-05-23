@@ -17,7 +17,6 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 APPS_DIR = BASE_DIR / "florilegiofe"
-print("----",APPS_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -144,7 +143,7 @@ BREVO_SENDER_NAME = os.environ.get('BREVO_SENDER_NAME', 'Florilegio de la Fe')
 BREVO_TEMPLATE_ID = os.environ.get('BREVO_TEMPLATE_ID', '')
 
 # YouVersion
-YVP_APP_KEY = os.environ.get('YVP_APP_KEY', 'vPQyIxSLnLbnPgg8Avm1T24kVIgyoaUpyLAUw6dll2BFqoXJ')
+YVP_APP_KEY = os.environ.get('YVP_APP_KEY', '')
 
 # PayPal
 PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID', '')
