@@ -871,22 +871,27 @@
                   style="display: none"
                   aria-hidden="true"
                 >
-                  <option value="nbla" selected>
+                  <option value="yv_103" selected>
                     Nueva Biblia de las Américas (NBLA)
                   </option>
-                  <option value="rv1960">Reina Valera 1960</option>
-                  <option value="spa_blm">
+                  <option value="yv_147">Reina-Valera Antigua (RVA)</option>
+                  <option value="yv_128">
+                    Nueva Versión Internacional 2025 (NVI-S)
+                  </option>
+                  <option value="yv_89">
                     La Biblia de las Américas (LBLA)
                   </option>
-                  <option value="spa_r09">Reina Valera 1909</option>
-                  <option value="spa_rvg">Reina Valera Gómez (RVG)</option>
-                  <option value="spa_bes">
-                    Biblia Española, Traducción Interconfesional (BES)
+                  <option value="yv_2664">
+                    Nueva Versión Internacional 2015 (NVI-S)
                   </option>
-                  <option value="spa_pdt">
-                    Palabra de Dios para Todos (PDT)
+                  <option value="yv_3291">
+                    Versión Biblia Libre (VBL)
                   </option>
-                  <option value="BSB">Berean Standard Bible (BSB)</option>
+                  <option value="yv_3365">
+                    Palabra de Dios para ti (PdDpt)
+                  </option>
+                  <option value="yv_4212">Gloss Spanish (GlossSP)</option>
+
                 </select>
               </div>
               <div class="form-group">
@@ -1397,8 +1402,21 @@
         document.getElementById("btn-mode-estudio").classList.add("active");
         document.getElementById("sidebar-estudio").style.display = "block";
         document.getElementById("content-estudio").style.display = "block";
+        showMobileWarning();
       }
     };
+
+    function showMobileWarning() {
+      if (window.innerWidth < 768) {
+        openModal(
+          "Modo Estudio",
+          '<p style="text-align:center;font-size:1rem;">Para una mejor experiencia de estudio, se recomienda usar una <strong>tablet</strong>, <strong>computadora</strong> o <strong>laptop</strong>.</p>' +
+          '<p style="text-align:center;font-size:0.9rem;color:#666;">El análisis interlineal y las herramientas de estudio se aprecian mejor en pantallas más grandes.</p>',
+          "info",
+          [{ text: "Entendido", className: "flor-modal-btn-primary" }]
+        );
+      }
+    }
 
     // Initialize with Lectura tab active
     switchTab("leer");
@@ -1798,6 +1816,17 @@
       return paragraphs;
     }
 
+    function renderYouVersionHTML(container, htmlContent) {
+      container.innerHTML = "";
+      const wrapper = document.createElement("div");
+      wrapper.className = "bible-chapter-text text-gray-800 dark:text-gray-200";
+      wrapper.style.fontSize = "1.5rem";
+      wrapper.style.lineHeight = "1.85";
+      wrapper.style.textAlign = "justify";
+      wrapper.innerHTML = htmlContent;
+      container.appendChild(wrapper);
+    }
+
     function renderBibleText(container, data, versiculoId) {
       container.innerHTML = "";
       if (data.length === 0) {
@@ -1809,7 +1838,7 @@
       const wrapper = document.createElement("div");
       wrapper.className =
         "bible-chapter-text text-gray-800 dark:text-gray-200 p-2";
-      wrapper.style.fontSize = "1.15rem";
+      wrapper.style.fontSize = "1.5rem";
 
       const paragraphs = groupIntoParagraphs(data);
 
@@ -2576,6 +2605,71 @@
 
       leerContainer.style.opacity = "0";
 
+      const isYouVersion = version.startsWith("yv_");
+
+      if (isYouVersion) {
+        const bibleId = version.replace("yv_", "");
+        try {
+          const yvUrl = `/api/youversion/chapter/?bible_id=${bibleId}&book=${libroId}&chapter=${capituloId}`;
+          const yvResp = await fetch(yvUrl);
+          const yvJson = await yvResp.json();
+
+          if (yvJson.status === "success") {
+            await new Promise((r) => setTimeout(r, 150));
+            if (yvJson.html) {
+              renderYouVersionHTML(leerContainer, yvJson.html);
+            } else {
+              renderBibleText(leerContainer, yvJson.data, null);
+            }
+            requestAnimationFrame(() => {
+              leerContainer.style.opacity = "1";
+            });
+            return;
+          }
+        } catch (e) {
+          console.warn("YouVersion API error, trying local fallback:", e);
+        }
+
+        // YouVersion falló — usar fallback local con advertencia
+        const localFallback = {
+          "103": "nbla",
+          "147": "spa_r09",
+          "89": "spa_blm",
+        }[bibleId] || "nbla";
+
+        let fallbackOk = false;
+        try {
+          const fallbackUrl = `/api/versiculo/?tipo=biblia&version=${localFallback}&libro=${libroId}&capitulo=${capituloId}&versiculo=`;
+          const fbResp = await fetch(fallbackUrl);
+          const fbJson = await fbResp.json();
+          if (fbJson.status === "success") {
+            await new Promise((r) => setTimeout(r, 150));
+            renderBibleText(leerContainer, fbJson.data, null);
+            fallbackOk = true;
+          } else {
+            leerContainer.innerHTML = `<div class="alert alert-danger w-100 mt-3">${fbJson.message}</div>`;
+          }
+        } catch (fbErr) {
+          leerContainer.innerHTML =
+            '<div class="alert alert-danger w-100 mt-3">Hubo un error de red.</div>';
+        }
+
+        if (fallbackOk) {
+          const warn = document.createElement("div");
+          warn.className = "alert alert-warning w-100 mb-3";
+          warn.style.fontSize = "0.9rem";
+          warn.innerHTML =
+            '<i class="unicon-information-circle me-2"></i>Hubo un problema con la información de la Biblia en línea. Mostrando versión local.';
+          leerContainer.insertBefore(warn, leerContainer.firstChild);
+        }
+
+        requestAnimationFrame(() => {
+          leerContainer.style.opacity = "1";
+        });
+        return;
+      }
+
+      // Modo local (no YouVersion)
       try {
         const url = `/api/versiculo/?tipo=biblia&version=${version}&libro=${libroId}&capitulo=${capituloId}&versiculo=`;
         const response = await fetch(url);
