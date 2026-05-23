@@ -1,12 +1,23 @@
 import requests
+import requests.exceptions
 import re
+import logging
+import urllib3
 from django.http import JsonResponse
 from django.conf import settings
 from django.views.decorators.http import require_GET
 import os
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+logger = logging.getLogger(__name__)
+
 YVP_API_URL = "https://api.youversion.com/v1"
-YVP_APP_KEY = os.environ.get("YVP_APP_KEY", getattr(settings, 'YVP_APP_KEY', 'vPQyIxSLnLbnPgg8Avm1T24kVIgyoaUpyLAUw6dll2BFqoXJ'))
+YVP_APP_KEY = (
+    os.environ.get("YVP_APP_KEY")
+    or getattr(settings, 'YVP_APP_KEY', None)
+    or 'vPQyIxSLnLbnPgg8Avm1T24kVIgyoaUpyLAUw6dll2BFqoXJ'
+)
 
 USFM_MAPPING = {
     1: 'GEN', 2: 'EXO', 3: 'LEV', 4: 'NUM', 5: 'DEU', 6: 'JOS', 7: 'JDG', 8: 'RUT',
@@ -63,7 +74,19 @@ def youversion_chapter(request):
 
     try:
         response = requests.get(url, headers={'X-YVP-App-Key': YVP_APP_KEY}, timeout=15)
-    except requests.RequestException:
+    except requests.exceptions.SSLError as e:
+        logger.error(f"YouVersion SSL error: {e}", exc_info=True)
+        try:
+            response = requests.get(url, headers={'X-YVP-App-Key': YVP_APP_KEY}, timeout=15, verify=False)
+        except requests.RequestException as e2:
+            logger.error(f"YouVersion API request failed even without SSL verify: {e2}", exc_info=True)
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Hubo un problema con la información de la Biblia. Por favor, intenta más tarde.',
+                'youversion_error': True
+            }, status=503)
+    except requests.RequestException as e:
+        logger.error(f"YouVersion API request failed: {e}", exc_info=True)
         return JsonResponse({
             'status': 'error',
             'message': 'Hubo un problema con la información de la Biblia. Por favor, intenta más tarde.',
@@ -71,6 +94,7 @@ def youversion_chapter(request):
         }, status=503)
 
     if response.status_code != 200:
+        logger.error(f"YouVersion API returned status {response.status_code}: {response.text[:500]}")
         return JsonResponse({
             'status': 'error',
             'message': 'Hubo un problema con la información de la Biblia. Por favor, intenta más tarde.',
