@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = "True" #os.getenv('DEBUG', 'False').strip() == 'True'
 
-ALLOWED_HOSTS = [os.environ.get('IP_FF'), 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [os.environ.get('IP_FF'), 'localhost', '127.0.0.1','florilegiodelafe.com', 'www.florilegiodelafe.com']
 
 
 # Application definition
