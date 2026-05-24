@@ -1,4 +1,32 @@
-{% extends "base.html" %} {% load static %} {% block content %}
+{% extends "base.html" %} {% load static %}
+
+{% block title %}{{ seo_title }}{% endblock %}
+{% block meta_description %}{{ seo_description }}{% endblock %}
+{% block og_title %}{{ seo_title }}{% endblock %}
+{% block og_description %}{{ seo_description }}{% endblock %}
+{% block canonical %}<link rel="canonical" href="{{ request.build_absolute_uri }}">{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Florilegio de la Fe",
+  "url": "{{ request.build_absolute_uri }}",
+  "description": "{{ seo_description|escapejs }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "{{ request.scheme }}://{{ request.get_host }}/buscar/?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
 <!-- Section: Hero Brand -->
 <div
   class="hero-brand-section panel overflow-hidden bg-gray-25 dark:bg-gray-900"
@@ -17,11 +45,11 @@
               />
             </a>
           </div>
-          <p class="mt-4 fs-4 italic text-center" id="typewriter-text">
+          <h1 class="mt-4 fs-4 italic text-center" id="typewriter-text">
           <span class="text-animation-title">Profundizando en la intimidad con Dios</span>
           <span class="text-animation-title">Estudiando la Biblia continuamente</span>
           <span class="text-animation-title">Orando a Dios siempre</span>
-        </p>
+        </h1>
       </div>
     </div>
   </div>
@@ -40,7 +68,7 @@
           {% if forloop.first %}
           <article class="post-card-featured panel vstack gap-3 bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-xs hover:shadow-sm transition-all duration-300">
             <figure class="featured-image m-0 ratio ratio-16x9 overflow-hidden bg-gray-200">
-              <img class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
+              <img loading="lazy" class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
               <a href="{% url 'article_detail' article.slug %}" class="position-cover"></a>
             </figure>
             <div class="p-3 lg:p-4 vstack gap-2">
@@ -60,7 +88,7 @@
             {% if forloop.counter > 3 %}
             <article class="post-card-grid panel vstack gap-2 bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-xs hover:shadow-sm transition-all duration-300 h-100">
               <figure class="featured-image m-0 ratio ratio-16x9 overflow-hidden bg-gray-200">
-                <img class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
+                <img loading="lazy" class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
                 <a href="{% url 'article_detail' article.slug %}" class="position-cover"></a>
               </figure>
               <div class="p-3 vstack gap-1">
@@ -81,7 +109,7 @@
           {% if forloop.counter == 2 or forloop.counter == 3 %}
           <article class="post-card-vertical panel vstack gap-2 bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-xs hover:shadow-sm transition-all duration-300">
             <figure class="featured-image m-0 ratio ratio-4x3 overflow-hidden bg-gray-200">
-              <img class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
+              <img loading="lazy" class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
               <a href="{% url 'article_detail' article.slug %}" class="position-cover"></a>
             </figure>
             <div class="p-3 vstack gap-1">
@@ -173,7 +201,7 @@
             <figure
               class="featured-image m-0 w-150px sm:w-250px ratio ratio-4x3 rounded-3 overflow-hidden bg-gray-200"
             >
-              <img
+              <img loading="lazy"
                 class="media-cover"
                 src="{{ article.image.url }}"
                 alt="{{ article.title }}"

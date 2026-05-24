@@ -1,3 +1,4 @@
+import re
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -83,6 +84,7 @@ class Article(models.Model):
     image_url = models.URLField(max_length=500)  # Link a la imagen de portada
     content = models.TextField()  # Contenido completo del artículo (soporta HTML)
     tags = models.JSONField(default=list)  # Lista de etiquetas/temas relacionados
+    meta_description = models.TextField(blank=True, null=True, help_text="Descripción para SEO y redes sociales. Máximo 160 caracteres.")
     is_featured = models.BooleanField(default=False)  # Si está marcado, aparece en el carrusel de arriba
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='revision')  # Estado de publicación
     created_at = models.DateTimeField(auto_now_add=True)  # Fecha de publicación automática
@@ -94,6 +96,13 @@ class Article(models.Model):
     @property
     def image(self):
         return {'url': self.image_url}
+
+    @property
+    def seo_description(self):
+        if self.meta_description:
+            return self.meta_description
+        clean = re.sub(r'<[^>]+>', '', self.content)[:160].strip() if self.content else self.title
+        return clean
 
 class Essay(models.Model):
     STATUS_CHOICES = [
@@ -108,6 +117,7 @@ class Essay(models.Model):
     image_url = models.URLField(max_length=500)
     content = models.TextField()
     tags = models.JSONField(default=list)
+    meta_description = models.TextField(blank=True, null=True, help_text="Descripción para SEO y redes sociales. Máximo 160 caracteres.")
     is_featured = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='revision')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -119,6 +129,13 @@ class Essay(models.Model):
     @property
     def image(self):
         return {'url': self.image_url}
+
+    @property
+    def seo_description(self):
+        if self.meta_description:
+            return self.meta_description
+        clean = re.sub(r'<[^>]+>', '', self.content)[:160].strip() if self.content else self.title
+        return clean
 
 class PalabraBiblia(models.Model):
     ognt_sort = models.CharField(max_length=50, primary_key=True)

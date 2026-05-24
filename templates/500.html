@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Error del servidor - Florilegio de la Fe{% endblock %}
+{% block meta_description %}Ocurrió un error en el servidor. Intenta de nuevo más tarde.{% endblock %}
+
+{% block content %}
+<div class="panel overflow-hidden bg-gray-25 dark:bg-gray-900 py-9 lg:py-12">
+    <div class="container max-w-lg text-center">
+        <div class="mb-6">
+            <span class="display-1 fw-bold text-danger opacity-25">500</span>
+        </div>
+        <h1 class="h2 fw-bold mb-3">Error del servidor</h1>
+        <p class="fs-5 text-gray-600 dark:text-gray-400 mb-6">
+            Algo salió mal. Por favor, intenta de nuevo más tarde.
+        </p>
+        <a href="/" class="btn btn-primary btn-lg">Volver al inicio</a>
+    </div>
+</div>
+{% endblock %}

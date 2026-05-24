@@ -16,10 +16,33 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.sitemaps.views import sitemap
+from django.http import HttpResponse
 from main_florife import views
 from main_florife import views_api_bible
 from main_florife import views_youversion
 from main_florife.admin_views import admin_bible_import, admin_import_rv1960_strongs, admin_import_strong_concord, admin_import_louw_nida
+from main_florife.sitemap import ArticleSitemap, EssaySitemap, StaticSitemap
+
+sitemaps = {
+    'articles': ArticleSitemap,
+    'essays': EssaySitemap,
+    'static': StaticSitemap,
+}
+
+
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Disallow: /admin/",
+        "Disallow: /api/",
+        "Disallow: /accounts/",
+        "Disallow: /mis-estudios/",
+        "Disallow: /perfil/",
+        "",
+        "Sitemap: https://florilegiodelafe.com/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
 
 urlpatterns = [
     # Importar versiones bíblicas desde JSON (admin) — antes que admin.site.urls
@@ -70,4 +93,11 @@ urlpatterns = [
     # YouVersion Platform API
     path("api/youversion/bibles/", views_youversion.youversion_bibles, name="youversion_bibles"),
     path("api/youversion/chapter/", views_youversion.youversion_chapter, name="youversion_chapter"),
+
+    # SEO
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
+    path("robots.txt", robots_txt, name="robots_txt"),
 ]
+
+handler404 = "main_florife.views.handler404"
+handler500 = "main_florife.views.handler500"

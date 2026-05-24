@@ -21,7 +21,9 @@ def dashboard(request):
     return render(request, 'index.html', {
         "featured_articles": featured_articles,
         "latest_articles": latest_articles,
-        "categories": categories
+        "categories": categories,
+        "seo_title": "Florilegio de la Fe - Teología, Historia y Biografías Cristianas",
+        "seo_description": "Profundiza en la intimidad con Dios a través de artículos de teología, historia de la iglesia, biografías cristianas y estudio bíblico.",
     })
 
 def article_list(request):
@@ -35,10 +37,20 @@ def article_list(request):
     paginator = Paginator(articles, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
+    if selected_category:
+        seo_title = f"Artículos sobre {selected_category.name} - Florilegio de la Fe"
+        seo_description = f"Explora artículos sobre {selected_category.name}. Teología, historia y biografías cristianas."
+    else:
+        seo_title = "Artículos - Florilegio de la Fe"
+        seo_description = "Explora todos los artículos de teología, historia de la iglesia y biografías cristianas."
+
     return render(request, 'article-list.html', {
         "page_obj": page_obj,
         "categories": categories,
-        "selected_category": selected_category
+        "selected_category": selected_category,
+        "seo_title": seo_title,
+        "seo_description": seo_description,
     })
 
 def essay_list(request):
@@ -58,11 +70,21 @@ def essay_list(request):
     paginator = Paginator(essays, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
+    if selected_category:
+        seo_title = f"Ensayos sobre {selected_category.name} - Florilegio de la Fe"
+        seo_description = f"Ensayos teológicos sobre {selected_category.name}. Estudios profundos sobre la fe."
+    else:
+        seo_title = "Ensayos - Florilegio de la Fe"
+        seo_description = "Ensayos teológicos profundos sobre la fe, la Biblia y la historia de la iglesia."
+
     return render(request, 'essays.html', {
         "page_obj": page_obj,
         "categories": categories,
         "selected_category": selected_category,
-        "query": query
+        "query": query,
+        "seo_title": seo_title,
+        "seo_description": seo_description,
     })
 
 def essay_detail(request, slug):
@@ -105,11 +127,14 @@ def essay_detail(request, slug):
     
     # Update essay content with IDs
     essay.content_with_ids = content
-    
+
     return render(request, 'essay_detail.html', {
         "essay": essay,
         "related_essays": related_essays,
-        "toc_items": toc_items
+        "toc_items": toc_items,
+        "seo_title": f"{essay.title} - Florilegio de la Fe",
+        "seo_description": essay.seo_description,
+        "seo_image": essay.image_url,
     })
 
 def search_view(request):
@@ -123,9 +148,15 @@ def search_view(request):
     paginator = Paginator(results, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
+    seo_title = f"Búsqueda: {query} - Florilegio de la Fe" if query else "Buscar - Florilegio de la Fe"
+    seo_description = "Resultados de búsqueda de artículos teológicos, históricos y biografías cristianas."
+
     return render(request, 'search-results.html', {
         "page_obj": page_obj,
-        "query": query
+        "query": query,
+        "seo_title": seo_title,
+        "seo_description": seo_description,
     })
 
 def article_detail(request, slug):
@@ -135,20 +166,33 @@ def article_detail(request, slug):
         status='liberado'
     ).exclude(id=article.id)[:3]
     categories = Category.objects.all()
+
     return render(request, 'blog-details.html', {
         "article": article,
         "related_articles": related_articles,
-        "categories": categories
+        "categories": categories,
+        "seo_title": f"{article.title} - Florilegio de la Fe",
+        "seo_description": article.seo_description,
+        "seo_image": article.image_url,
     })
 
 def privacy(request):
-    return render(request, 'privacy.html')
+    return render(request, 'privacy.html', {
+        'seo_title': 'Política de Privacidad - Florilegio de la Fe',
+        'seo_description': 'Política de privacidad y protección de datos de Florilegio de la Fe.',
+    })
 
 def terms(request):
-    return render(request, 'terms.html')
+    return render(request, 'terms.html', {
+        'seo_title': 'Términos y Condiciones - Florilegio de la Fe',
+        'seo_description': 'Términos y condiciones de uso del sitio Florilegio de la Fe.',
+    })
 
 def credits(request):
-    return render(request, 'credits.html')
+    return render(request, 'credits.html', {
+        'seo_title': 'Créditos - Florilegio de la Fe',
+        'seo_description': 'Créditos y atribuciones de Florilegio de la Fe.',
+    })
 
 def contact(request):
     sent = False
@@ -191,13 +235,20 @@ def contact(request):
                 sent = True  # sin Brevo configurado, simular éxito
             if not sent:
                 error = 'Error al enviar el mensaje. Intenta de nuevo.'
-    return render(request, 'contact.html', {'sent': sent, 'error': error})
+    return render(request, 'contact.html', {
+        'sent': sent,
+        'error': error,
+        'seo_title': 'Contacto - Florilegio de la Fe',
+        'seo_description': 'Comunícate con el equipo de Florilegio de la Fe.',
+    })
 
 def apoyo(request):
     return render(request, 'apoyo.html', {
         'paypal_client_id': settings.PAYPAL_CLIENT_ID,
         'paypal_plan_donation_monthly': settings.PAYPAL_PLAN_DONATION_MONTHLY,
         'paypal_plan_donation_annual': settings.PAYPAL_PLAN_DONATION_ANNUAL,
+        'seo_title': 'Apoya - Florilegio de la Fe',
+        'seo_description': 'Apoya el ministerio de Florilegio de la Fe con tu donación.',
     })
 
 def planes(request):
@@ -205,6 +256,8 @@ def planes(request):
         'paypal_client_id': settings.PAYPAL_CLIENT_ID,
         'paypal_plan_premium': settings.PAYPAL_PLAN_PREMIUM,
         'paypal_plan_pro': settings.PAYPAL_PLAN_PRO,
+        'seo_title': 'Planes - Florilegio de la Fe',
+        'seo_description': 'Planes premium y pro de Florilegio de la Fe para estudios bíblicos avanzados.',
     })
 
 
@@ -881,3 +934,11 @@ def profile_view(request):
         'profile_user': request.user,
         'avatares': avatares
     })
+
+
+def handler404(request, exception):
+    return render(request, '404.html', status=404)
+
+
+def handler500(request):
+    return render(request, '500.html', status=500)

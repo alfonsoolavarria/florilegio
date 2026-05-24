@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Página no encontrada - Florilegio de la Fe{% endblock %}
+{% block meta_description %}La página que buscas no existe. Regresa al inicio de Florilegio de la Fe.{% endblock %}
+
+{% block content %}
+<div class="panel overflow-hidden bg-gray-25 dark:bg-gray-900 py-9 lg:py-12">
+    <div class="container max-w-lg text-center">
+        <div class="mb-6">
+            <span class="display-1 fw-bold text-primary opacity-25">404</span>
+        </div>
+        <h1 class="h2 fw-bold mb-3">Página no encontrada</h1>
+        <p class="fs-5 text-gray-600 dark:text-gray-400 mb-6">
+            Lo sentimos, la página que buscas no existe o ha sido movida.
+        </p>
+        <a href="/" class="btn btn-primary btn-lg">Volver al inicio</a>
+    </div>
+</div>
+{% endblock %}

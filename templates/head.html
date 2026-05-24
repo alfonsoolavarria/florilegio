@@ -2,10 +2,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Florilegio de la Fe</title>
-    <meta name="description" content="Florilegio de la Fe es un sitio web para profundizar en la intimidad con Dios a través de artículos de teología, historia y biografías.">
-    <meta name="keywords" content="teología, fe, cristianos, Dios, evangelio, palabra de Dios, biblia, estudio bíblico, historia de la iglesia, biografías cristianas">
+    <title>{% block title %}Florilegio de la Fe{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Florilegio de la Fe es un sitio web para profundizar en la intimidad con Dios a través de artículos de teología, historia y biografías.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}teología, fe, cristianos, Dios, evangelio, palabra de Dios, biblia, estudio bíblico, historia de la iglesia, biografías cristianas{% endblock %}">
     <meta name="theme-color" content="#2757fd">
+
+    {% block canonical %}{% endblock %}
     <link rel="shortcut icon" href="{% static 'images/ico.ico' %}" type="image/x-icon">
 
     <!-- Fonts -->
@@ -15,11 +17,18 @@
 
     <!-- Open Graph Tags -->
     <meta property="og:locale" content="es_ES">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Florilegio de la Fe">
-    <meta property="og:description" content="Profundizando en la intimidad con Dios. Artículos, ensayos y biografías.">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}Florilegio de la Fe{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Profundizando en la intimidad con Dios. Artículos, ensayos y biografías.{% endblock %}">
     <meta property="og:site_name" content="Florilegio de la Fe">
-    <!-- <meta property="og:image" content="{% static 'images/common/seo-image.jpg' %}"> -->
+    <meta property="og:image" content="{% block og_image %}{% static 'images/ff.jpg' %}{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="{% block twitter_card %}summary_large_image{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}Florilegio de la Fe{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Profundizando en la intimidad con Dios. Artículos, ensayos y biografías.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{% static 'images/ff.jpg' %}{% endblock %}">
 
     <!-- preload head styles -->
     <link rel="preload" href="{% static 'css/unicons.min.css' %}" as="style">
@@ -59,4 +68,22 @@
 
     <!-- include scripts -->
     <script src="{% static 'js/uni-core-bundle.min.js' %}"></script>
+
+    {% block extra_head %}{% endblock %}
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Florilegio de la Fe",
+      "url": "https://florilegiodelafe.com",
+      "logo": "https://florilegiodelafe.com/static/images/ff.jpg",
+      "description": "Profundizando en la intimidad con Dios a través de artículos de teología, historia de la iglesia y biografías cristianas.",
+      "sameAs": [
+        "https://facebook.com/florilegiodelafe",
+        "https://instagram.com/florilegiodelafe",
+        "https://youtube.com/@florilegiodelafe"
+      ]
+    }
+    </script>
 </head>

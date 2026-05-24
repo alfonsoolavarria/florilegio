@@ -16,12 +16,24 @@ class AuthorAdmin(admin.ModelAdmin):
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'category', 'status', 'is_featured', 'created_at')
+    list_display = ('title', 'author', 'category', 'status', 'is_featured', 'created_at', 'meta_description_preview')
     list_filter = ('category', 'status', 'is_featured', 'created_at')
-    search_fields = ('title', 'content', 'tags')
+    search_fields = ('title', 'content', 'tags', 'meta_description')
     prepopulated_fields = {'slug': ('title',)}
     list_editable = ('status', 'is_featured')
     ordering = ('-created_at',)
+    fieldsets = (
+        (None, {'fields': ('title', 'slug', 'author', 'category', 'image_url', 'content', 'tags')}),
+        ('SEO', {'fields': ('meta_description',), 'classes': ('collapse',),
+                 'description': 'Descripción para motores de búsqueda y redes sociales. Máximo 160 caracteres.'}),
+        ('Publicación', {'fields': ('status', 'is_featured')}),
+    )
+
+    def meta_description_preview(self, obj):
+        if obj.meta_description:
+            return obj.meta_description[:80] + ('...' if len(obj.meta_description) > 80 else '')
+        return '(auto-generado)'
+    meta_description_preview.short_description = 'Meta Desc'
 
 @admin.register(ApiBibleSyncStatus)
 class ApiBibleSyncStatusAdmin(admin.ModelAdmin):
@@ -29,12 +41,24 @@ class ApiBibleSyncStatusAdmin(admin.ModelAdmin):
 
 @admin.register(Essay)
 class EssayAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'category', 'status', 'is_featured', 'created_at')
+    list_display = ('title', 'author', 'category', 'status', 'is_featured', 'created_at', 'meta_description_preview')
     list_filter = ('category', 'status', 'is_featured', 'created_at')
-    search_fields = ('title', 'content', 'tags')
+    search_fields = ('title', 'content', 'tags', 'meta_description')
     prepopulated_fields = {'slug': ('title',)}
     list_editable = ('status', 'is_featured')
     ordering = ('-created_at',)
+    fieldsets = (
+        (None, {'fields': ('title', 'slug', 'author', 'category', 'image_url', 'content', 'tags')}),
+        ('SEO', {'fields': ('meta_description',), 'classes': ('collapse',),
+                 'description': 'Descripción para motores de búsqueda y redes sociales. Máximo 160 caracteres.'}),
+        ('Publicación', {'fields': ('status', 'is_featured')}),
+    )
+
+    def meta_description_preview(self, obj):
+        if obj.meta_description:
+            return obj.meta_description[:80] + ('...' if len(obj.meta_description) > 80 else '')
+        return '(auto-generado)'
+    meta_description_preview.short_description = 'Meta Desc'
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):

@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 {% load static %}
+
+{% block title %}Verificar Correo - Florilegio de la Fe{% endblock %}
+{% block meta_description %}Verifica tu correo electrónico para activar tu cuenta en Florilegio de la Fe.{% endblock %}
+
 {% block content %}
 <div class="panel overflow-hidden bg-gray-25 dark:bg-gray-900 py-6 lg:py-9">
   <div class="container max-w-lg">
     <div class="row justify-center">
       <div class="col-12 col-md-6">
         <div class="panel bg-white dark:bg-gray-800 p-6 rounded-2 shadow-sm">
-          <h2 class="h4 fw-bold text-center mb-4">Verificar tu correo</h2>
+          <h1 class="h4 fw-bold text-center mb-4">Verificar tu correo</h1>
           <p class="text-center text-gray-500 mb-4">
             Hemos enviado un código de verificación a <strong>{{ email }}</strong>.
             Revisa tu bandeja de entrada.
