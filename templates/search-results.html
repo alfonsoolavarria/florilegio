@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}{{ seo_title }}{% endblock %}
+{% block meta_description %}{{ seo_description }}{% endblock %}
+{% block og_title %}{{ seo_title }}{% endblock %}
+{% block og_description %}{{ seo_description }}{% endblock %}
+{% block canonical %}<link rel="canonical" href="{{ request.build_absolute_uri }}">{% endblock %}
+
 {% block content %}
 <!-- Section: Header -->
 <div class="hero-brand-section panel overflow-hidden bg-gray-25 dark:bg-gray-900">
@@ -21,7 +27,7 @@
             <div class="col-12 col-md-6 col-lg-4">
                 <article class="post type-post panel uc-transition-toggle vstack gap-2 lg:gap-3 bg-white dark:bg-gray-900 p-3 rounded-3 shadow-sm h-100">
                     <figure class="featured-image m-0 ratio ratio-16x9 rounded-2 overflow-hidden bg-gray-25 dark:bg-gray-800">
-                        <img class="media-cover image uc-transition-scale-up uc-transition-opaque" src="{{ article.image.url }}" alt="{{ article.title }}">
+                        <img loading="lazy" class="media-cover image uc-transition-scale-up uc-transition-opaque" src="{{ article.image.url }}" alt="{{ article.title }}">
                         <a href="{% url 'article_detail' article.slug %}" class="position-cover"></a>
                     </figure>
                     <div class="post-header panel vstack gap-narrow">

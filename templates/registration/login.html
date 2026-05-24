@@ -1,13 +1,19 @@
 {% extends "base.html" %}
 {% load static %}
 {% load socialaccount %}
+
+{% block title %}Iniciar Sesión - Florilegio de la Fe{% endblock %}
+{% block meta_description %}Inicia sesión en Florilegio de la Fe para acceder a tus estudios y contenido.{% endblock %}
+{% block og_title %}Iniciar Sesión - Florilegio de la Fe{% endblock %}
+{% block og_description %}Inicia sesión en Florilegio de la Fe.{% endblock %}
+
 {% block content %}
 <div class="panel overflow-hidden bg-gray-25 dark:bg-gray-900 py-6 lg:py-9">
   <div class="container max-w-lg">
     <div class="row justify-center">
       <div class="col-12 col-md-6">
         <div class="panel bg-white dark:bg-gray-800 p-6 rounded-2 shadow-sm">
-          <h2 class="h4 fw-bold text-center mb-4">Iniciar Sesión</h2>
+          <h1 class="h4 fw-bold text-center mb-4">Iniciar Sesión</h1>
 
           {% if error %}
           <div class="alert alert-danger py-2 mb-4">{{ error }}</div>

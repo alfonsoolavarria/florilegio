@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}{{ seo_title }}{% endblock %}
+{% block meta_description %}{{ seo_description }}{% endblock %}
+{% block og_title %}{{ seo_title }}{% endblock %}
+{% block og_description %}{{ seo_description }}{% endblock %}
+{% block canonical %}<link rel="canonical" href="{{ request.build_absolute_uri }}">{% endblock %}
+{% block extra_head %}
+{% if page_obj.has_previous %}<link rel="prev" href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&categoria={{ selected_category.id }}{% endif %}">{% endif %}
+{% if page_obj.has_next %}<link rel="next" href="?page={{ page_obj.next_page_number }}{% if selected_category %}&categoria={{ selected_category.id }}{% endif %}">{% endif %}
+{% endblock %}
+
 {% block content %}
 <!-- Section: Header -->
 <div class="hero-brand-section panel overflow-hidden bg-gray-25 dark:bg-gray-900">
@@ -39,7 +49,7 @@
                     {% if forloop.first %}
                     <article class="post-card-featured panel vstack gap-3 bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-xs hover:shadow-sm transition-all duration-300">
                         <figure class="featured-image m-0 ratio ratio-16x9 overflow-hidden bg-gray-200">
-                            <img class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
+                            <img loading="lazy" class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
                             <a href="{% url 'article_detail' article.slug %}" class="position-cover"></a>
                         </figure>
                         <div class="p-3 lg:p-4 vstack gap-2">
@@ -59,7 +69,7 @@
                         {% if forloop.counter > 3 %}
                         <article class="post-card-grid panel vstack gap-2 bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-xs hover:shadow-sm transition-all duration-300">
                             <figure class="featured-image m-0 ratio ratio-16x9 overflow-hidden bg-gray-200">
-                                <img class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
+                                <img loading="lazy" class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
                                 <a href="{% url 'article_detail' article.slug %}" class="position-cover"></a>
                             </figure>
                             <div class="p-3 vstack gap-1">
@@ -80,7 +90,7 @@
                     {% if forloop.counter == 2 or forloop.counter == 3 %}
                     <article class="post-card-vertical panel vstack gap-2 bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-xs hover:shadow-sm transition-all duration-300">
                         <figure class="featured-image m-0 ratio ratio-4x3 overflow-hidden bg-gray-200">
-                            <img class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
+                            <img loading="lazy" class="media-cover image hover:scale-105 transition-transform duration-500" src="{{ article.image.url }}" alt="{{ article.title }}" />
                             <a href="{% url 'article_detail' article.slug %}" class="position-cover"></a>
                         </figure>
                         <div class="p-3 vstack gap-1">

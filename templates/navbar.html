@@ -81,7 +81,7 @@
                 <img
                   class="w-80px sm:w-150px"
                   src="{% static 'images/fin.svg' %}"
-                  alt="Logo"
+                  alt="Florilegio de la Fe"
                 />
               </a>
             </div>
@@ -165,7 +165,7 @@
               {% if user.is_authenticated %}
               {% if user.profile.avatar_url %}
               <a href="#" onclick="event.preventDefault(); toggleUserMenu(this);">
-                <img src="{% static 'avatares/' %}{{ user.profile.avatar_url }}"
+                <img loading="lazy" src="{% static 'avatares/' %}{{ user.profile.avatar_url }}"
                      class="rounded-circle" style="width:32px;height:32px;object-fit:cover;"
                      alt="Avatar">
               </a>
@@ -259,7 +259,7 @@
       <div class="hstack justify-between items-center">
         <div class="uc-logo mt-2">
           <a href="/">
-            <img
+            <img loading="lazy"
               class="w-120px"
               src="{% static 'images/fin.svg' %}"
               alt="Logo"

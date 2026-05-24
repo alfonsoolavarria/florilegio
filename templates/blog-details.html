@@ -1,6 +1,61 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}{{ seo_title }}{% endblock %}
+{% block meta_description %}{{ seo_description }}{% endblock %}
+{% block og_title %}{{ seo_title }}{% endblock %}
+{% block og_description %}{{ seo_description }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_image %}{{ article.image.url }}{% endblock %}
+{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}
+{% block twitter_title %}{{ seo_title }}{% endblock %}
+{% block twitter_description %}{{ seo_description }}{% endblock %}
+{% block twitter_image %}{{ article.image.url }}{% endblock %}
+{% block canonical %}<link rel="canonical" href="{{ request.build_absolute_uri }}">{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Inicio",
+    "item": "{{ request.scheme }}://{{ request.get_host }}/"
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "name": "{{ article.category.name }}",
+    "item": "{{ request.scheme }}://{{ request.get_host }}/articulos/?categoria={{ article.category.id }}"
+  },{
+    "@type": "ListItem",
+    "position": 3,
+    "name": "{{ article.title|escapejs }}"
+  }]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ article.title|escapejs }}",
+  "description": "{{ seo_description|escapejs }}",
+  "image": "{{ article.image.url }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ article.author.name|escapejs }}"
+  },
+  "datePublished": "{{ article.created_at|date:'c' }}",
+  "dateModified": "{{ article.updated_at|date:'c' }}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Florilegio de la Fe"
+  }
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- Reading Progress Bar -->
 <div class="reading-progress-container">
@@ -53,7 +108,7 @@
                         <div class="author-box panel bg-gray-50 dark:bg-gray-800 p-4 rounded-3 mt-8 mb-6">
                             <div class="row items-center g-4 lg:g-5">
                                 <div class="col-12 col-md-auto text-center">
-                                    <img class="author-avatar rounded-circle w-100px h-100px object-cover shadow-sm" 
+                                    <img loading="lazy" class="author-avatar rounded-circle w-100px h-100px object-cover shadow-sm" 
                                          src="{{ article.author.image_url|default:'https://via.placeholder.com/150' }}" 
                                          alt="{{ article.author.name }}">
                                 </div>
@@ -90,7 +145,7 @@
                             <div class="vstack gap-3">
                                 {% for item in related_articles %}
                                 <a href="/articulo/{{ item.slug }}/" class="related-post-item uc-link dark:text-white">
-                                    <img src="{{ item.image.url }}" class="related-post-img" alt="{{ item.title }}">
+                                    <img loading="lazy" src="{{ item.image.url }}" class="related-post-img" alt="{{ item.title }}">
                                     <div class="related-post-info">
                                         <h6 class="m-0">{{ item.title }}</h6>
                                         <span class="date">{{ item.created_at|date:"d M, Y" }}</span>

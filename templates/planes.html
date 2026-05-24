@@ -1,9 +1,16 @@
 {% extends "base.html" %} {% load static %}
+
+{% block title %}{{ seo_title }}{% endblock %}
+{% block meta_description %}{{ seo_description }}{% endblock %}
+{% block og_title %}{{ seo_title }}{% endblock %}
+{% block og_description %}{{ seo_description }}{% endblock %}
+{% block canonical %}<link rel="canonical" href="{{ request.build_absolute_uri }}">{% endblock %}
+
 {% block content %}
 <div class="panel overflow-hidden bg-gray-25 dark:bg-gray-900 py-6 lg:py-9">
   <div class="container max-w-lg">
     <div class="text-center mb-6">
-      <h2 class="h3 fw-bold mb-2">Planes de Estudio</h2>
+      <h1 class="h3 fw-bold mb-2">Planes de Estudio</h1>
       <p class="text-gray-500">
         Elige el plan que mejor se adapte a tu ritmo de estudio
       </p>

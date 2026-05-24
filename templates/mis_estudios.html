@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
+
+{% block title %}Mis Estudios - Florilegio de la Fe{% endblock %}
+{% block meta_description %}Tus estudios bíblicos guardados en Florilegio de la Fe.{% endblock %}
+{% block og_title %}Mis Estudios - Florilegio de la Fe{% endblock %}
+{% block og_description %}Tus estudios bíblicos guardados en Florilegio de la Fe.{% endblock %}
+
 {% block content %}
 <div class="panel overflow-hidden bg-gray-25 dark:bg-gray-900 py-6 lg:py-9">
   <div class="container max-w-lg">
@@ -7,9 +13,9 @@
       <div class="col-12 col-md-10">
         <div class="panel bg-white dark:bg-gray-800 p-6 rounded-2 shadow-sm">
           <div class="hstack justify-between mb-3">
-            <h2 class="h4 fw-bold mb-0">
+            <h1 class="h4 fw-bold mb-0">
               <i class="unicon-notebook me-2 text-primary"></i>Mis Estudios
-            </h2>
+            </h1>
             <a href="{% url 'estudios' %}" class="btn btn-outline-primary btn-sm">
               <i class="unicon-pen me-1"></i> Nuevo Estudio
             </a>

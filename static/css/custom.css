@@ -14,8 +14,14 @@ body {
 }
 
 .hero-logo {
-    max-width: 750px;
     width: 100%;
+}
+
+@media (min-width: 992px) {
+    .hero-logo {
+        width: 85vw !important;
+        max-width: 1500px;
+    }
 }
 
 /* Header & Logo */
@@ -417,6 +423,14 @@ body {
 #typewriter-text {
     margin-left: -100px;
 }
+
+@media (max-width: 767px) {
+    #typewriter-text {
+        margin-left: 0;
+        font-size: 1.25rem !important;
+        padding: 0 1rem;
+    }
+}
 .text-animation-unit {
     display: inline-block;
     white-space: pre;
@@ -434,10 +448,18 @@ body {
     display: inline-block;
     -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
+    text-align: center;
+    width: 100%;
+}
+
+.hero-brand-section .uc-logo a {
+    display: inline-block;
 }
 
 .hero-brand-section .uc-logo img,
 .hero-brand-section .uc-logo svg {
+    display: block;
+    margin: 0 auto;
     -webkit-animation: logoEntranceFlip 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     animation: logoEntranceFlip 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     -webkit-transform-origin: center bottom;
@@ -835,6 +857,20 @@ body {
     /* Fix search form width on mobile */
     .expanding-search-form.active .search-input {
         width: 160px; /* Reduced for mobile */
+    }
+}
+
+@media (max-width: 575px) {
+    .hero-logo {
+        max-width: 250px !important;
+    }
+    #typewriter-text {
+        font-size: 1rem !important;
+        margin-left: 0;
+        padding: 0 0.5rem;
+    }
+    .hero-brand-section {
+        padding-bottom: 6rem !important;
     }
 }
 
