@@ -99,5 +99,7 @@ urlpatterns = [
     path("robots.txt", robots_txt, name="robots_txt"),
 ]
 
+handler400 = "main_florife.views.handler400"
+handler403 = "main_florife.views.handler403"
 handler404 = "main_florife.views.handler404"
 handler500 = "main_florife.views.handler500"

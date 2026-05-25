@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Solicitud Inválida - Florilegio de la Fe{% endblock %}
+{% block meta_description %}La solicitud no pudo ser procesada debido a un error del cliente.{% endblock %}
+{% block content %}
+<div class="container py-9 text-center">
+    <h1 class="display-1 fw-bold text-danger">400</h1>
+    <h2 class="mb-4">Solicitud Inválida</h2>
+    <p class="lead mb-5">Lo sentimos, no pudimos procesar tu solicitud. Verifica los datos e intenta de nuevo.</p>
+    <a href="/" class="btn btn-primary">Volver al inicio</a>
+</div>
+{% endblock %}

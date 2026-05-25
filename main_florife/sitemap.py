@@ -8,7 +8,7 @@ class ArticleSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return Article.objects.filter(status='liberado')
+        return Article.objects.filter(status='liberado').order_by('id')
 
     def lastmod(self, obj):
         return obj.updated_at
@@ -22,7 +22,7 @@ class EssaySitemap(Sitemap):
     priority = 0.7
 
     def items(self):
-        return Essay.objects.filter(status='liberado')
+        return Essay.objects.filter(status='liberado').order_by('id')
 
     def lastmod(self, obj):
         return obj.updated_at
@@ -36,7 +36,7 @@ class StaticSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return ['index', 'article_list', 'essay_list', 'estudios', 'planes', 'apoyo', 'contacto', 'privacidad', 'terminos', 'creditos']
+        return ['index', 'article_list', 'essay_list', 'estudios', 'planes', 'apoyo', 'contact', 'privacy', 'terms', 'credits']
 
     def location(self, item):
         return reverse(item)
