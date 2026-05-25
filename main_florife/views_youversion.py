@@ -16,7 +16,6 @@ YVP_API_URL = "https://api.youversion.com/v1"
 YVP_APP_KEY = (
     os.environ.get("YVP_APP_KEY")
     or getattr(settings, 'YVP_APP_KEY', None)
-    or 'vPQyIxSLnLbnPgg8Avm1T24kVIgyoaUpyLAUw6dll2BFqoXJ'
 )
 
 USFM_MAPPING = {

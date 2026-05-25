@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from .models import ApiBibleSyncStatus, VersiculoBiblia
 
 API_BIBLE_URL = "https://rest.api.bible/v1/bibles"
-API_KEY = os.environ.get("BIBLE_API_KEY", getattr(settings, 'BIBLE_API_KEY', 'Iyj0SmQ9Yb413X750Kl98'))
+API_KEY = os.environ.get("BIBLE_API_KEY") or getattr(settings, 'BIBLE_API_KEY', None)
 
 VERSIONS_INFO = {
     'nbla': {'id': 'ce11b813f9a27e20-01', 'name': 'Nueva Biblia de las Américas'},
