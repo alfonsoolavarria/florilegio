@@ -1,10 +1,9 @@
 @font-face {
     font-family: Unicons;
-    src: url('../fonts/unicons/Unicons.eot');
-    src: url('../fonts/unicons/Unicons.eot#iefix') format('embedded-opentype'), url('/static/fonts/Unicons.ttf') format('truetype'), url('../fonts/unicons/Unicons.woff') format('woff'), url('../fonts/unicons/Unicons.svg#Unicons') format('svg');
+    src: url('/static/fonts/Unicons.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-    font-display: block
+    font-display: swap
 }
 
 [class^="unicon-"],

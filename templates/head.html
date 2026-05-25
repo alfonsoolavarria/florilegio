@@ -30,44 +30,27 @@
     <meta name="twitter:description" content="{% block twitter_description %}Profundizando en la intimidad con Dios. Artículos, ensayos y biografías.{% endblock %}">
     <meta name="twitter:image" content="{% block twitter_image %}{% static 'images/ff.jpg' %}{% endblock %}">
 
-    <!-- preload head styles -->
-    <link rel="preload" href="{% static 'css/unicons.min.css' %}" as="style">
-    <link rel="preload" href="{% static 'css/swiper-bundle.min.css' %}" as="style">
-
-    <!-- preload footer scripts -->
-    <link rel="preload" href="{% static 'js/jquery.min.js' %}" as="script">
-    <link rel="preload" href="{% static 'js/scrollmagic.min.js' %}" as="script">
-    <link rel="preload" href="{% static 'js/swiper-bundle.min.js' %}" as="script">
-    <link rel="preload" href="{% static 'js/anime.min.js' %}" as="script">
-    <link rel="preload" href="{% static 'js/data-attr-helper.js' %}" as="script">
-    <link rel="preload" href="{% static 'js/swiper-helper.js' %}" as="script">
-    <link rel="preload" href="{% static 'js/anime-helper.js' %}" as="script">
-    <link rel="preload" href="{% static 'js/anime-helper-defined-timelines.js' %}" as="script">
-    <link rel="preload" href="{% static 'js/uikit-components-bs.js' %}" as="script">
-    <link rel="preload" href="{% static 'js/app.js' %}" as="script">
+    <!-- DNS Prefetch / Preconnect for third-party origins -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://www.paypal.com" crossorigin>
 
     <!-- app head for bootstrap core -->
-    <script src="{% static 'js/app-head-bs.js' %}"></script>
+    <script defer src="{% static 'js/app-head-bs.js' %}"></script>
 
     <!-- include uni-core components -->
     <link rel="stylesheet" href="{% static 'css/uni-core.min.css' %}">
 
     <!-- include styles -->
     <link rel="stylesheet" href="{% static 'css/unicons.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/prettify.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
 
-    <!-- include main style -->
-    <link rel="stylesheet" href="{% static 'css/demo-four.min.css' %}">
+    <!-- include main style (lazy-loaded) -->
+    <link rel="stylesheet" href="{% static 'css/demo-four.min.css' %}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
 
-    <!-- CKEditor 5 Rich Text Editor (custom build) -->
-    <script src="{% static 'js/ckeditor.js' %}"></script>
-    <!-- PDF Export Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
     <!-- include scripts -->
-    <script src="{% static 'js/uni-core-bundle.min.js' %}"></script>
+    <script defer src="{% static 'js/uni-core-bundle.min.js' %}"></script>
 
     <!-- WebP Detection -->
     <script>

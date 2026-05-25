@@ -334,6 +334,15 @@ body {
     border-bottom: none;
 }
 
+/* Prevent CLS on article images that don't have explicit dimensions */
+.featured-image img,
+.post-card-featured img,
+.post-card-vertical img,
+.post-card-grid img,
+.related-post-img {
+    aspect-ratio: auto;
+}
+
 /* Newsletter Customization */
 .newsletter-section {
     border: 1px solid rgba(0,0,0,0.05);
