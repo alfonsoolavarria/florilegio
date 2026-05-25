@@ -27,9 +27,9 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = "False" #os.getenv('DEBUG', 'False').strip() == 'True'
+DEBUG = "False"
 
-ALLOWED_HOSTS = [os.environ.get('IP_FF'), 'localhost', '127.0.0.1','florilegiodelafe.com', 'www.florilegiodelafe.com']
+ALLOWED_HOSTS = ['florilegiodelafe.com', 'www.florilegiodelafe.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
