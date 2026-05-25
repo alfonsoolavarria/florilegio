@@ -397,6 +397,13 @@ body {
     padding-bottom: 10rem !important;
     border-bottom: none;
     overflow: visible;
+    background-image: url('../images/home.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.webp .hero-brand-section {
+    background-image: url('../images/home.webp');
 }
 
 .hero-brand-section::before {

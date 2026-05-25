@@ -69,6 +69,17 @@
     <!-- include scripts -->
     <script src="{% static 'js/uni-core-bundle.min.js' %}"></script>
 
+    <!-- WebP Detection -->
+    <script>
+        (function() {
+            var html = document.documentElement;
+            var img = new Image();
+            img.onload = function() { html.className += ' webp'; };
+            img.onerror = function() { html.className += ' no-webp'; };
+            img.src = 'data:image/webp;base64,UklGRi4AAABXRUJQVlA4TCEAAAAvAUAAEB8wAiMwAgSSNtse/cXjxyCCmrYNWPwmHRsB7wEAAAA=';
+        })();
+    </script>
+
     {% block extra_head %}{% endblock %}
 
     <script type="application/ld+json">
