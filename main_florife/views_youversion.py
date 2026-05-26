@@ -2,13 +2,10 @@ import requests
 import requests.exceptions
 import re
 import logging
-import urllib3
 from django.http import JsonResponse
 from django.conf import settings
 from django.views.decorators.http import require_GET
 import os
-
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 logger = logging.getLogger(__name__)
 
@@ -75,15 +72,11 @@ def youversion_chapter(request):
         response = requests.get(url, headers={'X-YVP-App-Key': YVP_APP_KEY}, timeout=15)
     except requests.exceptions.SSLError as e:
         logger.error(f"YouVersion SSL error: {e}", exc_info=True)
-        try:
-            response = requests.get(url, headers={'X-YVP-App-Key': YVP_APP_KEY}, timeout=15, verify=False)
-        except requests.RequestException as e2:
-            logger.error(f"YouVersion API request failed even without SSL verify: {e2}", exc_info=True)
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Hubo un problema con la información de la Biblia. Por favor, intenta más tarde.',
-                'youversion_error': True
-            }, status=503)
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Hubo un problema con la información de la Biblia. Por favor, intenta más tarde.',
+            'youversion_error': True
+        }, status=503)
     except requests.RequestException as e:
         logger.error(f"YouVersion API request failed: {e}", exc_info=True)
         return JsonResponse({

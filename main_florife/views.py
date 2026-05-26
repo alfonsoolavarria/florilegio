@@ -1,6 +1,7 @@
 import json
 import re
 import random
+import bleach
 import requests
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
@@ -11,8 +12,28 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST
+from django_ratelimit.decorators import ratelimit
 from .models import Article, Category, LibroBiblia, Essay, UserStudy
+
+BLEACH_TAGS = [
+    'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'ul', 'ol', 'li', 'blockquote', 'pre', 'code', 'hr',
+    'table', 'thead', 'tbody', 'tr', 'th', 'td',
+    'a', 'img', 'figure', 'span', 'div',
+]
+BLEACH_ATTRS = {
+    'a': ['href', 'title', 'target', 'rel'],
+    'img': ['src', 'alt', 'width', 'height'],
+    'span': ['class', 'style'],
+    'td': ['style', 'colspan', 'rowspan'],
+    'th': ['style', 'colspan', 'rowspan'],
+    'div': ['class', 'style'],
+    'table': ['style'],
+    '*': ['class', 'id', 'style'],
+}
 
 def dashboard(request):
     featured_articles = Article.objects.filter(is_featured=True, status='liberado')[:6]
@@ -194,6 +215,7 @@ def credits(request):
         'seo_description': 'Créditos y atribuciones de Florilegio de la Fe.',
     })
 
+@ratelimit(key='ip', rate='3/h', method='POST')
 def contact(request):
     sent = False
     error = None
@@ -281,13 +303,14 @@ def mis_estudios(request):
     })
 
 
+@ratelimit(key='user_or_ip', rate='60/h', method='POST')
 @login_required
 @require_POST
 def api_save_study(request):
     data = json.loads(request.body)
-    content = data.get('content', '')
-    title = data.get('title', '')
-    reference = data.get('reference', '')
+    content = bleach.clean(data.get('content', ''), tags=BLEACH_TAGS, attributes=BLEACH_ATTRS)
+    title = bleach.clean(data.get('title', ''), tags=[])
+    reference = bleach.clean(data.get('reference', ''), tags=[])
     study_id = data.get('study_id')
     
     if study_id:
@@ -329,6 +352,7 @@ def api_save_study(request):
     })
 
 
+@ratelimit(key='user_or_ip', rate='60/h', method='GET')
 @login_required
 def api_get_study(request, study_id):
     try:
@@ -679,6 +703,7 @@ def describir_morfologia_hebrea(morph):
     return ', '.join(desc_parts)
 
 
+@ratelimit(key='ip', rate='200/m', method='GET')
 def api_get_versiculo(request):
     tipo = request.GET.get('tipo', 'estudio')
     libro = request.GET.get('libro')
@@ -763,6 +788,7 @@ def api_get_versiculo(request):
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
 
+@ratelimit(key='ip', rate='5/h', method='POST')
 def register_view(request):
     next_url = request.GET.get('next') or request.POST.get('next') or '/'
     if request.method == 'POST':
@@ -777,18 +803,37 @@ def register_view(request):
             return render(request, 'registration/register.html', {'error': 'Las contraseñas no coinciden.', 'next': next_url})
         if User.objects.filter(email=email).exists():
             return render(request, 'registration/register.html', {'error': 'Ya existe un usuario con ese correo.', 'next': next_url})
-        if not re.match(r'^[^@]+@[^@]+\.com$', email):
-            return render(request, 'registration/register.html', {'error': 'Ingresa un correo válido que termine en .com', 'next': next_url})
+
+        try:
+            validate_email(email)
+        except ValidationError:
+            return render(request, 'registration/register.html', {'error': 'Ingresa un correo electrónico válido.', 'next': next_url})
+
+        username = email.split('@')[0]
+        base_username = username
+        counter = 1
+        while User.objects.filter(username=username).exists():
+            username = f"{base_username}{counter}"
+            counter += 1
+
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password1,
+            first_name=nombre
+        )
+        user.is_active = False
+        user.save()
 
         code = str(random.randint(100000, 999999))
         request.session['pending_email'] = email
-        request.session['pending_password'] = password1
-        request.session['pending_nombre'] = nombre
+        request.session['pending_user_id'] = user.id
         request.session['pending_code'] = code
         request.session['pending_next'] = next_url
 
         sent = _send_brevo_code(email, code)
         if not sent:
+            user.delete()
             api_key_set = bool(settings.BREVO_API_KEY)
             template_set = bool(settings.BREVO_TEMPLATE_ID)
             return render(request, 'registration/register.html', {
@@ -801,15 +846,15 @@ def register_view(request):
     })
 
 
+@ratelimit(key='ip', rate='10/15m', method='POST')
 def verify_email_view(request):
     if request.method == 'POST':
         entered_code = request.POST.get('code', '').strip()
         stored_code = request.session.get('pending_code')
         email = request.session.get('pending_email')
-        password = request.session.get('pending_password')
-        nombre = request.session.get('pending_nombre', '')
+        user_id = request.session.get('pending_user_id')
 
-        if not stored_code or not email:
+        if not stored_code or not email or not user_id:
             return redirect('register')
 
         if entered_code != stored_code:
@@ -818,22 +863,15 @@ def verify_email_view(request):
                 'error': 'Código incorrecto. Intenta de nuevo.'
             })
 
-        username = email.split('@')[0]
-        base_username = username
-        counter = 1
-        while User.objects.filter(username=username).exists():
-            username = f"{base_username}{counter}"
-            counter += 1
-
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password,
-            first_name=nombre
-        )
+        try:
+            user = User.objects.get(id=user_id, email=email, is_active=False)
+            user.is_active = True
+            user.save()
+        except User.DoesNotExist:
+            return redirect('register')
 
         next_url = request.session.get('pending_next', '/')
-        for key in ['pending_email', 'pending_password', 'pending_nombre', 'pending_code', 'pending_next']:
+        for key in ['pending_email', 'pending_user_id', 'pending_code', 'pending_next']:
             request.session.pop(key, None)
 
         user.backend = 'django.contrib.auth.backends.ModelBackend'
@@ -875,6 +913,7 @@ def _send_brevo_code(email, code):
         return False
 
 
+@ratelimit(key='ip', rate='10/15m', method='POST')
 def login_view(request):
     next_url = request.GET.get('next') or request.POST.get('next') or '/'
     if request.method == 'POST':
@@ -888,6 +927,7 @@ def login_view(request):
     return render(request, 'registration/login.html')
 
 
+@ratelimit(key='user_or_ip', rate='10/h', method='POST')
 @login_required
 @require_POST
 def api_paypal_activate(request):
@@ -905,6 +945,7 @@ def api_paypal_activate(request):
     return JsonResponse({'status': 'success', 'plan': plan, 'subscription_id': subscription_id})
 
 
+@ratelimit(key='user_or_ip', rate='10/h', method='POST')
 @login_required
 @require_POST
 def api_update_avatar(request):

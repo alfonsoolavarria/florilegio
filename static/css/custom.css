@@ -406,12 +406,15 @@ body {
     padding-bottom: 10rem !important;
     border-bottom: none;
     overflow: visible;
+}
+
+.hero-brand-section--home {
     background-image: url('../images/home.png');
     background-size: cover;
     background-position: center;
 }
 
-.webp .hero-brand-section {
+.webp .hero-brand-section--home {
     background-image: url('../images/home.webp');
 }
 

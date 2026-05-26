@@ -27,9 +27,14 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['florilegiodelafe.com', 'www.florilegiodelafe.com', 'localhost', '127.0.0.1']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://florilegiodelafe.com',
+    'https://www.florilegiodelafe.com',
+]
 
 
 # Application definition
@@ -60,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'main_florife.middleware.SecurityHeadersMiddleware',
 ]
 
 ROOT_URLCONF = 'florilegiofe.urls'
@@ -153,6 +159,24 @@ PAYPAL_PLAN_PREMIUM = os.environ.get('PAYPAL_PLAN_PREMIUM', '')
 PAYPAL_PLAN_PRO = os.environ.get('PAYPAL_PLAN_PRO', '')
 PAYPAL_PLAN_DONATION_MONTHLY = os.environ.get('PAYPAL_PLAN_DONATION_MONTHLY', '')
 PAYPAL_PLAN_DONATION_ANNUAL = os.environ.get('PAYPAL_PLAN_DONATION_ANNUAL', '')
+
+# Seguridad: SSL, HSTS y cookies seguras (solo en producción)
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Caché para rate limiting
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
