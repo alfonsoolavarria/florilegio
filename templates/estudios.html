@@ -5,10 +5,6 @@
 {% block og_title %}Estudio Bíblico Interlineal - Florilegio de la Fe{% endblock %}
 {% block og_description %}Estudia la Biblia en profundidad con herramientas de análisis bíblico.{% endblock %}
 
-{% block extra_js %}
-<script src="{% static 'js/ckeditor.js' %}"></script>
-{% endblock %}
-
 {% block content %}
 <style>
   /* Texto hebreo interlineal */
@@ -738,6 +734,27 @@
     }
   }
 
+  #contextTabs .context-tab.active {
+    color: #800020 !important;
+    border-bottom: 2px solid #800020 !important;
+  }
+  .dark #contextTabs .context-tab.active {
+    color: #d48c9c !important;
+    border-bottom-color: #d48c9c !important;
+  }
+  #contextTabs .context-tab:not(.active) {
+    color: #6b7280 !important;
+  }
+  #contextTabs .context-tab:not(.active):hover {
+    color: #800020 !important;
+  }
+  .dark #contextTabs .context-tab:not(.active) {
+    color: #9ca3af !important;
+  }
+  .dark #contextTabs .context-tab:not(.active):hover {
+    color: #d48c9c !important;
+  }
+
   /* ─── Transición suave para resultados de búsqueda ──────────────── */
   #interlinear-container,
   #leer-container {
@@ -1234,18 +1251,47 @@
       <div class="flex-grow-1" style="min-width: 0">
         <!-- Content: Lectura Bíblica -->
         <div id="content-leer">
-          <div class="panel p-4 bg-white dark:bg-gray-800 rounded-3 border">
-            <h4 class="h5 mb-4 border-bottom pb-2">
-              <i class="unicon-book me-2"></i> Lectura Bíblica
-            </h4>
-            <div
-              id="leer-container"
-              class="d-flex flex-wrap gap-2 align-items-start"
-              style="min-height: 200px"
-            >
-              <div class="w-100 text-center opacity-50 fst-italic">
-                Selecciona una versión, libro y capítulo en la barra lateral y
-                presiona Leer.
+          <div class="d-flex flex-column flex-lg-row gap-4 align-items-start">
+            <div class="panel p-4 bg-white dark:bg-gray-800 rounded-3 border bible-reading-panel">
+              <h4 class="h5 mb-4 border-bottom pb-2">
+                <i class="unicon-book me-2"></i> Lectura Bíblica
+              </h4>
+              <div
+                id="leer-container"
+                class="d-flex flex-wrap gap-2 align-items-start"
+                style="min-height: 200px"
+              >
+                <div class="w-100 text-center opacity-50 fst-italic">
+                  Selecciona una versión, libro y capítulo en la barra lateral y
+                  presiona Leer.
+                </div>
+              </div>
+            </div>
+            <div class="panel bg-white dark:bg-gray-800 rounded-3 border flex-grow-1 d-flex flex-column" style="position:sticky;top:80px;max-height:calc(100vh - 120px);">
+              <div class="p-4 pb-0">
+                <h4 class="h5 mb-3 border-bottom pb-2">
+                  <i class="unicon-information-circle me-2"></i> Contexto de <span id="context-book-name">Selecciona un libro</span>
+                </h4>
+                <div class="d-flex gap-1 border-bottom" id="contextTabs">
+                  <button class="context-tab px-3 py-2 active" data-tab="general" type="button" style="font-size:0.9rem;font-weight:600;border:none;background:none;border-radius:8px 8px 0 0;">General</button>
+                  <button class="context-tab px-3 py-2" data-tab="socio" type="button" style="font-size:0.9rem;font-weight:600;border:none;background:none;border-radius:8px 8px 0 0;">Socio-Político</button>
+                </div>
+              </div>
+              <div class="flex-grow-1 overflow-hidden" style="min-height:0;">
+                <div class="context-panel h-100" id="context-general">
+                  <div id="book-context-content" class="p-4 text-gray-700 dark:text-gray-300 overflow-y-auto" style="height:100%;font-size:1.5rem;line-height:1.85;">
+                    <div class="w-100 text-center opacity-50 fst-italic">
+                      Selecciona un libro en la barra lateral para ver su contexto.
+                    </div>
+                  </div>
+                </div>
+                <div class="context-panel h-100 d-none" id="context-socio">
+                  <div class="p-4 text-gray-700 dark:text-gray-300 d-flex align-items-center justify-content-center" style="height:100%;font-size:1.2rem;line-height:1.85;">
+                    <div class="w-100 text-center opacity-50 fst-italic">
+                      Próximamente.
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1316,7 +1362,7 @@
 </div>
 
 <!-- Full-width Study Editor Section -->
-<div class="bg-white dark:bg-gray-900 border-top">
+<div id="study-section" class="bg-white dark:bg-gray-900 border-top" style="display: none">
   <div class="container-fluid px-4 ps-lg-10 py-4">
     <!-- Resultados de Strong/Vine -->
     <div
@@ -1409,10 +1455,12 @@
         document.getElementById("btn-mode-leer").classList.add("active");
         document.getElementById("sidebar-leer").style.display = "block";
         document.getElementById("content-leer").style.display = "block";
+        document.getElementById("study-section").style.display = "none";
       } else {
         document.getElementById("btn-mode-estudio").classList.add("active");
         document.getElementById("sidebar-estudio").style.display = "block";
         document.getElementById("content-estudio").style.display = "block";
+        document.getElementById("study-section").style.display = "block";
         showMobileWarning();
       }
     };
@@ -2547,20 +2595,12 @@
     }
 
     window.toggleSidebar = function () {
-      const ml = document.getElementById("main-layout");
-      const catSection = document.getElementById("category-grid-section");
-      const isHidden = ml.style.display === "none" || ml.classList.contains("sidebar-hidden");
-      if (isHidden) {
-        catSection.style.display = "";
-        ml.style.display = "";
-        requestAnimationFrame(() => {
-          ml.classList.remove("sidebar-hidden");
-          ml.classList.remove("fade-out");
-        });
+      const estudioContent = document.getElementById("content-estudio");
+      if (!estudioContent) return;
+      if (estudioContent.style.display === "none") {
+        estudioContent.style.display = "block";
       } else {
-        ml.classList.add("sidebar-hidden");
-        ml.style.display = "none";
-        catSection.style.display = "none";
+        estudioContent.style.display = "none";
       }
     };
 
@@ -2575,6 +2615,89 @@
         '<div class="w-100 text-center py-5"><div class="spinner-border text-primary" role="status"></div><br><span class="opacity-50">Cargando Escrituras...</span></div>';
     }
 
+    // ─── Contexto del Libro ──────────────────────────────────────────
+    const bookContextContainer = document.getElementById("book-context-content");
+
+    function stripCite(text) {
+      return text.replace(/\[\s*cite:\s*\d+\s*\]/gi, '');
+    }
+
+    function renderValue(val) {
+      if (val === null || val === undefined) return '';
+      if (typeof val === 'string') return `<p>${stripCite(val)}</p>`;
+      if (Array.isArray(val)) {
+        if (val.length === 0) return '';
+        if (typeof val[0] === 'string') {
+          return '<ul class="vstack gap-2 ps-3">' + val.map(v => `<li>${stripCite(v)}</li>`).join('') + '</ul>';
+        }
+        return val.map(v => renderValue(v)).join('');
+      }
+      if (typeof val === 'object') {
+        return renderObject(val);
+      }
+      return String(val);
+    }
+
+    function renderObject(obj) {
+      if (!obj || Object.keys(obj).length === 0) return '';
+      let sections = '';
+      for (const [key, value] of Object.entries(obj)) {
+        const label = key
+          .replace(/_/g, ' ')
+          .replace(/\b\w/g, c => c.toUpperCase());
+        if (value === null || value === undefined) continue;
+        if (typeof value === 'string') {
+          sections += `<div class="mb-2"><p>${stripCite(value)}</p></div>`;
+        } else if (Array.isArray(value)) {
+          if (value.length === 0) continue;
+          if (typeof value[0] === 'string') {
+            sections += `<div class="mb-2"><div class="fw-bold mb-1">${label}</div><ul class="vstack gap-2 ps-3">${value.map(v => `<li>${stripCite(v)}</li>`).join('')}</ul></div>`;
+          } else {
+            sections += `<div class="mb-2"><div class="fw-bold mb-1">${label}</div>${value.map(v => renderValue(v)).join('')}</div>`;
+          }
+        } else if (typeof value === 'object') {
+          sections += `<div class="mb-2"><div class="fw-bold mb-1">${label}</div>${renderObject(value)}</div>`;
+        }
+      }
+      return sections;
+    }
+
+    function renderBookContext(container, contenido) {
+      if (!contenido || Object.keys(contenido).length === 0) {
+        container.innerHTML = '<div class="w-100 text-center opacity-50 fst-italic">No hay información de contexto disponible para este libro.</div>';
+        return;
+      }
+      const html = `<div class="vstack gap-3">${renderObject(contenido)}</div>` +
+        '<div class="mt-4 pt-3 border-top text-center" style="font-size: 0.75rem; line-height: 1.5; color: #6b7280;">' +
+        'Material exegético proporcionado por el Dr. Bob Utley a través de ' +
+        '<a href="https://www.freebiblecommentary.org" target="_blank" rel="noopener noreferrer" style="color: #800020;">www.freebiblecommentary.org</a>, ' +
+        'distribuido bajo sus términos de uso gratuito.</div>';
+      container.innerHTML = html;
+    }
+
+    let currentContextBook = null;
+
+    async function loadBookContext(libroNumero, bookName) {
+      currentContextBook = libroNumero;
+      document.getElementById("context-book-name").textContent = bookName || "Selecciona un libro";
+      if (!libroNumero) {
+        bookContextContainer.innerHTML = '<div class="w-100 text-center opacity-50 fst-italic">Selecciona un libro en la barra lateral para ver su contexto.</div>';
+        return;
+      }
+      bookContextContainer.innerHTML = '<div class="w-100 text-center py-4"><div class="spinner-border text-primary" role="status"></div><br><span class="opacity-50">Cargando contexto...</span></div>';
+      try {
+        const resp = await fetch(`/api/contexto/${libroNumero}/`);
+        const json = await resp.json();
+        if (json.status === "success") {
+          renderBookContext(bookContextContainer, json.data.contenido);
+        } else {
+          bookContextContainer.innerHTML = '<div class="w-100 text-center opacity-50 fst-italic">No hay información de contexto disponible para este libro.</div>';
+        }
+      } catch {
+        bookContextContainer.innerHTML = '<div class="w-100 text-center opacity-50 fst-italic">Error al cargar el contexto.</div>';
+      }
+    }
+
     // ─── Pestaña 1: LEER BIBLIA ────────────────────────────────────────────────
     const leerLibroSelect = document.getElementById("leer-libroSelect");
     const leerCapituloSelect = document.getElementById("leer-capituloSelect");
@@ -2586,6 +2709,8 @@
       leerCapituloSelect.innerHTML =
         '<option value="" disabled selected>---</option>';
       const libroId = this.value;
+      const bookName = this.options[this.selectedIndex]?.text;
+      document.getElementById("context-book-name").textContent = bookName || "Selecciona un libro";
       if (libroId && estructuraData[libroId]) {
         Object.keys(estructuraData[libroId])
           .map(Number)
@@ -2605,6 +2730,11 @@
       const version = leerVersionSelect.value;
       const libroId = leerLibroSelect.value;
       const capituloId = leerCapituloSelect.value;
+      const bookName = leerLibroSelect.options[leerLibroSelect.selectedIndex]?.text;
+
+      if (libroId && libroId !== currentContextBook) {
+        loadBookContext(libroId, bookName);
+      }
 
       if (!libroId || !capituloId) {
         showModalAlert(
@@ -3155,6 +3285,17 @@
     });
   });
 
+  // ─── Context tabs ──────────────────────────────────────────────────
+  document.querySelectorAll(".context-tab").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll(".context-tab").forEach(function (b) { b.classList.remove("active"); });
+      this.classList.add("active");
+      document.querySelectorAll(".context-panel").forEach(function (p) { p.classList.add("d-none"); });
+      var target = document.getElementById("context-" + this.getAttribute("data-tab"));
+      if (target) target.classList.remove("d-none");
+    });
+  });
+
   // ─── Pending save after login ──────────────────────────────────────
   if (window.USER_IS_AUTHENTICATED) {
     const pendingRaw = sessionStorage.getItem(window.PENDING_SAVE_KEY);
@@ -3198,4 +3339,5 @@
     }
   }
 </script>
+<script src="{% static 'js/ckeditor.js' %}"></script>
 {% endblock %}

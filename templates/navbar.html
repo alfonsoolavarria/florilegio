@@ -64,7 +64,7 @@
           class="uc-navbar items-center min-h-48px text-gray-900 dark:text-white"
           data-uc-navbar=" animation: uc-animation-slide-top-small; duration: 150;"
         >
-          <div class="uc-navbar-left gap-2 md:gap-3">
+          <div class="uc-navbar-left">
             <!-- Mobile Menu Toggle -->
             <div id="mobile-menu-toggle" class="d-lg-none">
               <a
@@ -102,6 +102,11 @@
               <li>
                 <a href="{% url 'essay_list' %}"
                   ><i class="icon icon-1 unicon-edit mr-1"></i> Ensayos</a
+                >
+              </li>
+              <li>
+                <a href="{% url 'madres_maestras' %}"
+                  ><i class="icon icon-1 unicon-pedestrian-family mr-1"></i> Madres</a
                 >
               </li>
               <li>
@@ -295,6 +300,14 @@
             href="{% url 'essay_list' %}"
             ><i class="icon icon-1 unicon-edit me-2 text-primary"></i>
             Ensayos</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-dark dark:text-gray-200 text-none"
+            href="{% url 'madres_maestras' %}"
+            ><i class="icon icon-1 unicon-pedestrian-family me-2 text-primary"></i>
+            Madres</a
           >
         </li>
         <li>

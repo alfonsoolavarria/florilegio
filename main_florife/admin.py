@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
+from django.db import models
 from allauth.socialaccount.models import SocialAccount
-from .models import Category, Article, Author, ApiBibleSyncStatus, Essay, UserProfile, UserStudy, LouwNidaConcord
+from .models import Category, Article, Author, ApiBibleSyncStatus, Essay, UserProfile, UserStudy, AgeCategory, MadreMaestraResource
+from .widgets import CKEditorWidget
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -11,11 +13,19 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('name', 'social_handle')
-    search_fields = ('name', 'bio')
+    list_display = ('name', 'user_email', 'social_handle')
+    search_fields = ('name', 'bio', 'user__email')
+    raw_id_fields = ('user',)
+
+    def user_email(self, obj):
+        return obj.user.email if obj.user else '—'
+    user_email.short_description = 'Usuario'
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        models.TextField: {'widget': CKEditorWidget},
+    }
     list_display = ('title', 'author', 'category', 'status', 'is_featured', 'created_at', 'meta_description_preview')
     list_filter = ('category', 'status', 'is_featured', 'created_at')
     search_fields = ('title', 'content', 'tags', 'meta_description')
@@ -41,6 +51,9 @@ class ApiBibleSyncStatusAdmin(admin.ModelAdmin):
 
 @admin.register(Essay)
 class EssayAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        models.TextField: {'widget': CKEditorWidget},
+    }
     list_display = ('title', 'author', 'category', 'status', 'is_featured', 'created_at', 'meta_description_preview')
     list_filter = ('category', 'status', 'is_featured', 'created_at')
     search_fields = ('title', 'content', 'tags', 'meta_description')
@@ -73,10 +86,27 @@ class UserStudyAdmin(admin.ModelAdmin):
     ordering = ('-updated_at',)
 
 
-@admin.register(LouwNidaConcord)
-class LouwNidaConcordAdmin(admin.ModelAdmin):
-    list_display = ('id', 'termino_griego', 'glosa_principal')
-    search_fields = ('id', 'termino_griego', 'glosa_principal', 'definicion_completa')
+@admin.register(AgeCategory)
+class AgeCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'sort_order')
+    search_fields = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
+
+
+@admin.register(MadreMaestraResource)
+class MadreMaestraResourceAdmin(admin.ModelAdmin):
+    list_display = ('title', 'age_category', 'status', 'time_minutes', 'created_at')
+    list_filter = ('age_category', 'status', 'created_at')
+    search_fields = ('title', 'content', 'summary', 'bible_passage', 'objective', 'materials')
+    prepopulated_fields = {'slug': ('title',)}
+    list_editable = ('status',)
+    ordering = ('-created_at',)
+    fieldsets = (
+        (None, {'fields': ('title', 'slug', 'age_category', 'image_url')}),
+        ('Plan de Lección', {'fields': ('bible_passage', 'key_verse', 'objective', 'materials', 'time_minutes')}),
+        ('Contenido', {'fields': ('content', 'summary', 'tags')}),
+        ('Publicación', {'fields': ('status',)}),
+    )
 
 
 admin.site.unregister(User)

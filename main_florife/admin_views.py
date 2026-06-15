@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.management import call_command
 from django.conf import settings
-from main_florife.models import VersiculoBiblia, TraduccionHebreo, StrongConcord, LouwNidaConcord
+from main_florife.models import VersiculoBiblia, TraduccionHebreo, StrongConcord
 
 VERSION_MAP = {
     'spa_r09': {'file': 'spa_r09.json', 'name': 'Reina Valera 1909'},
@@ -153,39 +153,3 @@ def admin_import_strong_concord(request):
     })
 
 
-@staff_member_required
-def admin_import_louw_nida(request):
-    filepath = os.path.join(settings.BASE_DIR, 'louw_nida.json')
-
-    if request.method == 'POST':
-        out = StringIO()
-        err = StringIO()
-        try:
-            call_command('import_louw_nida_from_json', force=True, stdout=out, stderr=err)
-            result = out.getvalue()
-            if err.getvalue():
-                result += '\n' + err.getvalue()
-            messages.success(request, result)
-        except Exception as e:
-            messages.error(request, f'Error: {e}')
-        return redirect('admin_import_louw_nida')
-
-    file_exists = os.path.exists(filepath)
-    file_size = os.path.getsize(filepath) if file_exists else 0
-
-    json_count = 0
-    if file_exists:
-        with open(filepath, encoding='utf-8') as f:
-            data = json.load(f)
-        key = list(data.keys())[0]
-        json_count = len(data[key])
-
-    imported_count = LouwNidaConcord.objects.count()
-
-    return render(request, 'admin/import_louw_nida.html', {
-        'file_exists': file_exists,
-        'file_size': file_size,
-        'json_count': json_count,
-        'imported_count': imported_count,
-        'title': 'Importar Louw-Nida (louw_nida_concord)',
-    })

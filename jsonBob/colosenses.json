@@ -1,0 +1,329 @@
+{
+  "libro": "Colosenses",
+  "contenido": {
+    "introduccion": "Introducción a los Colosenses",
+    "declaraciones_iniciales": [
+      "A. Gracias a Dios por los herejes en Colosas; porque por ellos Pablo escribió esta carta con tanto poder. Recuerda que para entender el libro, tenemos que relacionarlo a su estado histórico. Las cartas de Pablo son llamadas “documentos ocasionales” porque el estaba dirigiendo problemas locales con la verdad universal del evangelio. La herejía en Colosas era una mezcla inusual de filosofía Griega (gnosticísmo) y Judaísmo.",
+      "B. El Señorío cósmico de Jesús es el tema central (vea 1:15-17). ¡La Cristología de este libro no se puede sobre pasar! Colosenses forman el contorno básico para Efesios. Pablo sabia que la herejía se esparciría por Asia menor. Colosenses ataca las enseñanzas falsas mientras que Efesios desarrolla el tema central para preparar a las demás iglesias de la herejía que esta por venir. El énfasis de Colosenses es Cristológico mientras que el énfasis de Efesios es la unidad en todas las cosas en Cristo, quien es Señor de todo.",
+      "C. Pablo refuta el legalismo, ambos Judíos y Griegos, en unos términos muy poderosos (2:6-23)."
+    ],
+    "la_ciudad": {
+      "A_origen": "Originalmente la ciudad de Colosas era parte del reino de Pérgamo con Frigia. En 133 A.C. fue dado al senado de Roma.",
+      "B_centro_comercial": {
+        "descripcion": "Colosas era un gran centro comercial antes de los tiempos de Pablo (vea Historiae de Heródoto VII:30 y Anábasis de Jenofonte 1:2:6).",
+        "detalles": [
+          "1. El valle en el cual Colosas estaba localizada era el líder en producción de lana en el mundo antiguo Mediterráneo, especialmente lana negra, lana teñida, púrpura y escarlata. El suelo volcánico producía terreno especial para la pastura y la cretáceo, el agua ayudaba al proceso de teñido (Estrabón, 13:4:14).",
+          "2. Actividad volcánica (Estrabón, 12:8:6) causó que la ciudad fuera destruida varias veces en su historia; la ultima ves fue en 60 D.C. (Tácito) o 64 D.C. (Eusebio de Cesara)."
+        ]
+      },
+      "C_ubicacion": "Colosas estaba localizada en el Río Lycus, un dependiente del Río Maeadro el cual corría por Efeso 100 millas costa a bajo. En este valle había varias ciudades pequeñas localizadas, en donde Epafras había comenzado iglesias: Hierápolis (6 millas de distancia) y Laodicea (10 millas de distancia) (vea 1:2; 2:1; 4:13, 15-16) y Colosas.",
+      "D_decadencia": "Después de que los Romanos edificaran la mayor autopista dirigiéndose del este al oeste, Vía Egnatia, la cual evitaba a Colosas, se menguó a casi nada. Esto es similar a lo que le paso a Petra en la área Trans-Jordan de Palestina.",
+      "E_poblacion": "La ciudad estaba poblada por solo algunas personas Gentiles (Firigianos y Griegos), pero había un gran numero de Judíos también. Josephus nos dice que Antíoco III (223-118 A.C.) transportó 2,000 Judíos de Babilonia a Colosas. Los récords enseñan que para 76 D.C., 11,000 varones Judíos vivían en el distrito del cual Colosas era la capital."
+    },
+    "autor": {
+      "remitentes": "Hay dos personas que envían la carta, Pablo y Timoteo (vea Col. 1:1). Sin embargo, el autor principal es Pablo; Timoteo estaba enviando su saludo como ayudante de Pablo y posiblemente su escritor (amanuenses).",
+      "evidencia_literatura_antigua": {
+        "descripcion": "La literatura antigua acerca de que si Pablo el Apóstol era el autor es anónima ;",
+        "puntos": [
+          "1. Marción (quien vino a Roma en 140’s D. C. ), el hereje anti-Antiguo Testamento, lo incluyó en su corpus paulinos",
+          "2. Fue enlistado con las cartas de Pablo en el Canon Muratoriano (una lista de libros canónicos de Roma alrededor de 200 D.C. )",
+          "3. Varios de los padres de la iglesia apuntan e identifican a Pablo como el autor"
+        ],
+        "padres_iglesia": [
+          "a. Ireneo (escribió 177-190 D.C. )",
+          "b. Clemente de Alejandría (vivió 160-216 D.C. )"
+        ]
+      }
+    },
+    "la_relacion_literaria_entre_colosenses_y_efesios": {
+      "A_relacion_historica": {
+        "descripcion": "La relación histórica entre estas dos cartas de la prisión que Pablo escribió siguen este resumen",
+        "punto_1": {
+          "enunciado": "1. Epafras (Col. 1:7: 4:12; Filemón 23) se convirtió durante la campaña de Pablo en Efesio (Hechos19 ).",
+          "detalles": [
+            "a. Epafras tomo la nueva fe que encontró y la llevó para la área de su hogar, el valle del Rio Lycus (vea 4:12).",
+            "b. Epafras comenzó tres iglesias: Hierápolis, Laodicea (vea 4:13), y Colosas.",
+            "c. Epafras le pidió un consejo a Pablo, de cómo combatir la mezcla del Cristianismo, Judaísmo, y pensamiento Griego, el cual estaba siendo enseñado por los herejes. Pablo estaba prisionero (vea 4:3,18) en Roma (en los comienzos de los 60’s)."
+          ]
+        },
+        "punto_2": {
+          "enunciado": "2. Falsos maestros recomendaban la metafísica Griega",
+          "detalles": [
+            "a. El Espíritu y la materia eran co-eternal",
+            "b. El Espíritu (Dios) era bueno",
+            "c. La Materia (la creación) era mala",
+            "d. Una serie de aeons (niveles angelicales), especialmente en escritos de los Valentiniano, existía entre un Dios bueno que estaba en el nivel mas alto y un dios de nivel mas bajo que formaba la materia",
+            "e. La salvación estaba basada en el conocimiento de una clave secreta la cual ayudaba a las personas a progresar a través de los niveles angelicales (aeons) al Dios bueno del nivel mas alto"
+          ]
+        }
+      },
+      "B_relacion_literaria": [
+        "1. Pablo escuchó de las herejías en estas iglesias las cuales el nunca había visitado personalmente (vea 1:7-8).",
+        "2. Pablo escribió cartas que pegaban duro en cortas oraciones emocionales, dirigidas hacia los falsos maestros. El tema central era el señorío cósmico de Jesús. Esto es conocido como las cartas de Pablo a los Colosenses.",
+        "3. Aparentemente, después de que escribió Colosenses, con tiempo en sus manos en la prisión, él desarrolló el tema en la carta que nosotros conocemos como Efesios. El sabía que este intento de unir el pensamiento Griego y el evangelio con el propósito de que el Cristianismo fuera “relevante” a la cultura Griega se derramaría a todas las nuevas iglesias de Asia Menor. Efesios es caracterizada por sus oraciones largas y por desarrollar temas teológicos (1:3-14, 15-23; 2:1-10, 14-18, 19-22; 3:1-12, 14-19; 4:11-16; 6:13-20). Toma Colosenses como punto de inicio y saca sus implicaciones teológicas. Su tema central es la unidad de todas las cosas en Cristo, lo cual es contrario al aeons (niveles angelicales) del principio gnosticismo."
+      ],
+      "C_literatura_y_estructura_teologica_relacionada": {
+        "1_estructura_basica": [
+          "a. Tienen aperturas muy similares",
+          "b. Cada una tiene secciones doctrinales que tratan primordialmente con Cristo",
+          "c. Cada una tiene secciones practicas las cuales enfatizan un estilo de vida Cristino usando las mismas categorías, términos, y frases",
+          "d. Virtualmente tienen un fin de versos idénticos. Comparten 29 palabras consecutivas en Griego; Colosenses solo agrega dos palabras adicionales. ( “fiel ministro y consiervo en el Señor”) Compara Ef. 6:21-22 con Col. 4:7-9."
+        ],
+        "2_palabras_o_frases_cortas_exactas": [
+          "Ef. 1:1c y Col. 1:2a “fieles”",
+          "Ef. 1:4 y Col. 1:22 “santos y sin mancha”",
+          "Ef. 1:7y Col. 1:14 “redención…perdón”",
+          "Ef. 1:10 y Col. 1:20 “todas las cosas…cielo…tierra”",
+          "Ef. 1:15 y Col. 1:3-4 “oído…amor para con todos los santos”",
+          "Ef. 1:18 y Col. 1:27 “las riquezas de la gloria”",
+          "Ef. 1:27 y Col. 1:18 “cabeza…iglesia”",
+          "Ef. 2:1 y Col. 1:13 “estabais muertos”",
+          "Ef. 2:16 y Col. 1:20 “reconciliar…cruz”",
+          "Ef. 3:2 y Col. 1:25 “administración”",
+          "Ef. 3:3 y Col. 1:26,27 “misterio”",
+          "Ef. 4:3 y Col. 3:14 “unity”",
+          "Ef. 4:15 y Col. 2:19 “cabeza” y “crezcamos”",
+          "Ef. 4:24 y Col. 3:10, 12, 14 “vestíos…”",
+          "Ef. 4:31 y Col. 3:8 “enojo” “ira” “maledicencia” “malicia”",
+          "Ef. 5:3 y Col. 3:5 “fornicación” “inmundicia” “avaricia”",
+          "Ef. 5:5 y Col. 3:5 “idolatra” (avaricia)",
+          "Ef. 5:6 y Col. 3:6 “ira de Dios”",
+          "Ef. 5:16 y Col. 4:5 “aprovechando bien el tiempo”"
+        ],
+        "3_frases_u_oraciones_exactas": [
+          "Ef. 1:1a y Col. 1:1a",
+          "Ef. 1:1b y Col. 1:2a",
+          "Ef. 1:2 a y Col. 1:2b",
+          "Ef. 1:13 y Col. 1:5",
+          "Ef. 2:1 y Col. 2:13",
+          "Ef. 2:5b y Col. 2:13c",
+          "Ef. 4:1b y Col. 1:10a",
+          "Ef. 6:21,22 y Col. 4:7-9 (29 palabras consecutivas excepto por “kai syndoulos” en Colosenses)"
+        ],
+        "4_frases_u_oraciones_similares": [
+          "Ef. 1:21 y Col. 1:16",
+          "Ef. 2:1 y Col. 1:13",
+          "Ef. 2:16 y Col. 1:20",
+          "Ef. 3:7a y Col. 1:23d, 25a",
+          "Ef. 3:8 y Col. 1:27",
+          "Ef. 4:2 y Col. 3:12",
+          "Ef. 4:29 y Col. 3:8; 4:6",
+          "Ef. 5:15 y Col. 4:5",
+          "Ef. 5:19, 20 y Col. 3:16"
+        ],
+        "5_conceptos_sinonimos_teologicos": [
+          "Ef. 1:3 y Col. 1:3 una oración de agradecimiento",
+          "Ef. 2:1, 12 y Col. 1:21 aliento de Dios",
+          "Ef. 2:15 y Col. 2:14 hostilidad de la Ley",
+          "Ef. 4:1 y Col. 1:10 caminar digno",
+          "Ef. 4:15 y Col. 2:19 el cuerpo de Cristo creciendo a la madures a través de la Cabeza",
+          "Ef. 4:19 y Col. 3:5 impureza sexual",
+          "Ef. 4:22, 31 y Col. 3:8 pecados “abandonen”",
+          "Ef. 4:32 y Col. 3:12-13 Cristianos benignos unos con otros",
+          "Ef. 5:4 y Col. 3:8 el habla Cristiana",
+          "Ef. 5:18 y Col. 3:16 llenos del Espíritu=palabra de Cristo",
+          "Ef. 5:20 y Col. 3:17 agradecimiento a Dios par todo",
+          "Ef. 5:22 y Col. 3:18 esposas estar sujetas a vuestros maridos",
+          "Ef. 5:25 y Col. 3:19 maridos amen a vuestras esposas",
+          "Ef. 6:1 y Col. 3:20 hijos obedezcan a vuestros padres",
+          "Ef. 6:4 y Col. 3:21 padres no provoquen a vuestros hijos",
+          "Ef. 6:5 y Col. 3:22 esclavos obedezcan a vuestros amos",
+          "Ef. 6:9 y Col. 4:1 amos y esclavos",
+          "Ef. 6:18 y Col. 4:2-4 la petición de Pablo por oración"
+        ],
+        "6_terminos_y_frases_exclusivas_colosenses_y_efesios": {
+          "a_plenitud": [
+            "Ef. 1:23 “la plenitud de Aquel que todo lo llena en todo”",
+            "Ef. 3:19 “para que seáis llenos de toda la plenitud de Dios”",
+            "Ef. 4:13 “la plenitud de Cristo”",
+            "Col. 1:19 “en Él habitase toda plenitud”",
+            "Col. 2:9 “porque en Él habita corporalmente toda la plenitud de la Deidad”"
+          ],
+          "b_cristo_como_cabeza": "Ef. 4:15; 5:23 y Col. 1:18; 2:19",
+          "c_alejados": "Ef. 2:12; 4:16 y Col. 1:21",
+          "d_aprovechando_el_tiempo": "Ef. 5:16 y Col. 4:5",
+          "e_arraigados": "Ef. 3:17 y Col. 1:5",
+          "f_palabra_de_la_verdad": "Ef. 1:13 y Col. 1:5",
+          "g_tolerantes": "Ef. 4:2 y Col. 3:13",
+          "h_frases_inusuales": "Ef. 4:16 y Col. 2:19"
+        }
+      },
+      "D_sumario": [
+        "1. Mas de un tercio de las palabras en Colosenses están también en Efesios. Se ha estimado que 75 de los 155 versículos en Efesios hacen paralelo con Colosenses. Ambas afirman que Pablo es el autor mientras él estaba en la prisión.",
+        "2. Ambas fueron entregados por el amigo de Pablo Tíquico.",
+        "3. Ambas fueron mandadas a la misma área (Asia Menor).",
+        "4. Ambas trataban el mismo tópico Cristológico.",
+        "5. Ambas enfatizaban a Cristo como la Cabeza de la iglesia.",
+        "6. Ambas alentaban el diario vivir del Cristiano."
+      ],
+      "E_puntos_mayores_de_desigualdad": [
+        "1. La iglesia siempre es local en Colosenses pero universal en Efesios. Esto puede ser por la naturaleza circular de Efesios.",
+        "2. La Herejía, un tema de gran preeminencia en Colosenses, no se encuentra en Efesios. Sin embargo, ambas cartas usan términos de características gnósticas (“sabiduría,” “conocimiento,” “llenura,” “misterio,” “principado, poderes” y “mayordomía”).",
+        "3. La Segunda Venida de Jesucristo se menciona inmediatamente en Colosenses pero en Efesios es dilatada. La iglesia era, y es llamada a servir en un mundo caído (2:7; 3:21; 4:13).",
+        "4. Varios de los términos que son caracterizados Paulinos son usados diferente. Un ejemplo es el termino “misterio.” En Colosenses el misterio es Cristo (Col. 1:26-27; 2:2; 4:3), pero en Efesios (1:9; 5:32) es el plan de Dios que previamente esta oculto, pero ahora revelado para la unidad entre Gentiles y Judíos.",
+        "5. Efesios contiene varias alusiones al Antiguo Testamento (1:22—Sal. 8; 2:17—Isa. 57:19) (2:20—Sal. 118:22) (4:8—Sal. 68:18) (4:26—Sal. 4:4) (5:15—Isa. 26:19, 51:17, 52:1, 60:1) (5:3—Gen. 3:24) (6:2—3-Exod. 20:12) (6:14—Isa. 11:5, 59:17) (6:15—Isa. 52:7) pero Colosenses solamente contiene una o dos, 2:3—Isa. 11:2, y posiblemente 2:22—Isa. 29:13."
+      ],
+      "F_conceptos_unicos": [
+        "1. La bendición de gracia Trinitaria, Ef. 1:3-14",
+        "2. Los pasajes que mencionan la gracia, Ef. 2:1-10",
+        "3. El significado de Judíos y Gentiles en un nuevo cuerpo, Ef. 2:11-3:13",
+        "4. La unidad y los dones del cuerpo de Cristo, Ef. 4:1-16",
+        "5. “Cristo y la iglesia” como el patrón para “marido y esposa,” Ef. 5:22-33",
+        "6. Los pasajes que mencionan la guerra espiritual, Ef. 6:10-18",
+        "7. Los pasajes Cristológicos, Col. 1:13-18",
+        "8. Rituales religiosos humanos y reglas, Col. 2:16-23",
+        "9. El tema del significado cósmico en Cristo en Colosenses oponiéndose al tema de la unidad de todas las cosas en Cristo en Efesios."
+      ],
+      "G_conclusion": "En conclusión, es preferible seguir a A.T. Robertson y a F.F. Bruce al acertar que Pablo escribió ambas cartas en cierta proximidad y desarrolló el pensamiento de Colosenses in lo que es la base principal de su presentación de la verdad, Efesios."
+    },
+    "fecha": {
+      "A_encarcelamiento": "La fecha de Colosenses esta vinculada a uno de los encarcelamientos de Pablo (Efeso, Filipo, Cesarea, o Roma). El encarcelamiento en Roma es el que mejor queda con las verdades encontradas en el libro de los Hechos.",
+      "B_periodo": "Una vez cuando se asume que Roma era el lugar de encarcelamiento, surge la pregunta--¿en cual tiempo? El libro del los Hechos registra que Pablo fue encarcelado al comienzo de los 60’s. Sin embargo, él fue puesto en libertad y escribió las cartas Pastorales (I y II de Timoteo y Tito) y fue después encarcelado y asesinado antes de Junio 9, 68 D.C. (la fecha del suicidio de Nero), probablemente en 67 D.C.",
+      "C_conjetura": "La mejor conjetura acerca de cuando se escribió Colosenses (Efesios y Filemón) es en el primer encarcelamiento de Pablo, al comienzo de los 60’s. (Filipenses fue la ultima de la carta de las prisiones, probablemente escrita a mitad de los 60’s.)",
+      "D_mensajeros": "Tíquico junto con Onésimo, probablemente llevaron las cartas de los Colosenses, Efesios, y Filemón a Asia Menor. Después, posiblemente muchos años después, recuperado de su enfermedad física, Epafrodito llevó consigo a su iglesia local la carta a los Filipenses.",
+      "E_cronologia_viajes": "Los escritos cronológicos de Pablo posiblemente siguen a F.F. Bruce y a Murry Harris con un poco de adaptaciones menores.",
+      "tabla_cronologica": [
+        {
+          "numero": 1,
+          "libro": "Gálatas",
+          "fecha": "48",
+          "lugar_escritura": "Siria Antioquia",
+          "relacion_hechos": "14:28; 15:2"
+        },
+        {
+          "numero": 2,
+          "libro": "I Tesalonicenses",
+          "fecha": "50",
+          "lugar_escritura": "Corinto",
+          "relacion_hechos": "18:5"
+        },
+        {
+          "numero": 3,
+          "libro": "II Tesalonicenses",
+          "fecha": "50",
+          "lugar_escritura": "Corinto",
+          "relacion_hechos": ""
+        },
+        {
+          "numero": 4,
+          "libro": "I Corintios",
+          "fecha": "55",
+          "lugar_escritura": "Efeso",
+          "relacion_hechos": "19:20"
+        },
+        {
+          "numero": 5,
+          "libro": "II Corintios",
+          "fecha": "56",
+          "lugar_escritura": "Macedonia",
+          "relacion_hechos": "20:2"
+        },
+        {
+          "numero": 6,
+          "libro": "Romanos",
+          "fecha": "57",
+          "lugar_escritura": "Corinto",
+          "relacion_hechos": "20:3"
+        },
+        {
+          "seccion": "7.-10. Cartas de las prisiones",
+          "registros": [
+            {
+              "libro": "Colosenses",
+              "fecha": "principios 60’s",
+              "lugar_escritura": "Roma",
+              "relacion_hechos": ""
+            },
+            {
+              "libro": "Efesios",
+              "fecha": "principios 60’s",
+              "lugar_escritura": "Roma",
+              "relacion_hechos": ""
+            },
+            {
+              "libro": "Filemón",
+              "fecha": "principios 60’s",
+              "lugar_escritura": "Roma",
+              "relacion_hechos": ""
+            },
+            {
+              "libro": "Filipenses",
+              "fecha": "Fines 62-63",
+              "lugar_escritura": "Roma",
+              "relacion_hechos": "28:30-31"
+            }
+          ]
+        },
+        {
+          "seccion": "11.-13. Cuarto Viaje Misionero",
+          "registros": [
+            {
+              "libro": "I Timoteo",
+              "fecha": "63 (o después, pero antes de 68)",
+              "lugar_escritura": "Macedonia",
+              "relacion_hechos": ""
+            },
+            {
+              "libro": "Tito",
+              "fecha": "63 (o después, pero antes de 68)",
+              "lugar_escritura": "Efeso (?)",
+              "relacion_hechos": ""
+            },
+            {
+              "libro": "II Timoteo",
+              "fecha": "64 D.C. 68",
+              "lugar_escritura": "Roma",
+              "relacion_hechos": ""
+            }
+          ]
+        }
+      ]
+    },
+    "destinatarios_y_ocasion_de_la_carta": {
+      "A_origen_iglesia": "Aparentemente la iglesia fue comenzada por Epafras (vea 1:7, 8; 2:1; 4:12-13), quien probablemente fue convertido por Pablo en Éfeso (vea Col. 1:7-8 y compare con 2:1). En la iglesia la mayoría eran Gentiles (vea 1:21; 3:7). Epafras fue a Pablo en la prisión a reportar un problema con falsos maestros los cuales enseñaban una mezcla de Cristianismo con filosofía Griega llamada gnosticísmo (2:8) y legalísmo Judío (vea elementos Judíos, 2:11, 16, 17: 3:11; adoración de ángeles, 1:16; 2:15, 18 y ascetismo 2:20-23). Había una gran comunidad Judía en Colosas el cual se habían convertido extremadamente Helenísticos. La esencia del problema giraba alrededor del significado de la persona y trabajos de Cristo. Los gnósticos negaban que Jesús era totalmente hombre pero afirmaban que era totalmente divino por su eterna manera de pensar tan antagónicamente dualista entre la materia y el espíritu. Ellos afirmaban Su Deidad pero negaban Su humanidad. También negaban Su preeminencia mediadora. Para ellos existían many niveles de ángeles (aeons) entre un buen dios de nivel mas alto y la humanidad; Jesús, aunque el mas alto, era tan solo uno de esos gods. Se ocupaban a ser una elite intelectual (vea 3:11, 14, 16, 17) que enfatizaban un conocimiento secreto, especial y exclusivo (vea 2:15, 18, 19) como el camino hacía Dios en ves del sacrifico vicario; como propiciación de Jesús y la respuesta de la humanidad que es por media de la fe a su oferta gratis del perdón.",
+      "B_enfasis_libro": [
+        "1. A Cristo como persona única y su trabajo completo de la salvación .",
+        "2. Su posesión cósmica, reinado y significado de Jesús de Nazaret-Su nacimiento, Su enseñanzas, Su vida, Su muerte, Su resurrección y Su ascensión! El es Señor de todo!"
+      ]
+    },
+    "proposito": "El propósito de Pablo era refutar la herejía en Colosas. Para poder cumplir con esta meta, él exalted a Cristo como la misma imagen de Dios (1:5), el Creador (1:16), el sustentador de todas las cosas que siempre a existido (1:17), la cabeza de la iglesia (1:18), el primero en resucitar (1:18), deidad completa en forma de cuerpo (1:19, 2:9) y el que reconcilia a la humanidad con Dios (1:20-22). Así que, Cristo era adecuadamente completo. Los creyentes “han sido completos en Cristo” (2:10). La herejía en Colosas era completamente inadecuada teológicamente para probar salvación espiritual. Era una filosofía sin ninguna profundidad y que engañaba (2:8), la cual no tenia ninguna habilidad para restringir la naturaleza antigua pecaminosa (2:23). Un tema permanente en Colosenses es que Cristo es completamente suficiente en contraste con el vacío de la filosofía de humanos. Esta característica es expresada en la Señoría cósmica de Jesús. El es dueño, creador y soberano sobre todas las cosas, visibles e invisibles (vea 1:15-18).",
+    "bosquejo": {
+      "A_comienzos_tradicionales_paulinos": [
+        "1. Identificación con el remitente, 1:1",
+        "2. Identificación con los emisarios, 1:2a",
+        "3. Saludos, 1:2b"
+      ],
+      "B_la_supremacia_de_cristo": [
+        "1. Fe en Cristo, 1:3-8",
+        "2. La Preeminencia de Cristo, 1:9-18",
+        "3. Reconciliación en Cristo, 1:19-23",
+        "4. El servir con sacrificio para Cristo , 1:24-29",
+        "5. No una filosofía, sino Cristo, 2:1-10",
+        "6. No legalismo, sino Cristo, 2:11-23",
+        "7. No carnalidad, sino Cristo, 3:1-11",
+        "8. Puesto en Cristo, 3:12-17",
+        "9. Dejar que Cristo tome control del hogar, 3:19-4:1",
+        "10. Dejar que Cristo tome control del diario vivir, 4:2-6"
+      ],
+      "C_mensaje_pablo": "4:7-9",
+      "D_amigos_pablo": "Los amigos de Pablo mandaron sus saludos, 4:10-14",
+      "E_saludos_pablo": "Pablo manda saludos, 4:15-17",
+      "F_finalizacion": "Pablo finaliza con su propia mano, 4:18"
+    },
+    "gnosticismo": {
+      "A_origen_conocimiento": "La mayor parte de lo que conocemos acerca de esta herejía es a través de escritos agnósticos del segundo siglo. Sin embargo, las ideas nacientes estaban presentes en el primer siglo (Manuscritos del Mar Muerto).",
+      "B_problema_colosas": "El problema en Colosas era un Cristianismo híbrido, gnosticismo naciente, y Judaísmo legalista.",
+      "C_principios_segundo_siglo": [
+        "1. La materia y el espíritu eran co-eternales (un dualismo antológico). La materia es maligna, el espíritu es bueno. Dios, quien es espíritu no puede ser directamente implicado con la materia maligna creada.",
+        "2. Existen emanaciones (aeons o niveles angelicales) entre Dios y la materia. El ultimo o el mas bajo era YHWH del Antiguo Testamento el cual formo el universo (kosmos).",
+        "3. Jesús era un Emanación así como YHWH pero mas alto en la escala, mas cercano al Dios verdadero. Muchos lo ponen como el mas alto pero todavía un poco menos que Dios y ciertamente no deidad encarnada (vea Juan 1:14). Como la materia es maligna, Jesús no pudo haber tenido un cuerpo humano y permanecer siendo divino. El parecía un humano, pero en verdad era espíritu (vea I Juan 1:1-3; 4:1-6).",
+        "4. La salvación era obtenida por tener fe en Jesús mas un conocimiento especial, el cual era solamente conocido por ciertas personas del grupo. Conocimiento (una contraseña) era necesaria para poder pasar a través de las esferas celestiales. El legalismo Judío de igual manera era necesario para poder llegar a Dios."
+      ],
+      "D_sistemas_eticos_opuestos": [
+        "1. Para algunos, un estilo de vida no se relacionaba en ninguna manera con la salvación. Para ellos, la salvación y el ser espiritual estaban encapsulados en el conocimiento secreto (una contraseña) a través de las esferas angelicales (aeons).",
+        "2. Para otros, un estilo de vida era crucial para obtener la salvación. En este libro, los falsos maestros enfatizaban un estilo de vida ascética como evidencia de una espiritualidad verdadera."
+      ],
+      "E_material_referencia": "Algún material bueno como referencia: The Gnostic Religion por Hans Jonas, publicado por Becon Press. The Gnostic Scriptures por Bentley Layton, Anchor Bible Reference Library. The Dictionary of New Testament Background, IVP, “Gnosticism” pp. 414-417"
+    }
+  }
+}

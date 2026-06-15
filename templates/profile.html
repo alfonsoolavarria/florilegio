@@ -75,6 +75,15 @@
                         </div>
                     </div>
 
+                    {% if profile_user.profile.is_author %}
+                    <hr class="my-4">
+                    <div class="d-grid">
+                        <a href="{% url 'author_dashboard' %}" class="btn btn-outline-primary">
+                            Panel de Autor
+                        </a>
+                    </div>
+                    {% endif %}
+
                     <hr class="my-4">
 
                     <a href="{% url 'logout' %}" class="btn btn-outline-danger">Cerrar Sesión</a>

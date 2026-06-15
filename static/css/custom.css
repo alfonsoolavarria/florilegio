@@ -139,16 +139,38 @@ body {
     border-bottom: 2px solid rgba(255,255,255,0.1);
 }
 
-/* Ensure sticky logo is visible when sticky */
+/* Sticky navbar: logo, items on one line, no extra gap */
+.uc-navbar .uc-navbar-left {
+    gap: 0 !important;
+}
+.sticky-logo {
+    display: none;
+}
+.uc-navbar-sticky .uc-top-navbar .uc-navbar-left {
+    flex-wrap: nowrap !important;
+}
 .uc-navbar-sticky .uc-top-navbar .sticky-logo {
     display: block !important;
+    width: auto !important;
+    margin-right: 6px !important;
     animation: fadeIn 0.3s ease-in-out;
-    margin-right: 15px;
 }
-
 @keyframes fadeIn {
     from { opacity: 0; transform: translateX(-10px); }
     to { opacity: 1; transform: translateX(0); }
+}
+.uc-navbar-sticky .uc-top-navbar .uc-navbar-nav {
+    flex-wrap: nowrap !important;
+    gap: 0.15rem !important;
+}
+.uc-navbar-sticky .uc-top-navbar .uc-navbar-nav a {
+    font-size: 0.95rem !important;
+    white-space: nowrap !important;
+    padding: 0.25rem 0.35rem !important;
+}
+.uc-navbar-sticky .uc-top-navbar .uc-navbar-nav .icon-1 {
+    font-size: 0.85rem !important;
+    margin-right: 0.15rem !important;
 }
 
 /* Article Grid Layout */
@@ -996,4 +1018,19 @@ body {
 
 .close-menu-btn:hover {
     transform: rotate(90deg);
+}
+
+/* Estudios page: sidebar wider, content narrower for better reading */
+.estudio-sidebar {
+    flex: 0 0 340px;
+}
+
+@media (max-width: 991.98px) {
+    .estudio-sidebar {
+        flex: 0 0 100%;
+    }
+}
+
+.bible-reading-panel {
+    flex: 0 0 720px;
 }

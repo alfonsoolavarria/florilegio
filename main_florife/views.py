@@ -16,7 +16,7 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST
 from django_ratelimit.decorators import ratelimit
-from .models import Article, Category, LibroBiblia, Essay, UserStudy
+from .models import Article, Category, ContextoLibro, LibroBiblia, Essay, UserStudy
 
 BLEACH_TAGS = [
     'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
@@ -283,6 +283,31 @@ def planes(request):
     })
 
 
+def madres_maestras(request):
+    from .models import AgeCategory, MadreMaestraResource
+    age_categories = AgeCategory.objects.all()
+    resources = MadreMaestraResource.objects.filter(status='liberado').order_by('-created_at')
+    grouped = {}
+    for cat in age_categories:
+        grouped[cat] = [r for r in resources if r.age_category_id == cat.id]
+    return render(request, 'madres_maestras.html', {
+        'age_categories': age_categories,
+        'grouped': grouped,
+        'seo_title': 'MM Madres Maestras - Florilegio de la Fe',
+        'seo_description': 'Recursos y enseñanzas para madres maestras organizados por categorías de edad.',
+    })
+
+
+def madre_maestra_detail(request, slug):
+    from .models import MadreMaestraResource
+    resource = get_object_or_404(MadreMaestraResource, slug=slug, status='liberado')
+    return render(request, 'madre_maestra_detail.html', {
+        'resource': resource,
+        'seo_title': f'{resource.title} - MM Madres Maestras',
+        'seo_description': resource.summary or resource.objective or resource.title,
+    })
+
+
 def estudios(request):
     libros_ot = LibroBiblia.objects.filter(testamento="Antiguo Testamento").order_by('numero')
     libros_nt = LibroBiblia.objects.filter(testamento="Nuevo Testamento").order_by('numero')
@@ -387,13 +412,11 @@ def palabra_detalle(request, idioma, pk):
         StrongConcord, VineConcord,
         PalabraBiblia, TraduccionLiteral, Morfologia,
         PalabraHebreo, TraduccionHebreo, MorfologiaHebreo,
-        LouwNidaConcord
     )
 
     word_data = {}
     strong_def = None
     vine_defs = []
-    louw_nida_def = None
     strong_num = None
 
     try:
@@ -441,10 +464,6 @@ def palabra_detalle(request, idioma, pk):
         if num_part:
             vine_defs = list(VineConcord.objects.filter(strong_numbers__contains=[int(num_part)]))
 
-    if idioma == 'griego' and word_data.get('low_nida'):
-        ln_id = word_data['low_nida'].removeprefix('LN-').strip()
-        louw_nida_def = LouwNidaConcord.objects.filter(id=ln_id).first()
-
     word_data['strong_num'] = strong_num
 
     return render(request, 'palabra_detalle.html', {
@@ -452,7 +471,6 @@ def palabra_detalle(request, idioma, pk):
         'word': word_data,
         'strong_def': strong_def,
         'vine_defs': vine_defs,
-        'louw_nida_def': louw_nida_def,
     })
 
 
@@ -701,6 +719,20 @@ def describir_morfologia_hebrea(morph):
                 desc_parts.append(part)
 
     return ', '.join(desc_parts)
+
+
+@ratelimit(key='ip', rate='200/m', method='GET')
+def api_get_contexto_libro(request, libro_numero):
+    try:
+        contexto = ContextoLibro.objects.get(libro__numero=libro_numero)
+        return JsonResponse({
+            'status': 'success',
+            'data': {
+                'contenido': contexto.get_contenido(),
+            }
+        })
+    except ContextoLibro.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'No hay contexto disponible para este libro.'}, status=404)
 
 
 @ratelimit(key='ip', rate='200/m', method='GET')

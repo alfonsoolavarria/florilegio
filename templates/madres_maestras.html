@@ -1,0 +1,373 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ seo_title }}{% endblock %}
+{% block meta_description %}{{ seo_description }}{% endblock %}
+{% block og_title %}{{ seo_title }}{% endblock %}
+{% block og_description %}{{ seo_description }}{% endblock %}
+
+{% block content %}
+<style>
+  .mm-bg-cream { background-color: #fef7f0; }
+  .dark .mm-bg-cream { background-color: #1c1518; }
+  .mm-card { transition: box-shadow 0.2s ease, transform 0.2s ease; }
+  .mm-card:hover { box-shadow: 0 8px 24px rgba(212, 137, 158, 0.15); transform: translateY(-2px); }
+  .mm-category-icon {
+    width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+    border-radius: 50%; background: #f3e0e8; color: #d4899e; font-size: 1.3rem; flex-shrink: 0;
+  }
+  .dark .mm-category-icon { background: #4a2a35; color: #e8a0b4; }
+  .mm-badge {
+    display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.2rem 0.6rem;
+    border-radius: 6px; font-size: 0.78rem; background: #fdf2f5; color: #b06d82;
+  }
+  .dark .mm-badge { background: #3a222b; color: #d4899e; }
+  :root {
+    --mm-rose: #d4899e; --mm-rose-light: #f3e0e8; --mm-cream: #fef7f0;
+    --s-primary: #051528; --s-secondary: #53643f; --s-surface: #fbf9f8;
+    --s-surface-variant: #44474c; --s-surface-low: #f6f3f2;
+    --s-container: #f0eded; --s-outline: #c4c6cd; --s-secondary-container: #d2e7b8;
+  }
+  .mm-hero-section {
+    position: relative; height: 600px; display: flex; align-items: center; overflow: hidden;
+  }
+  .mm-hero-section .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+  }
+  .mm-hero-section .hero-bg img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .mm-hero-section .hero-vignette {
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, rgba(251,249,248,0.9) 20%, transparent 100%);
+  }
+  .mm-hero-section .hero-content {
+    position: relative; z-index: 10;
+  }
+  @media (min-width: 992px) {
+    .mm-hero-section { height: 870px; }
+  }
+  .mm-section { padding: 80px 16px; }
+  @media (min-width: 992px) { .mm-section { padding: 80px 64px; } }
+  .mm-container { max-width: 1200px; margin: 0 auto; }
+  .mm-label {
+    font-family: 'Manrope', sans-serif; font-size: 14px; line-height: 20px;
+    letter-spacing: 0.05em; font-weight: 600; text-transform: uppercase;
+  }
+  .mm-display-lg {
+    font-family: 'EB Garamond', serif; font-size: 36px; line-height: 44px; font-weight: 500;
+  }
+  @media (min-width: 992px) {
+    .mm-display-lg { font-size: 48px; line-height: 56px; letter-spacing: -0.01em; }
+  }
+  .mm-headline-md {
+    font-family: 'EB Garamond', serif; font-size: 32px; line-height: 40px; font-weight: 500;
+  }
+  .mm-headline-sm {
+    font-family: 'EB Garamond', serif; font-size: 24px; line-height: 32px; font-weight: 600;
+  }
+  .mm-body-lg {
+    font-family: 'Manrope', sans-serif; font-size: 18px; line-height: 28px; font-weight: 400;
+  }
+  .mm-body-md {
+    font-family: 'Manrope', sans-serif; font-size: 16px; line-height: 24px; font-weight: 400;
+  }
+  .mm-text-primary { color: var(--s-primary); }
+  .mm-text-secondary { color: var(--s-secondary); }
+  .mm-text-surface-variant { color: var(--s-surface-variant); }
+  .mm-bg-surface { background-color: var(--s-surface); }
+  .mm-bg-surface-low { background-color: var(--s-surface-low); }
+  .mm-bg-primary { background-color: var(--s-primary); }
+  .mm-bg-secondary { background-color: var(--s-secondary); }
+  .mm-bg-secondary-container { background-color: var(--s-secondary-container); }
+  .mm-text-on-primary { color: #fff; }
+  .mm-text-on-secondary { color: #fff; }
+  .mm-border-outline { border-color: var(--s-outline); }
+  .mm-border-secondary { border-color: var(--s-secondary); }
+  .mm-card-testimonial {
+    background: #fff; padding: 2rem; border: 1px solid rgba(196,198,205,0.3);
+    transition: box-shadow 0.3s;
+  }
+  .mm-card-testimonial:hover { box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+  .mm-quote-icon { color: var(--s-secondary); margin-bottom: 1.5rem; }
+  .mm-quote-icon svg { width: 36px; height: 36px; }
+  .mm-btn-primary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background-color: var(--s-primary); color: #fff; padding: 1rem 2rem;
+    font-family: 'Manrope', sans-serif; font-size: 14px; line-height: 20px;
+    letter-spacing: 0.05em; font-weight: 600; text-transform: uppercase;
+    text-decoration: none; transition: box-shadow 0.3s;
+  }
+  .mm-btn-primary:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.15); color: #fff; }
+  .mm-btn-outline {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: transparent; color: var(--s-secondary); padding: 1rem 2rem;
+    border: 1px solid var(--s-secondary); text-decoration: none;
+    font-family: 'Manrope', sans-serif; font-size: 14px; line-height: 20px;
+    letter-spacing: 0.05em; font-weight: 600; text-transform: uppercase;
+    transition: background-color 0.3s;
+  }
+  .mm-btn-outline:hover { background-color: rgba(83,100,63,0.1); color: var(--s-secondary); }
+  .mm-botanical-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--s-secondary) 50%, transparent);
+    opacity: 0.2; position: relative;
+  }
+  .mm-botanical-divider::after {
+    content: "❦"; position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%); background: var(--s-surface); padding: 0 10px;
+    color: var(--s-secondary); font-size: 1.2rem;
+  }
+  .mm-icon-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle; display: inline-block;
+  }
+  .mm-icon-filled {
+    font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle; display: inline-block;
+  }
+  .mm-avatar-circle {
+    width: 40px; height: 40px; border-radius: 50%; background: var(--s-secondary-container);
+    display: flex; align-items: center; justify-content: center; color: var(--s-secondary); font-weight: bold;
+  }
+  @media (max-width: 767px) {
+    .mm-hero-section { height: 500px; }
+    .mm-display-lg { font-size: 28px; line-height: 36px; }
+    .mm-section { padding: 48px 16px; }
+  }
+  /* Override Bootstrap's container for this page only */
+  .mm-page .container { max-width: 1200px; }
+  .dark .mm-card-testimonial { background: #1e1e2a; border-color: rgba(255,255,255,0.08); }
+  .dark .mm-text-primary { color: #e0e0e0; }
+  .dark .mm-bg-surface { background-color: #121212; }
+  .dark .mm-bg-surface-low { background-color: #1a1a1a; }
+  .dark .mm-botanical-divider::after { background: #121212; }
+  .dark .mm-text-surface-variant { color: #aaa; }
+</style>
+
+<div class="mm-page">
+  <!-- Hero Section -->
+  <section class="mm-hero-section">
+    <div class="hero-bg">
+      <img alt="Escritorio con Biblia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHh7TjzwV55O_YiFfXRIMiwtz2P-G6AOvcSLlRDkg7gCebg4bOud67eVKgViYMCA4IhuaFwQJ_x7roKV7sT9CfMCGod4Y68i0Y10ZOsHMxeOGk7fVbqZ75f3fx0WZsab07CdQ-BUNvYt_e0uDQTJVEXxRau2LH2_mAEpbDRXd3w_2KTj7WjLTKVryFwsC_vMUcaj3KgEcJ3BErT90GByEwz0SGkUPeA3HP4akEXp8cI6WDLuovM_ZxjhK1Ztbj1hUOtfiewyVufxM"/>
+      <div class="hero-vignette"></div>
+    </div>
+    <div class="container hero-content">
+      <div class="row">
+        <div class="col-12 col-lg-7 col-xl-6">
+          <p class="mm-label mm-text-secondary mb-3 tracking-widest">BIENVENIDA AL</p>
+          <h1 class="mm-display-lg mm-text-primary mb-4">Lugar de la Mamá-Maestra</h1>
+          <p class="mm-body-lg mm-text-surface-variant mb-5" style="font-size: 1.25rem; max-width: 540px;">
+            Un refugio para crecer, enseñar e inspirar en medio de tu vocación. Encuentra el equilibrio entre la tiza y la fe.
+          </p>
+          <div class="d-flex gap-3 flex-wrap">
+            <a href="#recursos" class="mm-btn-primary">
+              Explorar el Refugio
+              <span class="material-symbols-outlined mm-icon-outlined" style="font-size: 20px;">auto_stories</span>
+            </a>
+            <a href="#recursos" class="mm-btn-outline">Ver Recursos</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Voces que Inspiran -->
+  <section class="mm-section mm-bg-surface">
+    <div class="mm-container">
+      <div class="text-center mb-5">
+        <h2 class="mm-headline-md mm-text-primary mb-3">Voces que Inspiran</h2>
+        <p class="mm-body-md mm-text-surface-variant" style="max-width: 740px; margin: 0 auto;">Relatos de maestras que, como tú, navegan el desafío de educar con el corazón anclado en la Verdad.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-12 col-md-4">
+          <div class="mm-card-testimonial">
+            <div class="mm-quote-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><path d="M10 11h-4v-4h4v4zm-6 2h4v4h-4v-4zm12-6h-4v4h4v-4zm-6 6h4v4h-4v-4zm6-2h4v4h-4v-4zm0 6h4v4h-4v-4z" transform="rotate(180,12,12)"/></svg>
+            </div>
+            <h3 class="mm-headline-sm mm-text-primary mb-3">La Gracia en el Aula</h3>
+            <p class="mm-body-md mm-text-surface-variant mb-4 fst-italic">"Aprendí que mi mayor lección no estaba en el currículo, sino en cómo reflejaba el amor de Dios cuando un alumno cometía un error..."</p>
+            <div class="d-flex align-items-center gap-3">
+              <div class="mm-avatar-circle">M</div>
+              <div>
+                <p class="mm-label mm-text-primary mb-0">María Elena R.</p>
+                <p class="small mm-text-surface-variant mb-0">Maestra de Primaria</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="mm-card-testimonial">
+            <div class="mm-quote-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><path d="M10 11h-4v-4h4v4zm-6 2h4v4h-4v-4zm12-6h-4v4h4v-4zm-6 6h4v4h-4v-4zm6-2h4v4h-4v-4zm0 6h4v4h-4v-4z" transform="rotate(180,12,12)"/></svg>
+            </div>
+            <h3 class="mm-headline-sm mm-text-primary mb-3">Orar antes de Calificar</h3>
+            <p class="mm-body-md mm-text-surface-variant mb-4 fst-italic">"Mis noches de corrección se transformaron cuando empecé a interceder por cada nombre en la parte superior de la hoja..."</p>
+            <div class="d-flex align-items-center gap-3">
+              <div class="mm-avatar-circle">L</div>
+              <div>
+                <p class="mm-label mm-text-primary mb-0">Lucía Fernández</p>
+                <p class="small mm-text-surface-variant mb-0">Profesora de Literatura</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="mm-card-testimonial">
+            <div class="mm-quote-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><path d="M10 11h-4v-4h4v4zm-6 2h4v4h-4v-4zm12-6h-4v4h4v-4zm-6 6h4v4h-4v-4zm6-2h4v4h-4v-4zm0 6h4v4h-4v-4z" transform="rotate(180,12,12)"/></svg>
+            </div>
+            <h3 class="mm-headline-sm mm-text-primary mb-3">Semillas de Eternidad</h3>
+            <p class="mm-body-md mm-text-surface-variant mb-4 fst-italic">"Incluso en las escuelas más seculares, la integridad y el servicio hablan un idioma que el alma de un niño reconoce de inmediato."</p>
+            <div class="d-flex align-items-center gap-3">
+              <div class="mm-avatar-circle">E</div>
+              <div>
+                <p class="mm-label mm-text-primary mb-0">Elena G.</p>
+                <p class="small mm-text-surface-variant mb-0">Directora Académica</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Botanical Divider -->
+  <div class="mm-botanical-divider mm-container" style="margin-top: 0; margin-bottom: 0;"></div>
+
+  <!-- Recursos por Edades -->
+  <section id="recursos" class="mm-section mm-bg-cream">
+    <div class="mm-container">
+      <div class="text-center mb-5">
+        <h2 class="mm-headline-md mm-text-primary mb-3">Recursos para tu Aula</h2>
+        <p class="mm-body-md mm-text-surface-variant" style="max-width: 576px; margin: 0 auto;">Enseñanzas y materiales organizados por etapa, diseñados para nutrir el corazón de cada estudiante.</p>
+      </div>
+      {% if not grouped %}
+      <div class="text-center py-5">
+        <i class="unicon-heart" style="color: var(--mm-rose); font-size: 3rem; opacity: 0.3;"></i>
+        <p class="mt-3 fs-5 text-gray-500">Pronto tendremos recursos disponibles para ti.</p>
+      </div>
+      {% else %}
+      <div class="row g-4">
+        {% for cat, cat_resources in grouped.items %}
+          {% for resource in cat_resources %}
+          <div class="col-12 col-sm-6 col-lg-4">
+            <article class="mm-card panel h-100 bg-white dark:bg-gray-800 rounded-xl border overflow-hidden shadow-xs" style="border-color: var(--mm-rose-light) !important;">
+              {% if resource.image_url %}
+              <figure class="m-0 ratio ratio-16x9 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                <img loading="lazy" class="media-cover hover:scale-105 transition-transform duration-500" src="{{ resource.image.url }}" alt="{{ resource.title }}" />
+              </figure>
+              {% endif %}
+              <div class="p-4 vstack gap-2">
+                <div class="d-flex flex-wrap gap-1">
+                  <span class="mm-badge" style="background: var(--mm-rose-light); color: var(--mm-rose);">
+                    <i class="{{ cat.icon|default:'unicon-users' }}"></i> {{ cat.name }}
+                  </span>
+                  {% if resource.bible_passage %}
+                  <span class="mm-badge"><i class="unicon-book"></i> {{ resource.bible_passage }}</span>
+                  {% endif %}
+                  {% if resource.time_minutes %}
+                  <span class="mm-badge"><i class="unicon-clock"></i> {{ resource.time_minutes }} min</span>
+                  {% endif %}
+                </div>
+                <h4 class="h5 mb-1 fw-semibold">
+                  <a href="{% url 'madre_maestra_detail' resource.slug %}" class="text-none text-gray-900 dark:text-white stretched-link">{{ resource.title }}</a>
+                </h4>
+                {% if resource.objective %}
+                  <p class="mm-body-md text-gray-600 dark:text-gray-400 mb-0">{{ resource.objective|truncatechars:120 }}</p>
+                {% elif resource.summary %}
+                  <p class="mm-body-md text-gray-600 dark:text-gray-400 mb-0">{{ resource.summary|truncatechars:120 }}</p>
+                {% endif %}
+                <a href="{% url 'madre_maestra_detail' resource.slug %}" class="uc-link mt-1" style="color: var(--mm-rose); font-size: 0.9rem;">Ver recurso →</a>
+              </div>
+            </article>
+          </div>
+          {% empty %}
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="text-center py-5 rounded-3 border bg-white dark:bg-gray-800 bg-opacity-50 h-100 d-flex flex-column align-items-center justify-content-center" style="border-color: var(--mm-rose-light) !important;">
+              <div class="mm-category-icon mb-3"><i class="{{ cat.icon|default:'unicon-users' }}"></i></div>
+              <p class="mm-label mm-text-primary mb-1">{{ cat.name }}</p>
+              <p class="mm-body-md text-gray-500 mb-0">Pronto tendremos recursos para esta etapa.</p>
+            </div>
+          </div>
+          {% endfor %}
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- El Rincón del Estudio Rápido -->
+  <section class="mm-section mm-bg-surface-low">
+    <div class="mm-container">
+      <div class="row align-items-center g-5">
+        <div class="col-12 col-lg-6">
+          <div class="position-relative">
+            <img alt="Pequeño Diario" class="shadow-lg border-8 border-white w-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsEz6TQvBFEEUAFrQGMtTgn8SBcsIkqUrb5B9_MyFJtOK6deMWoCu1j5tQfJeE5jsrjziJ06wfru2_8rHvhegCwuIrgxmddRI25AcTpDSLlXHDHgpgbLs0Xvv3eWGSUDdX36zP0WfL6_H26NhJer34maABhoVkotPIh2LXN3baGeA-i2AulDx4xWhus9nYwkmMIs7Xr-KP6zHFS_sxnAIe4m8FfIIY-6udFuxJxAH6BNeDyQF4FDU76I8JS5NrtzpCjPgXHNmCQPI"/>
+            <div class="position-absolute bottom-0 end-0 translate-middle-y me-4 d-none d-md-block mm-bg-secondary mm-text-on-secondary p-4">
+              <p class="mm-display-lg mb-0" style="font-size: 2.25rem;">"5 min"</p>
+              <p class="mm-label mb-0">devocionales diarios</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <h2 class="mm-headline-md mm-text-primary mb-4">El Rincón del Estudio Rápido</h2>
+          <p class="mm-body-lg mm-text-surface-variant mb-4">Sabemos que tu tiempo es sagrado y a menudo escaso. Aquí te ofrecemos perlas de sabiduría para esos breves momentos entre clases.</p>
+          <ul class="list-unstyled vstack gap-4">
+            <li class="d-flex gap-3">
+              <span class="mm-text-secondary flex-shrink-0" style="margin-top: 2px;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zM5 1C3.34 1 2 2.34 2 4v16c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3v-3h-2v3c0 .55-.45 1-1 1H5c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h12c.55 0 1 .45 1 1v3h2V4c0-1.66-1.34-3-3-3H5zm5 6H6v2h4V7zm0 4H6v2h4v-2zm0 4H6v2h4v-2zm7-3h-2v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg></span>
+              <div>
+                <h4 class="mm-label mm-text-primary mb-1">Micro-Meditation</h4>
+                <p class="mm-body-md mm-text-surface-variant mb-0">Cómo meditar en un solo versículo durante el cambio de hora.</p>
+              </div>
+            </li>
+            <li class="d-flex gap-3">
+              <span class="mm-text-secondary flex-shrink-0" style="margin-top: 2px;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zM5 1C3.34 1 2 2.34 2 4v16c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3v-3h-2v3c0 .55-.45 1-1 1H5c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h12c.55 0 1 .45 1 1v3h2V4c0-1.66-1.34-3-3-3H5zm5 6H6v2h4V7zm0 4H6v2h4v-2zm0 4H6v2h4v-2zm7-3h-2v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg></span>
+              <div>
+                <h4 class="mm-label mm-text-primary mb-1">Audio-Estudio Express</h4>
+                <p class="mm-body-md mm-text-surface-variant mb-0">Podcasts de 7 minutos diseñados para el trayecto a la escuela.</p>
+              </div>
+            </li>
+            <li class="d-flex gap-3">
+              <span class="mm-text-secondary flex-shrink-0" style="margin-top: 2px;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zM5 1C3.34 1 2 2.34 2 4v16c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3v-3h-2v3c0 .55-.45 1-1 1H5c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h12c.55 0 1 .45 1 1v3h2V4c0-1.66-1.34-3-3-3H5zm5 6H6v2h4V7zm0 4H6v2h4v-2zm0 4H6v2h4v-2zm7-3h-2v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg></span>
+              <div>
+                <h4 class="mm-label mm-text-primary mb-1">Oración del Pasillo</h4>
+                <p class="mm-body-md mm-text-surface-variant mb-0">Guía de intercesión rápida mientras caminas hacia tu siguiente aula.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="mm-section mm-bg-primary mm-text-on-primary">
+    <div class="mm-container" style="max-width: 720px;">
+      <div class="text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" class="mb-4" style="color: #d5e9bb;"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <h2 class="mm-headline-md mb-3" style="color: #fff;">Recibe aliento semanal en tu bandeja de entrada</h2>
+        <p class="mm-body-md mb-5" style="color: rgba(255,255,255,0.8); max-width: 480px; margin-left: auto; margin-right: auto;">Suscríbete para recibir reflexiones exclusivas, recursos listos para usar y una palabra de ánimo diseñada especialmente para la mujer educadora.</p>
+        <form class="d-flex flex-column flex-md-row gap-3" style="max-width: 432px; margin: 0 auto;">
+          <input class="flex-grow-1 p-3" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; outline: none;" placeholder="Tu correo electrónico" type="email"/>
+          <button class="mm-btn-primary border-0" type="submit" style="background-color: #53643f; color: #fff; text-align: center; justify-content: center;">SUSCRIBIRME</button>
+        </form>
+        <p class="mt-4 small text-uppercase tracking-widest" style="color: rgba(255,255,255,0.4); font-size: 10px; letter-spacing: 0.15em;">Respetamos tu tiempo.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // Load Material Symbols font
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap';
+  document.head.appendChild(link);
+  // Load Manrope font
+  var link2 = document.createElement('link');
+  link2.rel = 'stylesheet';
+  link2.href = 'https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap';
+  document.head.appendChild(link2);
+</script>
+{% endblock %}

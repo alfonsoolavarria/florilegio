@@ -170,26 +170,6 @@
     {% endif %}
   </div>
 
-  {% if louw_nida_def %}
-  <div class="detail-section">
-    <h2>Louw-Nida (Dominio Semántico)</h2>
-    <div style="margin-bottom: 0.75rem;">
-      <span class="strong-badge">{{ word.low_nida }}</span>
-      <span style="font-size: 1.1rem; margin-left: 0.5rem; color: var(--bs-gray-600);">
-        {{ louw_nida_def.termino_griego }}
-      </span>
-    </div>
-    {% if louw_nida_def.glosa_principal %}
-      <div class="definition-text" style="margin-bottom: 0.75rem;">
-        <em>{{ louw_nida_def.glosa_principal }}</em>
-      </div>
-    {% endif %}
-    {% if louw_nida_def.definicion_completa %}
-      <div class="definition-text">{{ louw_nida_def.definicion_completa }}</div>
-    {% endif %}
-  </div>
-  {% endif %}
-
   {% if vine_defs %}
   <div class="detail-section">
     <h2>Vine</h2>

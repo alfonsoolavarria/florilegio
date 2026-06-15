@@ -1,0 +1,141 @@
+{
+  "libro": "Romanos",
+  "contenido": {
+    "introduccion": "INTRODUCCIÓN A ROMANOS",
+    "declaraciones_iniciales": [
+      "A. Romanos es el libro más sistemático y lógico del Apóstol Pablo. La carta fue afectada por circunstancias en Roma, por lo tanto es un documento “ocasional”. Algo sucedió que originó que Pablo escribiese la carta. Sin embargo, es la más neutral de los escritos de Pablo, en el sentido de que la manera en que él trató con el problema (el problema era probablemente celo entre los creyentes judíos y el liderazgo gentil, vea 14:1-15:13) fue una clara presentación del Evangelio y sus implicaciones para la vida diaria.",
+      "B. La presentación que Pablo hace del Evangelio en Romanos ha impactado la vida de la iglesia a través de los siglos:\n1. Agustín fue convertido al cristianismo en el año 386 D. de C. leyendo Romanos 13:13-14.\n2. El entendimiento de Martín Lutero fue cambiado radicalmente en el año 1513 D. de C. mientras que comparaba el Salmo 31:1 con Romanos 1:17 (ver Habacuc 2:4).\n3. John Wesley fue convertido al cristianismo en el año 1738 D. de C. en Londres. Él estaba caminando fuera de una iglesia menonita cuando escuchó que leían el sermón de Lutero a la introducción de Romanos.",
+      "C. ¡Conocer el libro de Romanos es conocer el cristianismo! La carta da forma a la vida y enseñanzas de Jesús dando un fundamento inmovible para la iglesia de cualquier época. Martín Lutero se expresó de este libro como ¡“el principal del NT y [que contiene] el más puro Evangelio”!"
+    ],
+    "autor": {
+      "nombre": "Pablo",
+      "detalles": "Pablo es definitivamente el autor. Su saludo típico se encuentra en 1:1. Es el consenso generalizado que “el aguijón en la carne” de Pablo era su vista defectuosa, y que él no escribió por su propia mano la carta, sino que usó a un escriba, Tercio (vea 16:22)."
+    },
+    "fecha": {
+      "descripcion": "A. La fecha probable en que se escribió Romanos es 56-58 D. de C. Este es uno de los pocos libros del NT. al que puede dársele una fecha exacta. Esto se hace al comparar Hechos 20:2 y siguientes con Romanos 15:17 y siguientes. Romanos fue escrita probablemente hacia el final del tercer viaje misionero de Pablo, justo antes de que partiera hacia Jerusalén.",
+      "cronologia_probable_pablo": {
+        "fuente": "Tomada de F. F. Bruce y Murry Harris con mínimas adaptaciones.",
+        "tabla_cronologica": [
+          {
+            "numero": 1,
+            "libro": "Gálatas",
+            "fecha": "48 D. de C.",
+            "lugar_escritura": "Antioquia de Siria",
+            "relacion_hechos": "14:28; 15:2"
+          },
+          {
+            "numero": 2,
+            "libro": "I Tesalonicenses",
+            "fecha": "50",
+            "lugar_escritura": "Corinto",
+            "relacion_hechos": "18:5"
+          },
+          {
+            "numero": 3,
+            "libro": "II Tesalonicenses",
+            "fecha": "50",
+            "lugar_escritura": "Corinto",
+            "relacion_hechos": ""
+          },
+          {
+            "numero": 4,
+            "libro": "I Corintios",
+            "fecha": "55",
+            "lugar_escritura": "Efeso",
+            "relacion_hechos": "19:20"
+          },
+          {
+            "numero": 5,
+            "libro": "II Corintios",
+            "fecha": "56",
+            "lugar_escritura": "Macedonia",
+            "relacion_hechos": "20:2"
+          },
+          {
+            "numero": 6,
+            "libro": "Romanos",
+            "fecha": "57",
+            "lugar_escritura": "Corinto",
+            "relacion_hechos": "20:3"
+          },
+          {
+            "seccion": "7-10 Cartas de Prisión",
+            "registros": [
+              {
+                "libro": "Colosenses",
+                "fecha": "Principios de los 60",
+                "lugar_escritura": "Roma",
+                "relacion_hechos": ""
+              },
+              {
+                "libro": "Efesios",
+                "fecha": "Principios de los 60",
+                "lugar_escritura": "Roma",
+                "relacion_hechos": ""
+              },
+              {
+                "libro": "Filemón",
+                "fecha": "Principios de los 60",
+                "lugar_escritura": "Roma",
+                "relacion_hechos": ""
+              },
+              {
+                "libro": "Filipenses",
+                "fecha": "A fines del 62-63",
+                "lugar_escritura": "Roma",
+                "relacion_hechos": "28:30-31"
+              }
+            ]
+          },
+          {
+            "seccion": "11-13. Cuarto Viaje Misionero",
+            "registros": [
+              {
+                "libro": "I Timoteo",
+                "fecha": "63 (o después pero antes del 64)",
+                "lugar_escritura": "Macedonia",
+                "relacion_hechos": ""
+              },
+              {
+                "libro": "Tito",
+                "fecha": "63 (o después pero antes del 64)",
+                "lugar_escritura": "Efeso (¿?)",
+                "relacion_hechos": ""
+              },
+              {
+                "libro": "II Timoteo",
+                "fecha": "68",
+                "lugar_escritura": "Roma",
+                "relacion_hechos": ""
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "recipientes_de_la_carta": {
+      "destino": "La carta declara que su destino es Roma. No sabemos quién fundó la iglesia en Roma:",
+      "teorias_fundacion": [
+        "A. Pudieron haber sido algunas de las personas quienes visitaron Jerusalén en el día del Pentecostés y que se convirtieron y regresaron a sus hogares para comenzar la iglesia (vea Hechos 2:10);",
+        "B. Pudieron haber sido discípulos que huyeron de la persecución en Jerusalén después de la muerte de Esteban (vea Hechos 8:4); o",
+        "C. Pudieron haber sido creyentes convertidos de los viajes misioneros de Pablo quienes viajaron a Roma."
+      ],
+      "contexto_y_valor": "Pablo nunca había visitado esta iglesia, pero deseaba hacerlo (vea Hechos 19:21). Él tenía muchos amigos ahí (vea Ro. 16). Aparentemente su plan era visitar Roma en camino a España (ver Ro. 15:28) después de su viaje a Jerusalén con la “ofrenda de amor”. Pablo sentía que su ministerio en el este del Mediterráneo estaba terminado. Él buscaba nuevos campos (vea 15:20-23,28). La persona que se encargó de llevar la carta de Pablo de Grecia a Roma parece haber sido Febe, una diaconisa, quien estaba viajando en esa dirección (vea Ro. 16:1). ¿Por qué se considera tan importante esta carta escrita en el primer siglo por un constructor de tiendas en las calles de Corinto? Martín Lutero lo llamó “el principal libro del NT y [que contiene] el más puro Evangelio”. El valor de este libro se encuentra en el hecho de que es una explicación profunda del Evangelio por el rabino judío convertido al cristianismo, Saulo de Tarso, llamado a ser un apóstol a los gentiles. La mayoría de las cartas de Pablo están dominadas por una situación loca, no así Romanos. Es una presentación sistemática de un apóstol de la fe. ¿Te das cuenta, mi amigo cristiano, que la mayoría de los términos técnicos usados hoy para describir la “fe,” tales como: “justificación,” “imputar,” adopción,” y santificación” provienen de Romanos? ¡Ora que Dios te abra esta maravillosa carta mientras juntos buscamos Su voluntad para nuestras vidas hoy!"
+    },
+    "proposito": [
+      "A. Una apelación para recibir ayuda para su viaje misionero a España. Pablo sentía que su trabajo apostólico en el este del Mediterráneo ya estaba terminado (ver 15:20-2,28).",
+      "B. Para dirigirse a los problemas de la iglesia en Roma entre los creyentes judíos y los creyentes gentiles. Esto fue probablemente como resultado de la expulsion de todos de Roma y su retorno tardío. Para entonces los líderes cristianos judíos habían sido reemplazados por líderes cristianos judíos.",
+      "C. Para presentarse a la iglesia en Roma. Había mucha oposición hacia Pablo proveniente de sinceros judíos convertidos al cristianismo en Jerusalén (Concilio de Jerusalén en el Libro de los Hechos capítulo 15), de judíos no sinceros (los judaizantes de Gálatas y 2 Co. 3, 10-13), y de los gentiles (Colosenses, Efesios) quienes trataban de fundir el evangelio con sus falsas teorías o filosofías (por ej. gnosticismo).",
+      "D. Pablo era acusado de ser un peligroso innovador, que le añadía a las enseñanzas de Jesús. El libro de Romanos fue la manera en que sistemáticamente Pablo se defendió al demostrar cómo su evangelio era verdad, usando el Antiguo Testamento y las enseñanzas de Jesús (los Evangelios)."
+    ],
+    "breve_bosquejo": [
+      "A. Introducción (1:1-17) 1. Saludo (1:1-7) a. Autor (1-5) b. Destinatarios (6-7a) c. Saludos (7b) 2. Ocasión (1:8-15) 3. Tema (1:16-17)",
+      "B. Necesidad de la Justicia Divina (1:18-3:20) 1. Declinación o Caída del Mundo Gentil (1:18-32) 2. Hipocresía de los Judíos y Moralistas Paganos (2:1-16) 3. Juicio de los Judíos (2:17-3:8) 4. Condenación Universal (3:9-20)",
+      "C. Lo que la Justicia Divina es (3:21-8:39) 1. Justicia por medio de la Fe Únicamente (3:21-31) 2. Las Bases de la Justificación: La Promesa de Dios (4:1-25) a. La correcta relación de Abraham con Dios (4:1-5) b. David (4:6-8) c. La relación de Abraham con la Circuncisión (4:9-12) d. La Promesa de Dios a Abraham (4:13-25) 3. La Obtención de la Justificación (5:1-21) a. El aspecto subjetivo: amor inmerecido, gozo in igual (5:1-5) b. Las bases objetivas: El sorprendente amor de Dios (5:6-11) c. La topología Adán/Cristo: La ofensa de Adán, la provisión de Dios (5:12-21) 4. La justificación divina debe resultar en actos rectos personales (6:1-7:25) a. Liberados del pecado (6:1-14) (1) Una supuesta objeción (6:1-2) (2) El significado del bautismo (6:3-14) b. Esclavo de Satanás o Esclavo de Dios: la decisión es tuya (6:15-23) c. La unión (comparada al matrimonio) del hombre a la ley (7:1-6) d. La Ley es buena, pero el pecado impide hacer lo bueno (7:7-14) e. La eterna lucha del bien y el mal en el creyente (7:15-25) 5. Los resultados que se pueden observar de la justificación divina (8:1-39) a. La vida en el Espíritu (8:1-17) b. La redención de la creación (8:18-25) c. La ayuda constante del Espíritu (8:26-30) d. El triunfo judicial de la justificación por la fe (8:31-39)",
+      "D. El Propósito Divino para Toda la Humanidad (9:1-11:32) 1. La Elección de Israel (9:1-33) a. Verdaderos herederos de la fe (9:1-13) b. La Soberanía de Dios (9:14-26) c. El Plan universal de Dios incluye a los gentiles (9:27-33) 2. La salvación de Israel (10:1-21) a. La justicia de Dios vs. la justicia de la humanidad (10:1-13) b. La misericordia de Dios necesita mensajeros, un llamado a las misiones mundiales (10:14-18) c. La continua incredulidad de Israel en cuanto a Cristo (10:19-21) 3. El fracaso de Israel (11:1-36) a. El remanente Judío (11:1-10) b. El celo de Israel (11:11-24)  c. La ceguera temporal de Israel (11:25-32) d. Explosión de Pablo en alabanzas (11:33-36)",
+      "E. El Resultado del regalo de la Justicia Divina (12:1-15:13) 1. Llamado a la consagración (12:1-2) 2. El uso de los dones (12:3-8) 3. La relación de los creyentes con otros creyentes (12:9-21) 4. La relación con el Estado (13:1-7) 5. La relación con el prójimo (13:8-10) 6. La relación con nuestro Señor (13:11-14) 7. La relación con otros miembros de la iglesia (14:1-12) 8. Nuestro efecto en los demás (12:13-23) 9. Nuestra relaciones para ser más como Cristo (15:1-13)",
+      "F. Conclusión (15:14-33) 1. Los planes personales de Pablo (15:14-29) 2. Peticiones de oración (15:30-33)",
+      "G. Posdata (16:1-27) 1. Salutaciones (16:1-24) 2. Doxología (16:25-27)"
+    ]
+  }
+}

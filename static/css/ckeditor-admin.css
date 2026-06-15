@@ -1,0 +1,10 @@
+.ck.ck-editor {
+    max-width: 100% !important;
+}
+.ck.ck-content {
+    min-height: 400px;
+    max-height: 600px;
+}
+.vLargeTextField.ckeditor-ready {
+    display: none;
+}

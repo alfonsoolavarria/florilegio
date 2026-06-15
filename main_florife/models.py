@@ -1,8 +1,10 @@
+import json
 import re
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.exceptions import ValidationError
 
 
 class VineConcord(models.Model):
@@ -37,21 +39,6 @@ class StrongConcord(models.Model):
         return self.topic
 
 
-class LouwNidaConcord(models.Model):
-    id = models.CharField(max_length=50, primary_key=True)
-    termino_griego = models.TextField(blank=True, null=True)
-    definicion_completa = models.TextField(blank=True, null=True)
-    glosa_principal = models.TextField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'louw_nida_concord'
-        verbose_name = 'Louw-Nida'
-        verbose_name_plural = 'Louw-Nida'
-
-    def __str__(self):
-        return f'{self.id} - {self.termino_griego or ""}'
-
-
 class Category(models.Model):
     name = models.CharField(max_length=100)  # Nombre de la categoría (ej. Teología)
     icon = models.CharField(max_length=100, default="unicon-book")  # Clase del icono para mostrar en la web
@@ -63,6 +50,7 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
 
 class Author(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='author_profile')
     name = models.CharField(max_length=150)
     bio = models.TextField()
     image_url = models.URLField(max_length=500, blank=True, null=True)
@@ -70,6 +58,10 @@ class Author(models.Model):
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        if self.user and Author.objects.filter(user=self.user).exclude(pk=self.pk).exists():
+            raise ValidationError(f"El usuario {self.user.email} ya tiene un perfil de autor.")
 
 class Article(models.Model):
     STATUS_CHOICES = [
@@ -211,6 +203,22 @@ class VersiculoBiblia(models.Model):
     def __str__(self):
         return f"[{self.version.upper()}] {self.libro} {self.capitulo}:{self.versiculo}"
 
+class ContextoLibro(models.Model):
+    libro = models.ForeignKey(LibroBiblia, on_delete=models.CASCADE, related_name='contextos')
+    contenido = models.TextField()
+
+    class Meta:
+        db_table = 'contexto_libro'
+        verbose_name = 'Contexto de Libro'
+        verbose_name_plural = 'Contextos de Libros'
+
+    def __str__(self):
+        return f'Contexto de {self.libro.nombre}'
+
+    def get_contenido(self):
+        return json.loads(self.contenido)
+
+
 class ApiBibleSyncStatus(models.Model):
     VERSION_CHOICES = [
         ('nbla', 'Nueva Biblia de las Américas'),
@@ -244,6 +252,10 @@ class UserProfile(models.Model):
         limits = {'free': 3, 'premium': 100, 'pro': None}
         return limits.get(self.plan, 3)
 
+    @property
+    def is_author(self):
+        return hasattr(self.user, 'author_profile')
+
     def __str__(self):
         return self.user.username
 
@@ -267,6 +279,57 @@ class UserStudy(models.Model):
         verbose_name = "Estudio de usuario"
         verbose_name_plural = "Estudios de usuarios"
         ordering = ['-updated_at']
+
+
+class AgeCategory(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+    description = models.TextField(blank=True, null=True)
+    icon = models.CharField(max_length=100, default="unicon-users")
+    sort_order = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name = "Categoría de edad"
+        verbose_name_plural = "Categorías de edad"
+        ordering = ['sort_order']
+
+    def __str__(self):
+        return self.name
+
+
+class MadreMaestraResource(models.Model):
+    STATUS_CHOICES = [
+        ('revision', 'En Revisión'),
+        ('liberado', 'Liberado'),
+    ]
+
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True)
+    age_category = models.ForeignKey(AgeCategory, on_delete=models.CASCADE, related_name="resources")
+    image_url = models.URLField(max_length=500, blank=True, null=True)
+    bible_passage = models.CharField(max_length=200, blank=True, null=True, help_text="Pasaje bíblico (ej. Juan 3:16)")
+    key_verse = models.CharField(max_length=300, blank=True, null=True, help_text="Versículo clave")
+    objective = models.TextField(blank=True, null=True, help_text="Objetivo de la enseñanza")
+    materials = models.TextField(blank=True, null=True, help_text="Materiales necesarios")
+    time_minutes = models.IntegerField(blank=True, null=True, help_text="Tiempo estimado en minutos")
+    content = models.TextField(blank=True, null=True, help_text="Desarrollo completo de la lección (soporta HTML)")
+    summary = models.TextField(blank=True, null=True, help_text="Resumen corto para la tarjeta")
+    tags = models.JSONField(default=list)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='revision')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Recurso MM"
+        verbose_name_plural = "Recursos MM"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def image(self):
+        return {'url': self.image_url} if self.image_url else {'url': ''}
 
 
 @receiver(post_save, sender=User)

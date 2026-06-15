@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Santuario de la Maestra | Florilegio de la Fe</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ffdcbd",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e4e2e1",
+                        "secondary-fixed": "#d5e9bb",
+                        "surface-dim": "#dcd9d9",
+                        "surface-bright": "#fbf9f8",
+                        "surface-container": "#f0eded",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#051528",
+                        "on-surface": "#1b1c1c",
+                        "on-surface-variant": "#44474c",
+                        "surface-variant": "#e4e2e1",
+                        "outline": "#74777d",
+                        "primary-fixed-dim": "#b8c8e0",
+                        "inverse-primary": "#b8c8e0",
+                        "on-tertiary-fixed": "#2c1600",
+                        "secondary-fixed-dim": "#b9cda0",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "secondary": "#53643f",
+                        "on-secondary": "#ffffff",
+                        "background": "#fbf9f8",
+                        "on-primary-fixed": "#0c1c2f",
+                        "tertiary": "#221000",
+                        "primary-fixed": "#d4e3fd",
+                        "surface": "#fbf9f8",
+                        "inverse-surface": "#303030",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#eae8e7",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#623f18",
+                        "tertiary-container": "#3f2200",
+                        "outline-variant": "#c4c6cd",
+                        "surface-container-low": "#f6f3f2",
+                        "on-secondary-fixed": "#111f03",
+                        "on-secondary-fixed-variant": "#3b4c29",
+                        "on-secondary-container": "#576843",
+                        "on-background": "#1b1c1c",
+                        "on-primary-fixed-variant": "#39485c",
+                        "primary-container": "#1b2a3d",
+                        "on-tertiary-container": "#b58759",
+                        "on-primary-container": "#8291a8",
+                        "surface-tint": "#515f75",
+                        "inverse-on-surface": "#f3f0f0",
+                        "secondary-container": "#d2e7b8",
+                        "tertiary-fixed-dim": "#f0bd8b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1200px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "unit": "8px",
+                        "section-gap": "80px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["EB Garamond"],
+                        "body-lg": ["Manrope"],
+                        "display-lg": ["EB Garamond"],
+                        "headline-sm": ["EB Garamond"],
+                        "headline-md": ["EB Garamond"],
+                        "caption": ["Manrope"],
+                        "label-md": ["Manrope"],
+                        "body-md": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["36px", {"lineHeight": "44px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .botanical-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #53643f 50%, transparent);
+            opacity: 0.2;
+            position: relative;
+        }
+        .botanical-divider::after {
+            content: "❦";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #fbf9f8;
+            padding: 0 10px;
+            color: #53643f;
+            font-size: 1.2rem;
+        }
+        .glass-card {
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.7);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .hero-vignette {
+            background: linear-gradient(to right, rgba(251, 249, 248, 0.9) 20%, transparent 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-secondary-container selection:text-on-secondary-container overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop py-unit max-w-container-max mx-auto bg-surface/80 backdrop-blur-md shadow-sm shadow-primary/5 transition-all duration-200 ease-in-out">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-headline-sm text-primary">Florilegio de la Fe</span>
+</div>
+<nav class="hidden md:flex items-center gap-gutter">
+<a class="font-body-md text-primary font-bold border-b-2 border-secondary transition-colors duration-300" href="#">Sanctuary</a>
+<a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Resources</a>
+<a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Stories</a>
+<a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Tips</a>
+<a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Community</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:text-primary transition-colors">search</button>
+<button class="bg-primary text-on-primary px-6 py-2 font-label-md transition-all hover:opacity-90">Teacher Login</button>
+</div>
+</header>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative h-[870px] flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Desk with Bible" class="w-full h-full object-cover" data-alt="A serene and scholarly teacher's desk at dawn, featuring an open antique Bible with handwritten notes in the margins. Beside it sits a vintage fountain pen, a ceramic mug of steaming tea, and a small vase with a single dried olive branch. The lighting is soft and golden, filtering through a nearby window, creating long, peaceful shadows on a light wood surface. The overall mood is academic, spiritual, and deeply calm, following a sophisticated cream and navy color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHh7TjzwV55O_YiFfXRIMiwtz2P-G6AOvcSLlRDkg7gCebg4bOud67eVKgViYMCA4IhuaFwQJ_x7roKV7sT9CfMCGod4Y68i0Y10ZOsHMxeOGk7fVbqZ75f3fx0WZsab07CdQ-BUNvYt_e0uDQTJVEXxRau2LH2_mAEpbDRXd3w_2KTj7WjLTKVryFwsC_vMUcaj3KgEcJ3BErT90GByEwz0SGkUPeA3HP4akEXp8cI6WDLuovM_ZxjhK1Ztbj1hUOtfiewyVufxM"/>
+<div class="absolute inset-0 hero-vignette"></div>
+</div>
+<div class="container mx-auto px-margin-desktop relative z-10 max-w-container-max">
+<div class="max-w-2xl">
+<span class="font-label-md text-secondary tracking-widest mb-4 block">BIENVENIDA AL</span>
+<h1 class="font-display-lg text-display-lg text-primary mb-6 leading-tight">Santuario de la Maestra</h1>
+<p class="font-body-lg text-on-surface-variant mb-10 text-xl leading-relaxed">
+                        Un refugio para crecer, enseñar e inspirar en medio de tu vocación. Encuentra el equilibrio entre la tiza y la fe.
+                    </p>
+<div class="flex gap-4">
+<button class="bg-primary text-on-primary px-8 py-4 font-label-md text-base hover:shadow-lg transition-all flex items-center gap-2">
+                            Explorar el Refugio <span class="material-symbols-outlined">auto_stories</span>
+</button>
+<button class="border border-secondary text-secondary px-8 py-4 font-label-md text-base hover:bg-secondary-container/20 transition-all">
+                            Ver Recursos
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Voces que Inspiran Section (Stories) -->
+<section class="py-section-gap px-margin-desktop bg-surface">
+<div class="max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+<div class="max-w-xl">
+<h2 class="font-display-lg text-headline-md text-primary mb-4">Voces que Inspiran</h2>
+<p class="font-body-md text-on-surface-variant">Relatos de maestras que, como tú, navegan el desafío de educar con el corazón anclado en la Verdad.</p>
+</div>
+<a class="font-label-md text-secondary border-b border-secondary pb-1 hover:text-primary hover:border-primary transition-all" href="#">LEER TODAS LAS HISTORIAS</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-8 border border-outline-variant/30 hover:shadow-xl transition-all group">
+<span class="material-symbols-outlined text-secondary mb-6 text-4xl" style="font-variation-settings: 'FILL' 1;">format_quote</span>
+<h3 class="font-headline-sm text-primary mb-4">La Gracia en el Aula</h3>
+<p class="font-body-md text-on-surface-variant mb-8 line-clamp-4 italic">"Aprendí que mi mayor lección no estaba en el currículo, sino en cómo reflejaba el amor de Dios cuando un alumno cometía un error..."</p>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-secondary font-bold">M</div>
+<div>
+<p class="font-label-md text-primary">María Elena R.</p>
+<p class="text-xs text-on-surface-variant">Maestra de Primaria</p>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-8 border border-outline-variant/30 hover:shadow-xl transition-all group">
+<span class="material-symbols-outlined text-secondary mb-6 text-4xl" style="font-variation-settings: 'FILL' 1;">format_quote</span>
+<h3 class="font-headline-sm text-primary mb-4">Orar antes de Calificar</h3>
+<p class="font-body-md text-on-surface-variant mb-8 line-clamp-4 italic">"Mis noches de corrección se transformaron cuando empecé a interceder por cada nombre en la parte superior de la hoja..."</p>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-secondary font-bold">L</div>
+<div>
+<p class="font-label-md text-primary">Lucía Fernández</p>
+<p class="text-xs text-on-surface-variant">Profesora de Literatura</p>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-8 border border-outline-variant/30 hover:shadow-xl transition-all group">
+<span class="material-symbols-outlined text-secondary mb-6 text-4xl" style="font-variation-settings: 'FILL' 1;">format_quote</span>
+<h3 class="font-headline-sm text-primary mb-4">Semillas de Eternidad</h3>
+<p class="font-body-md text-on-surface-variant mb-8 line-clamp-4 italic">"Incluso en las escuelas más seculares, la integridad y el servicio hablan un idioma que el alma de un niño reconoce de inmediato."</p>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-secondary font-bold">E</div>
+<div>
+<p class="font-label-md text-primary">Elena G.</p>
+<p class="text-xs text-on-surface-variant">Directora Académica</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Divider -->
+<div class="botanical-divider container mx-auto"></div>
+<!-- Herramientas para el Aula (Resources Grid) -->
+<section class="py-section-gap px-margin-desktop">
+<div class="max-w-container-max mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-display-lg text-headline-md text-primary mb-4">Herramientas para el Aula</h2>
+<p class="font-body-md text-on-surface-variant max-w-2xl mx-auto">Materiales prácticos diseñados para elevar la calidad académica sin perder el enfoque espiritual.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<!-- Resource 1 (Large Bento) -->
+<div class="md:col-span-2 bg-primary-container text-on-primary-container p-10 flex flex-col justify-between overflow-hidden relative min-h-[400px]">
+<div class="relative z-10">
+<span class="bg-secondary text-on-secondary text-[10px] px-3 py-1 font-bold uppercase tracking-widest">NUEVO</span>
+<h3 class="font-display-lg text-headline-sm mt-6 mb-4">Guía de Planificación Bíblica</h3>
+<p class="font-body-md opacity-80 mb-8 max-w-md">Una metodología integral para alinear tus planes de clase con principios eternos de manera orgánica.</p>
+</div>
+<div class="relative z-10 flex items-center gap-4">
+<button class="bg-on-primary text-primary px-6 py-3 font-label-md hover:bg-secondary-container transition-all">Descargar PDF</button>
+<span class="text-xs italic opacity-60">1.2k descargas esta semana</span>
+</div>
+<span class="material-symbols-outlined absolute -bottom-10 -right-10 text-[200px] opacity-10 rotate-12">menu_book</span>
+</div>
+<!-- Resource 2 -->
+<div class="bg-surface-container-low border border-outline-variant/20 p-8 flex flex-col items-center text-center group hover:bg-surface-container transition-all">
+<div class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center text-secondary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">record_voice_over</span>
+</div>
+<h4 class="font-headline-sm text-primary mb-2">Narración para Niños</h4>
+<p class="font-body-md text-on-surface-variant mb-6 text-sm">Técnicas de storytelling para capturar la imaginación y el corazón.</p>
+<a class="mt-auto font-label-md text-secondary hover:text-primary" href="#">Ver Módulo</a>
+</div>
+<!-- Resource 3 -->
+<div class="bg-surface-container-low border border-outline-variant/20 p-8 flex flex-col items-center text-center group hover:bg-surface-container transition-all">
+<div class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center text-secondary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">redeem</span>
+</div>
+<h4 class="font-headline-sm text-primary mb-2">Recursos Gratuitos</h4>
+<p class="font-body-md text-on-surface-variant mb-6 text-sm">Plantillas, láminas y organizadores listos para imprimir y usar.</p>
+<a class="mt-auto font-label-md text-secondary hover:text-primary" href="#">Explorar Gratis</a>
+</div>
+</div>
+</div>
+</section>
+<!-- El Rincón del Estudio Rápido (Tips) -->
+<section class="py-section-gap px-margin-desktop bg-surface-container-low relative">
+<div class="max-w-container-max mx-auto flex flex-col lg:flex-row items-center gap-16">
+<div class="lg:w-1/2 relative">
+<img alt="Small Journal" class="shadow-2xl border-8 border-white" data-alt="A close-up of a small, handcrafted leather journal resting on a white linen tablecloth. Next to it is a small branch of eucalyptus and a pair of delicate gold reading glasses. The scene is lit by soft, diffused morning light, emphasizing textures and a sense of quiet morning reflection. The overall style is modern minimalist with a serene academic touch, using a palette of creams, sages, and deep charcoal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsEz6TQvBFEEUAFrQGMtTgn8SBcsIkqUrb5B9_MyFJtOK6deMWoCu1j5tQfJeE5jsrjziJ06wfru2_8rHvhegCwuIrgxmddRI25AcTpDSLlXHDHgpgbLs0Xvv3eWGSUDdX36zP0WfL6_H26NhJer34maABhoVkotPIh2LXN3baGeA-i2AulDx4xWhus9nYwkmMIs7Xr-KP6zHFS_sxnAIe4m8FfIIY-6udFuxJxAH6BNeDyQF4FDU76I8JS5NrtzpCjPgXHNmCQPI"/>
+<div class="absolute -bottom-6 -right-6 bg-secondary text-on-secondary p-8 hidden md:block">
+<p class="font-display-lg text-4xl">"5 min"</p>
+<p class="font-label-md">devocionales diarios</p>
+</div>
+</div>
+<div class="lg:w-1/2">
+<h2 class="font-display-lg text-headline-md text-primary mb-6">El Rincón del Estudio Rápido</h2>
+<p class="font-body-lg text-on-surface-variant mb-8">Sabemos que tu tiempo es sagrado y a menudo escaso. Aquí te ofrecemos perlas de sabiduría para esos breves momentos entre clases.</p>
+<ul class="space-y-6">
+<li class="flex gap-4 items-start">
+<span class="material-symbols-outlined text-secondary mt-1">potted_plant</span>
+<div>
+<h4 class="font-label-md text-primary mb-1">Micro-Meditation</h4>
+<p class="font-body-md text-on-surface-variant">Cómo meditar en un solo versículo durante el cambio de hora.</p>
+</div>
+</li>
+<li class="flex gap-4 items-start">
+<span class="material-symbols-outlined text-secondary mt-1">potted_plant</span>
+<div>
+<h4 class="font-label-md text-primary mb-1">Audio-Estudio Express</h4>
+<p class="font-body-md text-on-surface-variant">Podcasts de 7 minutos diseñados para el trayecto a la escuela.</p>
+</div>
+</li>
+<li class="flex gap-4 items-start">
+<span class="material-symbols-outlined text-secondary mt-1">potted_plant</span>
+<div>
+<h4 class="font-label-md text-primary mb-1">Oración del Pasillo</h4>
+<p class="font-body-md text-on-surface-variant">Guía de intercesión rápida mientras caminas hacia tu siguiente aula.</p>
+</div>
+</li>
+</ul>
+<button class="mt-10 border-b-2 border-primary text-primary font-label-md pb-1 hover:text-secondary hover:border-secondary transition-all">VER TODOS LOS TIPS</button>
+</div>
+</div>
+</section>
+<!-- Newsletter Footer Section -->
+<section class="py-section-gap px-margin-desktop bg-primary text-on-primary">
+<div class="max-w-3xl mx-auto text-center">
+<span class="material-symbols-outlined text-5xl mb-6 text-secondary-fixed">mail</span>
+<h2 class="font-display-lg text-headline-md mb-4">Recibe aliento semanal en tu bandeja de entrada</h2>
+<p class="font-body-md opacity-80 mb-10">Suscríbete para recibir reflexiones exclusivas, recursos listos para usar y una palabra de ánimo diseñada especialmente para la mujer educadora.</p>
+<form class="flex flex-col md:flex-row gap-4 max-w-lg mx-auto">
+<input class="flex-grow bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:ring-secondary focus:border-secondary p-4" placeholder="Tu correo electrónico" type="email"/>
+<button class="bg-secondary text-on-secondary px-8 py-4 font-label-md hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-all" type="submit">SUSCRIBIRME</button>
+</form>
+<p class="mt-6 text-[10px] opacity-40 uppercase tracking-widest">Respetamos tu tiempo. Sin spam, solo esencia.</p>
+</div>
+</section>
+</main>
+<!-- Global Footer -->
+<footer class="bg-primary dark:bg-surface-container-highest w-full py-section-gap px-margin-desktop flex flex-col items-center gap-unit text-center">
+<div class="font-display-lg text-display-lg text-on-primary dark:text-on-surface mb-8">Florilegio de la Fe</div>
+<div class="flex flex-wrap justify-center gap-gutter mb-12">
+<a class="font-body-md text-on-primary/70 hover:text-secondary-fixed-dim transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-on-primary/70 hover:text-secondary-fixed-dim transition-colors" href="#">Terms of Service</a>
+<a class="font-body-md text-on-primary/70 hover:text-secondary-fixed-dim transition-colors" href="#">Contact Us</a>
+<a class="font-body-md text-on-primary/70 hover:text-secondary-fixed-dim transition-colors" href="#">Teacher Community</a>
+</div>
+<div class="flex gap-6 mb-12">
+<a class="text-on-primary/50 hover:text-white transition-all" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-on-primary/50 hover:text-white transition-all" href="#"><span class="material-symbols-outlined">share</span></a>
+<a class="text-on-primary/50 hover:text-white transition-all" href="#"><span class="material-symbols-outlined">mail</span></a>
+</div>
+<p class="font-body-md text-on-primary/50 dark:text-on-surface-variant max-w-md">© 2024 Florilegio de la Fe. Crafted for the Modern Educator.</p>
+</footer>
+<script>
+        // Simple micro-interaction for navbar transparency
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('py-2', 'bg-surface/95', 'shadow-md');
+                header.classList.remove('py-unit', 'bg-surface/80');
+            } else {
+                header.classList.remove('py-2', 'bg-surface/95', 'shadow-md');
+                header.classList.add('py-unit', 'bg-surface/80');
+            }
+        });
+
+        // Hover effect for the cards
+        document.querySelectorAll('.group').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.querySelector('.material-symbols-outlined').style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.querySelector('.material-symbols-outlined').style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

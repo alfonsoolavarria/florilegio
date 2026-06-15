@@ -1,0 +1,223 @@
+{% extends "base.html" %} {% load static %}
+
+{% block title %}{{ seo_title }}{% endblock %}
+
+{% block content %}
+<div class="panel overflow-hidden bg-gray-25 dark:bg-gray-900 py-6 lg:y-9">
+    <div class="container-fluid px-4">
+        <div class="row justify-center mb-4">
+            <div class="col-12 col-md-11">
+                <div class="hstack gap-3">
+                    <a href="{% url 'author_dashboard' %}" class="btn btn-outline-secondary btn-sm">&larr; Volver al panel</a>
+                    <h1 class="h4 fw-bold mb-0">{% if article %}Editar Artículo{% else %}Nuevo Artículo{% endif %}</h1>
+                </div>
+            </div>
+        </div>
+
+        <form method="post" class="row justify-center">
+            {% csrf_token %}
+
+            <div class="col-12 col-md-11">
+                <div class="row g-4">
+
+                    <!-- LEFT: Editor -->
+                    <div class="col-12 col-lg-6">
+                        <div class="panel bg-white dark:bg-gray-800 p-4 rounded-2 shadow-sm h-100">
+                            <h2 class="h5 fw-semibold mb-3">Editor</h2>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-medium">Título del artículo</label>
+                                <input type="text" name="title" id="id_title"
+                                       class="form-control {% if errors.title %}is-invalid{% endif %}"
+                                       placeholder="Ej: La Soberanía de Dios en la Historia"
+                                        value="{% firstof data.title article.title %}">
+                                {% if errors.title %}
+                                <div class="invalid-feedback">{{ errors.title }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-medium">Categoría</label>
+                                <select name="category" id="id_category"
+                                        class="form-select {% if errors.category %}is-invalid{% endif %}">
+                                    <option value="">-- Selecciona --</option>
+                                    {% for cat in categories %}
+                                    <option value="{{ cat.id }}"
+                                            {% if data.category|stringformat:"s" == cat.id|stringformat:"s" or article and article.category_id == cat.id %}selected{% endif %}>
+                                        {{ cat.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                {% if errors.category %}
+                                <div class="invalid-feedback">{{ errors.category }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-medium">URL de imagen de portada</label>
+                                <input type="url" name="image_url" id="id_image_url"
+                                       class="form-control"
+                                       placeholder="https://ejemplo.com/imagen.jpg"
+                                       value="{% firstof data.image_url article.image_url %}">
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-medium">Contenido</label>
+                                <textarea name="content" id="id_content"
+                                          class="form-control {% if errors.content %}is-invalid{% endif %}"
+                                          rows="20">{% firstof data.content article.content %}</textarea>
+                                {% if errors.content %}
+                                <div class="invalid-feedback">{{ errors.content }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="hstack gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    {% if article %}Guardar cambios{% else %}Enviar para revisión{% endif %}
+                                </button>
+                                <a href="{% url 'author_dashboard' %}" class="btn btn-outline-secondary">Cancelar</a>
+                            </div>
+                            {% if article %}
+                            <p class="text-gray-500 small mt-3 mb-0">
+                                El artículo se guardará en estado <strong>En Revisión</strong> hasta que un administrador lo libere.
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: Preview -->
+                    <div class="col-12 col-lg-6">
+                        <div class="panel bg-white dark:bg-gray-800 p-4 rounded-2 shadow-sm h-100">
+                            <h2 class="h5 fw-semibold mb-3">Vista Previa</h2>
+                            <div id="preview" class="article-preview">
+                                <p class="text-gray-400">Escribe contenido en el editor para ver la vista previa aquí...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{% static 'js/ckeditor.js' %}"></script>
+<script>
+let editorInstance = null;
+
+document.addEventListener("DOMContentLoaded", () => {
+    FlorilegioEditor.create(document.getElementById("id_content"), {
+        toolbar: {
+            items: [
+                "undo", "redo",
+                "heading", "|",
+                "bold", "italic", "underline", "strikethrough", "code", "|",
+                "bulletedList", "numberedList", "outdent", "indent", "|",
+                "link", "blockQuote", "insertTable", "|",
+                "mediaEmbed", "horizontalLine", "|",
+                "sourceEditing"
+            ],
+            shouldNotGroupWhenFull: false
+        },
+        language: "es",
+        placeholder: "Escribe aquí el contenido de tu artículo..."
+    })
+    .then(editor => {
+        editorInstance = editor;
+        updatePreview();
+
+        editor.model.document.on('change:data', () => {
+            updatePreview();
+        });
+    })
+    .catch(error => console.error("CKEditor error:", error));
+});
+
+function updatePreview() {
+    const preview = document.getElementById("preview");
+    if (!preview) return;
+
+    const title = document.getElementById("id_title")?.value || "Sin título";
+    const content = editorInstance ? editorInstance.getData() : "";
+
+    let html = `<article class="preview-article">`;
+    html += `<h1 class="preview-title">${escapeHtml(title)}</h1>`;
+    html += `<div class="preview-content">${content || "<p class='text-gray-400'>El contenido aparecerá aquí...</p>"}</div>`;
+    html += `</article>`;
+    preview.innerHTML = html;
+}
+
+// Also update preview when title changes
+document.addEventListener("DOMContentLoaded", () => {
+    const titleInput = document.getElementById("id_title");
+    if (titleInput) {
+        titleInput.addEventListener("input", updatePreview);
+    }
+});
+
+function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+</script>
+
+<style>
+.article-preview {
+    min-height: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 1rem;
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 0.5rem;
+    background: #fff;
+}
+.article-preview .preview-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+.article-preview .preview-content blockquote {
+    border-left: 4px solid #0d6efd;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+    background: #f8f9fa;
+    font-style: italic;
+    color: #495057;
+}
+.article-preview .preview-content blockquote p {
+    margin-bottom: 0;
+}
+.article-preview .preview-content h2 {
+    font-size: 1.4rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+.article-preview .preview-content h3 {
+    font-size: 1.2rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+.article-preview .preview-content p {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+}
+.article-preview .preview-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+.article-preview .preview-content th,
+.article-preview .preview-content td {
+    border: 1px solid #dee2e6;
+    padding: 0.5rem;
+}
+.article-preview .preview-content pre {
+    background: #f4f4f4;
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+</style>
+{% endblock %}

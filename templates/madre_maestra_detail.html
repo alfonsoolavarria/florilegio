@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ seo_title }}{% endblock %}
+{% block meta_description %}{{ seo_description }}{% endblock %}
+{% block og_title %}{{ seo_title }}{% endblock %}
+{% block og_description %}{{ seo_description }}{% endblock %}
+
+{% block extra_head %}
+<style>
+  :root {
+    --mm-rose: #d4899e;
+    --mm-rose-light: #f3e0e8;
+    --mm-cream: #fef7f0;
+  }
+  .mm-bg-cream {
+    background-color: var(--mm-cream);
+  }
+  .dark .mm-bg-cream {
+    background-color: #1c1518;
+  }
+  .mm-text-rose {
+    color: var(--mm-rose);
+  }
+  .mm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    background: #fdf2f5;
+    color: #b06d82;
+  }
+  .dark .mm-badge {
+    background: #3a222b;
+    color: #d4899e;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="panel overflow-hidden" style="background: linear-gradient(135deg, var(--mm-cream) 0%, #fce9f0 50%, var(--mm-cream) 100%);">
+  <div class="container py-4 lg:py-6">
+    <div class="row justify-center">
+      <div class="col-12 col-lg-8">
+        <a href="{% url 'madres_maestras' %}" class="uc-link fs-7 mm-text-rose mb-3 d-inline-block">
+          ← Volver a Madres Maestras
+        </a>
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="mm-badge"><i class="unicon-users"></i> {{ resource.age_category.name }}</span>
+          {% if resource.bible_passage %}
+          <span class="mm-badge"><i class="unicon-book"></i> {{ resource.bible_passage }}</span>
+          {% endif %}
+          {% if resource.time_minutes %}
+          <span class="mm-badge"><i class="unicon-clock"></i> {{ resource.time_minutes }} min</span>
+          {% endif %}
+        </div>
+        <h1 class="h2 lg:h1 fw-bold text-gray-900 dark:text-white">{{ resource.title }}</h1>
+        {% if resource.objective %}
+          <p class="fs-5 text-gray-600 dark:text-gray-400 mt-2">🎯 {{ resource.objective }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mm-bg-cream py-5 lg:py-7">
+  <div class="container max-w-lg">
+    <div class="row justify-center">
+      <div class="col-12 col-lg-8">
+        <div class="panel bg-white dark:bg-gray-800 rounded-xl border p-4 lg:p-5 vstack gap-4">
+
+          {% if resource.key_verse %}
+          <div class="p-4 rounded-2" style="background: #fdf2f5; border-left: 4px solid var(--mm-rose);">
+            <strong class="fs-7 text-uppercase letter-spacing-wider mm-text-rose">Versículo Clave</strong>
+            <p class="mb-0 mt-2 fst-italic fs-5 text-gray-700 dark:text-gray-300">{{ resource.key_verse }}</p>
+          </div>
+          {% endif %}
+
+          {% if resource.objective %}
+          <div>
+            <strong class="fs-7 text-uppercase letter-spacing-wider mm-text-rose">Objetivo</strong>
+            <p class="mb-0 mt-1">{{ resource.objective }}</p>
+          </div>
+          {% endif %}
+
+          {% if resource.materials %}
+          <div>
+            <strong class="fs-7 text-uppercase letter-spacing-wider mm-text-rose">Materiales</strong>
+            <p class="mb-0 mt-1">{{ resource.materials|linebreaksbr }}</p>
+          </div>
+          {% endif %}
+
+          {% if resource.summary %}
+          <div>
+            <strong class="fs-7 text-uppercase letter-spacing-wider mm-text-rose">Resumen</strong>
+            <p class="mb-0 mt-1">{{ resource.summary }}</p>
+          </div>
+          {% endif %}
+
+          {% if resource.content %}
+          <div class="pt-3 border-top">
+            <strong class="fs-7 text-uppercase letter-spacing-wider mm-text-rose">Desarrollo de la Lección</strong>
+            <div class="mt-2 definition-text">{{ resource.content|safe }}</div>
+          </div>
+          {% endif %}
+
+        </div>
+
+        <div class="text-center mt-4">
+          <a href="{% url 'madres_maestras' %}" class="uc-link mm-text-rose">← Volver a Madres Maestras</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

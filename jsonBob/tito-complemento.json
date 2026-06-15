@@ -1,0 +1,25 @@
+{
+  "libro": "Tito",
+  "contenido": {
+    "introduccion_a_tito": {
+      "breve_trasfondo": [
+        "A. Tito es parte de la colección de cartas de Pablo conocida como “las cartas pastorales”. Esto se debe a que I Timoteo, Tito y II Timoteo traban las exhortaciones de Pablo a sus colaboradores con relación a: 1. Cómo tratar a los falsos maestros 2. Cómo establecer el liderazgo en las iglesias locales 3. Cómo motivar a una vida piadosa. El probable orden cronológico de estos libros sería: I Timoteo y/o Tito, y posteriormente, II Timoteo. Tito desarrolla los mismos temas que I Timoteo, por lo que pudo haber sido escrito antes dado que sus instrucciones son más largas y está más desarrollado teológicamente, al modo de Romanos.",
+        "B. Los desplazamientos geográficos de Pablo y de estos sus colaboradores no coinciden con los mismos en Hechos. Por tanto, muchos –incluyéndome a mí- esto evidencia que Pablo fue liberado de prisión, tras lo cual organizó su cuarto viaje misionero.",
+        "C. La fecha aproximada para este último viaje tiene que haber sido alrededor del 60 d.C. hasta el 68 d.C., porque Pablo fue decapitado bajo el gobierno de Nerón, quien se suicidó en esta misma fecha (muchos asumen la persecución hacia el 65 d.C.)."
+      ]
+    },
+    "tito_el_hombre": [
+      "A. Tito fue uno de los colabores más cercanos de Pablo, lo cual se evidencia en el hecho de que Pablo lo envió a iglesias problemáticas como Corinto y Creta.",
+      "B. Era un gentil puro (Timoteo era medio griego), convertido por la predicación paulina. El Apóstol no quiso circuncidarlo (cf. Gálatas 2:3).",
+      "C. Frecuentemente se le menciona en las cartas de Pablo (cf. II Corintios 2:13; 7:6-15; 8:6-24; 12:18; Gálatas 2:1-3; II Timoteo 4:10), aunque es sorprendente que Lucas no lo mencione en los Hechos de los Apóstoles. Algunos comentaristas suponen que: 1. Pudo haber sido pariente de Lucas -probablemente su hermano-, por lo que incluir su nombre habría sido visto como un acto culturalmente inapropiado por parte de éste. 2. Tito es la principal fuente de información sobre el ministerio y la vida de Pablo, por lo que, al igual que Lucas, no podía autonombrarse.",
+      "D. Acompañó a Pablo y a Bernabé al relevante Concilio de Jerusalén, presentado en Hechos 15, donde fue debatido y acordado el tema de los nuevos creyentes gentiles y su relación con la ley mosaica.",
+      "E. El libro contiene los consejos que Pablo le dio a Tito para su ministerio en Creta.",
+      "F. En el Nuevo Testamento, la última información sobre Tito señala que fue enviado como ministro a Dalmacia (cf. II Timoteo 4:10)."
+    ],
+    "los_falsos_maestros": [
+      "A. Obviamente que en Creta había un grupo de falsos maestros que se oponían al evangelio de Pablo.",
+      "B. Sus enseñanzas teológicas entraron en conflicto con la vida piadosa que se esperaba de los creyentes. 1. Referencias a la vida piadosa (1:1, 16; 2:7, 14; 3:1, 8, 14) 2. Referencias a las cualidades del carácter (2:11-14: 3:4-7)",
+      "C. Es evidente que hay un sabor judío en estas falsas enseñanzas (cf. 1:10, 14; 3:8-9). Tales herejías son una combinación de legalismo judío y pensamiento especulativo griego (Gnosticismo. Vea el Tópico Especial en el 1:1). Son similares a las de los falsos maestros que aparecen en I Timoteo, Colosenses y Efesios. El enfoque de las Cartas Pastorales se centra en las herejías, no exclusivamente en la organización eclesial."
+    ]
+  }
+}

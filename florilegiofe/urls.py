@@ -21,7 +21,8 @@ from django.http import HttpResponse
 from main_florife import views
 from main_florife import views_api_bible
 from main_florife import views_youversion
-from main_florife.admin_views import admin_bible_import, admin_import_rv1960_strongs, admin_import_strong_concord, admin_import_louw_nida
+from main_florife import views_authors
+from main_florife.admin_views import admin_bible_import, admin_import_rv1960_strongs, admin_import_strong_concord
 from main_florife.sitemap import ArticleSitemap, EssaySitemap, StaticSitemap
 
 sitemaps = {
@@ -49,7 +50,7 @@ urlpatterns = [
     path("admin/bible-import/", admin_bible_import, name="admin_bible_import"),
     path("admin/import-rv1960-strongs/", admin_import_rv1960_strongs, name="admin_import_rv1960_strongs"),
     path("admin/import-strong-concord/", admin_import_strong_concord, name="admin_import_strong_concord"),
-    path("admin/import-louw-nida/", admin_import_louw_nida, name="admin_import_louw_nida"),
+
 
     path('admin/', admin.site.urls),
     path("", views.dashboard, name="index"),
@@ -66,10 +67,13 @@ urlpatterns = [
     path("planes/", views.planes, name="planes"),
     path("mis-estudios/", views.mis_estudios, name="mis_estudios"),
     path("apoyo/", views.apoyo, name="apoyo"),
+    path("madres/", views.madres_maestras, name="madres_maestras"),
+    path("madres/<slug:slug>/", views.madre_maestra_detail, name="madre_maestra_detail"),
     path("api/versiculo/", views.api_get_versiculo, name="api_get_versiculo"),
     path("api/estudios/guardar/", views.api_save_study, name="api_save_study"),
     path("api/estudios/<int:study_id>/", views.api_get_study, name="api_get_study"),
     path("api/strong/<int:numero>/", views.api_get_strong, name="api_get_strong"),
+    path("api/contexto/<int:libro_numero>/", views.api_get_contexto_libro, name="api_get_contexto_libro"),
     path("palabra/<str:idioma>/<str:pk>/", views.palabra_detalle, name="palabra_detalle"),
     
     # Auth URLs
@@ -80,6 +84,11 @@ urlpatterns = [
     path("perfil/", views.profile_view, name="profile"),
     path("api/perfil/avatar/", views.api_update_avatar, name="update_avatar"),
     path("api/paypal/subscription/activate/", views.api_paypal_activate, name="api_paypal_activate"),
+
+    # Portal de Autores
+    path("autores/panel/", views_authors.author_dashboard, name="author_dashboard"),
+    path("autores/articulo/nuevo/", views_authors.author_article_create, name="author_article_create"),
+    path("autores/articulo/<int:article_id>/editar/", views_authors.author_article_edit, name="author_article_edit"),
 
     # Allauth (Google OAuth, etc.)
     path("accounts/", include("allauth.urls")),

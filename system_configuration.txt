@@ -3,7 +3,7 @@
 ======================================================================
 
 Requisitos: Python 3.11+, virtualenv activado, archivos JSON y CSV en
-sus ubicaciones (strong_hebreo.json, strong_griego.json, louw_nida.json,
+sus ubicaciones (strong_hebreo.json, strong_griego.json,
 biblia/morphhb/, data/*.json, etc.)
 
 Todos los comandos se ejecutan desde el directorio raíz del proyecto
@@ -17,7 +17,6 @@ python manage.py migrate
 
 Esto crea las tablas faltantes, incluyendo:
   - strong_concord      (migración 0023)
-  - louw_nida_concord   (migración 0024)
 
 ======================================================================
   PASO 2 — COLECTAR ARCHIVOS ESTÁTICOS (solo producción)
@@ -112,17 +111,6 @@ Requiere: strong_hebreo.json y strong_griego.json en el proyecto.
 POBLACIÓN: ~14,000 registros en strong_concord.
 
 ======================================================================
-  PASO 9 — IMPORTAR DOMINIO SEMÁNTICO LOUW-NIDA
-======================================================================
-
-Admin Django → /admin/ → "Importar Datos"
-  → "Importar Dominio Semántico Louw-Nida"
-  → Botón "Importar Definiciones de Louw-Nida"
-
-Requiere: louw_nida.json en el proyecto.
-POBLACIÓN: ~6,600 registros en louw_nida_concord.
-
-======================================================================
   PASO 10 — GENERAR LIBROS BÍBLICOS
 ======================================================================
 
@@ -164,7 +152,7 @@ print(f'Palabras Griegas:{PalabraBiblia.objects.count()}')
 print(f'Palabras Hebreas:{PalabraHebreo.objects.count()}')
 print(f'Libros:          {LibroBiblia.objects.count()} ({LibroBiblia.objects.filter(testamento=\"Antiguo Testamento\").count()} AT + {LibroBiblia.objects.filter(testamento=\"Nuevo Testamento\").count()} NT)')
 print(f'Strong Concord:  {StrongConcord.objects.count()}')
-print(f'Louw-Nida:       {LouwNidaConcord.objects.count()}')
+
 print(f'Vine Concord:    {VineConcord.objects.count()}')
 "
 
@@ -179,6 +167,5 @@ print(f'Vine Concord:    {VineConcord.objects.count()}')
   5. python manage.py import_morphhb biblia/morphhb
   6. Admin → Importar RV1960 con Strong (AT)
   7. Admin → Importar Definiciones de Strong
-  8. Admin → Importar Dominio Semántico Louw-Nida
-  9. python manage.py generar_libros
-  10. python manage.py seed_data
+  8. python manage.py generar_libros
+  9. python manage.py seed_data

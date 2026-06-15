@@ -1,0 +1,133 @@
+{
+  "libro": "Filemón",
+  "contenido": {
+    "introduccion": "INTRODUCCIÓN A FILEMÓN",
+    "declaraciones_iniciales": [
+      "A. Este libro es un ejemplo de una carta privada tan común en el mundo Greco-Romano del primer siglo. Probablemente cabía en una hoja de papiro (vea III Juan). Es incierto a quien era dirigida primordialmente: (1) Filemón; (2) Apia y Arquipo (vea Col. 4:17) o (3) o en cierto sentido a la iglesia entera en el hogar.",
+      "B. Esta carta provee una ventana hacia 1. Los métodos pastorales del Apóstol Pablo 2. Las iglesias en el hogar del primer siglo (vea Ro. 16; I Co. 10:19; Col. 4:15)",
+      "C. El Cristianismo ya estaba cambiando radicalmente el entorno social del mundo Mediterráneo. Las barreras sociales al evangelio se estaban cayendo (vea I Co. 12:13; Gá. 3:28; Col. 3:11)."
+    ],
+    "autor": [
+      "A. La naturaleza personal de la carta convence a la mayoría de los lectores (una excepción, F.C. Baur) que el autor fue Pablo, el Apóstol.",
+      "B. Filemón y Colosenses están relacionados muy cercanamente 1. Mismo origen 2. Las mismas personas dando saludos 3. Mismo final 4. Tíquico fue quien llevó la carta de los Colosenses y viajó con Onésimo (vea Col. 4:7,9). Si Filemón es Paulina, también lo es Colosenses (la cual es puesta en duda por varios eruditos modernos).",
+      "C. Es mencionada entre las cartas de Pablo tanto por el hereje primitivo Marción (quien vino a Roma en los 140’s D.C.) y la lista de libros canónicos, los Fragmentos Muratoriano (escritos en Roma entre 180-200 D.C.)."
+    ],
+    "fecha": {
+      "detalles": [
+        "A. La fecha de esta carta esta conectada a uno de los encarcelamientos de Pablo (Efeso, Filipo, Cesárea, o Roma). Un encarcelamiento en Roma se apega mejor a las verdades de los Hechos.",
+        "B. Una vez que Roma es asumida ser el lugar de encarcelamiento, la pregunta que surge es--¿Cuál de todas? Pablo estuvo en la cárcel en los tempranos 60’s y esto esta grabado en Hechos. Sin embargo, él fue dejado en libertad y escribió las cartas Pastorales (I & II Timoteo y Tito) y fue después arrestado y muerto antes de Junio 9, 68 D.C. (el suicidio de Nero). La que mejor conjetura que se puede dar para la fecha en que se escribió Colosenses, Efesios y Filemón es el primer encarcelamiento de Pablo, a los tempranos 60’s. Filipenses probablemente se escribió a mitad de los 60’s.",
+        "C. Tíquico, juntamente con Onésimo, probablemente llevaron las cartas de Colosenses, Efesios y Filemón a Asia Menor. Después (posiblemente varios años después), Epafrodito, después de recobrarse de su enfermedad física, llevó de regreso la carta de los filipenses a su iglesia natal."
+      ],
+      "cronologia_probable_pablo": {
+        "fuente": "Siguiendo a F.F. Bruce y Murry Harris (con adaptaciones menores).",
+        "tabla_cronologica": [
+          {
+            "numero": 1,
+            "libro": "Gálatas",
+            "fecha": "48",
+            "lugar_escritura": "Siria Antioquia",
+            "relacion_hechos": "14:28; 15:2"
+          },
+          {
+            "numero": 2,
+            "libro": "I Tesalonicenses",
+            "fecha": "50",
+            "lugar_escritura": "Corinto",
+            "relacion_hechos": "18:5"
+          },
+          {
+            "numero": 3,
+            "libro": "II Tesalonicenses",
+            "fecha": "50",
+            "lugar_escritura": "Corinto",
+            "relacion_hechos": ""
+          },
+          {
+            "numero": 4,
+            "libro": "I Corintios",
+            "fecha": "55",
+            "lugar_escritura": "Éfeso",
+            "relacion_hechos": "19:20"
+          },
+          {
+            "numero": 5,
+            "libro": "II Corintios",
+            "fecha": "56",
+            "lugar_escritura": "Macedonia",
+            "relacion_hechos": "20:2"
+          },
+          {
+            "numero": 6,
+            "libro": "Romanos",
+            "fecha": "57",
+            "lugar_escritura": "Corinto",
+            "relacion_hechos": "20:3"
+          },
+          {
+            "seccion": "7.-10. Cartas de la Prisión",
+            "registros": [
+              {
+                "libro": "Colosenses",
+                "fecha": "principios 60’s",
+                "lugar_escritura": "Roma",
+                "relacion_hechos": ""
+              },
+              {
+                "libro": "Efesios",
+                "fecha": "principios 60’s",
+                "lugar_escritura": "Roma",
+                "relacion_hechos": ""
+              },
+              {
+                "libro": "Filemón",
+                "fecha": "principios 60’s",
+                "lugar_escritura": "Roma",
+                "relacion_hechos": ""
+              },
+              {
+                "libro": "Filipenses",
+                "fecha": "Finales 62-63",
+                "lugar_escritura": "Roma",
+                "relacion_hechos": "28:30-31"
+              }
+            ]
+          },
+          {
+            "seccion": "11.-13. Cuarto Viaje Misionero",
+            "registros": [
+              {
+                "libro": "I Timoteo",
+                "fecha": "63 (o después, pero antes de 68)",
+                "lugar_escritura": "Macedonia",
+                "relacion_hechos": ""
+              },
+              {
+                "libro": "Tito",
+                "fecha": "63 (o después, pero antes de 68)",
+                "lugar_escritura": "Éfeso (?)",
+                "relacion_hechos": ""
+              },
+              {
+                "libro": "II Timoteo",
+                "fecha": "64 D.C. 68",
+                "lugar_escritura": "Roma",
+                "relacion_hechos": ""
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ocasion_para_la_carta": [
+      "A. Filemón era el dueño de Onésimo el esclavo. Él vivía en Colosas. Probablemente era un convertido de Pablo, posiblemente mientras que Pablo ministraba en Efeso.",
+      "B. Onésimo era un esclavo de Filemón que se habían fugado. Él también era un convertido de Pablo, mientras estaba en la Prisión en Roma (61-63 D.C.). Es incierto como Pablo y Onésimo se conocieron. Quizás (1) ambos estaban encarcelados, (2) Onésimo fue enviado a llevarle un recado a Pablo, u (3) Onésimo buscó a Pablo para que le diera un consejo cuando cambió su forma de pensar después de haberse fugado.",
+      "C. Epafras era un creyente de Asia Menor y el fundador de las Iglesias en el Valle del Río Lycus (Colosas, Laodicea y Hierápolis). Él llevó palabra a Pablo en la prisión acerca de la herejía en Colosas y acerca de la fidelidad de Filemón.",
+      "D. Tíquico fuel el que llevó las cartas de Pablo a esta área: Colosenses, Efesios, y Filemón (vea Col. 4:7-9; Ef. 6:21-22). Onésimo también regresó con él para encarar a su maestro (vea v. 11). Filemón es una de las dos cartas privadas preservadas en el Nuevo Testamento (vea III Juan). Como cincuenta años después (110 D.C.) Ignacio, de camino a Roma a ser mártir, escribió una carta (“A los Efesios” 1:3) a el obispo de Efeso llamado Onésimo! Podría éste, haber sido convertido!"
+    ],
+    "proposito_de_la_carta": [
+      "A. Muestra la manera en como Pablo usa su autoridad apostólica y animo pastoral.",
+      "B. Muestra como el Cristianismo hizo hermanos y hermanas de esclavos y amos, pobres y ricos! Esta verdad cambiaría, a su tiempo radicalmente el Imperio Romano.",
+      "C. Muestra las creencias de Pablo que él sería dejado libre del encarcelamiento Romano y regresaría a Asia Menor."
+    ]
+  }
+}
