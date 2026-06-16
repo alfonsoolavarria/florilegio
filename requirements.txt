@@ -5,3 +5,4 @@ python-dotenv==1.0.1
 django-allauth==0.54.0
 django-ratelimit==4.1.0
 bleach==6.3.0
+Pillow==12.2.0

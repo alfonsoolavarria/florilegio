@@ -13,9 +13,17 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user_email', 'social_handle')
+    list_display = ('name', 'user_email', 'social_handle', 'has_photo')
     search_fields = ('name', 'bio', 'user__email')
     raw_id_fields = ('user',)
+    fieldsets = (
+        (None, {'fields': ('user', 'name', 'bio', 'image_url', 'photo', 'social_handle')}),
+    )
+
+    def has_photo(self, obj):
+        return bool(obj.photo)
+    has_photo.boolean = True
+    has_photo.short_description = 'Foto'
 
     def user_email(self, obj):
         return obj.user.email if obj.user else '—'

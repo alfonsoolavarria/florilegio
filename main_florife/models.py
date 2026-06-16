@@ -54,10 +54,19 @@ class Author(models.Model):
     name = models.CharField(max_length=150)
     bio = models.TextField()
     image_url = models.URLField(max_length=500, blank=True, null=True)
+    photo = models.ImageField(upload_to='authors/', blank=True, null=True)
     social_handle = models.CharField(max_length=100, blank=True, null=True, help_text="Ej: @JohnPiper")
 
     def __str__(self):
         return self.name
+
+    @property
+    def photo_url(self):
+        if self.photo:
+            return self.photo.url
+        if self.image_url:
+            return self.image_url
+        return 'https://via.placeholder.com/150'
 
     def clean(self):
         if self.user and Author.objects.filter(user=self.user).exclude(pk=self.pk).exists():
