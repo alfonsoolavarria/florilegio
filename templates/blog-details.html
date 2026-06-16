@@ -80,6 +80,10 @@
             <div class="panel vstack gap-4 md:gap-6 xl:gap-8 text-center">
                 <div class="panel vstack items-center max-w-400px sm:max-w-500px xl:max-w-md mx-auto gap-2 md:gap-3">
                     <h1 class="h4 sm:h2 lg:h1 xl:display-6">{{ article.title }}</h1>
+                    <div class="fs-6 text-gray-600 dark:text-gray-400 flex items-center gap-2 justify-content-center">
+                        <i class="unicon-calendar"></i>
+                        <time datetime="{{ article.created_at|date:'c' }}">{{ article.created_at|date:"d \d\e F, Y" }}</time>
+                    </div>
                     <ul class="post-share-icons nav-x gap-1 dark:text-white">
                         <!-- Social Share Icons (simplified for now) -->
                         <li><a class="btn btn-md p-0 border-gray-900 border-opacity-15 w-32px lg:w-48px h-32px lg:h-48px text-dark dark:text-white dark:border-white hover:bg-primary hover:border-primary hover:text-white rounded-circle" href="#"><i class="unicon-logo-facebook icon-1"></i></a></li>
