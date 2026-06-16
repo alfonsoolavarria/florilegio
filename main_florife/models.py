@@ -62,10 +62,10 @@ class Author(models.Model):
 
     @property
     def photo_url(self):
-        if self.photo:
-            return self.photo.url
         if self.image_url:
             return self.image_url
+        if self.photo:
+            return self.photo.url
         return 'https://via.placeholder.com/150'
 
     def clean(self):
