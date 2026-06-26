@@ -311,6 +311,68 @@
     color: var(--bs-primary, #0d6efd);
   }
 
+  .bible-reading-panel {
+    display: grid;
+    grid-template-columns: 32px 1fr 32px;
+    gap: 0 8px;
+  }
+  .bible-reading-panel > h3 {
+    grid-column: 1 / -1;
+  }
+  .chapter-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    color: #800020;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    position: sticky;
+    top: 100px;
+    z-index: 5;
+    align-self: start;
+  }
+  .chapter-nav-prev {
+    grid-column: 1;
+    grid-row: 2;
+    margin-left: -24px;
+    margin-top: 4px;
+  }
+  .chapter-nav-next {
+    grid-column: 3;
+    grid-row: 2;
+    margin-right: -24px;
+    margin-top: 4px;
+  }
+  .chapter-nav-btn:hover {
+    border-color: #800020;
+    background: #fef2f3;
+  }
+  .chapter-nav-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.15);
+  }
+  .chapter-nav-btn:active {
+    background: #fce4e6;
+  }
+  .chapter-nav-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .dark .chapter-nav-btn {
+    background: #2a2a2a;
+    border-color: #555;
+    color: #d48c9c;
+  }
+  .dark .chapter-nav-btn:hover {
+    border-color: #d48c9c;
+    background: #3a2a2e;
+  }
   .bible-label {
     font-size: 0.8rem;
     font-weight: 700;
@@ -322,6 +384,13 @@
   }
   .dark .bible-label {
     color: #9ca3af;
+  }
+
+  .context-panel-bg {
+    background-color: #f7f3ed;
+  }
+  .dark .context-panel-bg {
+    background-color: #252525;
   }
 
   /* ─── Custom Select ─────────────────────────────────────────────────── */
@@ -1253,9 +1322,14 @@
         <div id="content-leer">
           <div class="d-flex flex-column flex-lg-row gap-4 align-items-start">
             <div class="panel p-4 bg-white dark:bg-gray-800 rounded-3 border bible-reading-panel">
-              <h4 class="h5 mb-4 border-bottom pb-2">
+              <h3 class="h4 mb-4 border-bottom pb-2">
                 <i class="unicon-book me-2"></i> Lectura Bíblica
-              </h4>
+              </h3>
+              <button id="btn-chapter-prev" class="chapter-nav-btn chapter-nav-prev" type="button" title="Capítulo anterior">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
               <div
                 id="leer-container"
                 class="d-flex flex-wrap gap-2 align-items-start"
@@ -1266,8 +1340,13 @@
                   presiona Leer.
                 </div>
               </div>
+              <button id="btn-chapter-next" class="chapter-nav-btn chapter-nav-next" type="button" title="Siguiente capítulo">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
             </div>
-            <div class="panel bg-white dark:bg-gray-800 rounded-3 border flex-grow-1 d-flex flex-column" style="position:sticky;top:80px;max-height:calc(100vh - 120px);">
+            <div class="panel rounded-3 border flex-grow-1 d-flex flex-column context-panel-bg" style="position:sticky;top:80px;max-height:calc(100vh - 120px);">
               <div class="p-4 pb-0">
                 <h4 class="h5 mb-3 border-bottom pb-2">
                   <i class="unicon-information-circle me-2"></i> Contexto de <span id="context-book-name">Selecciona un libro</span>
@@ -1279,7 +1358,7 @@
               </div>
               <div class="flex-grow-1 overflow-hidden" style="min-height:0;">
                 <div class="context-panel h-100" id="context-general">
-                  <div id="book-context-content" class="p-4 text-gray-700 dark:text-gray-300 overflow-y-auto" style="height:100%;font-size:1.5rem;line-height:1.85;">
+                  <div id="book-context-content" class="p-4 text-gray-700 dark:text-gray-300 overflow-y-auto" style="height:100%;">
                     <div class="w-100 text-center opacity-50 fst-italic">
                       Selecciona un libro en la barra lateral para ver su contexto.
                     </div>
@@ -2833,6 +2912,55 @@
           leerContainer.style.opacity = "1";
         });
       }
+    });
+
+    // ─── Chapter navigation (prev / next) ──────────────────────────────
+    const btnChapterPrev = document.getElementById("btn-chapter-prev");
+    const btnChapterNext = document.getElementById("btn-chapter-next");
+
+    function updateChapterButtons() {
+      const libroId = leerLibroSelect.value;
+      const capituloId = leerCapituloSelect.value;
+      if (!libroId || !capituloId || !estructuraData[libroId]) {
+        btnChapterPrev.disabled = true;
+        btnChapterNext.disabled = true;
+        return;
+      }
+      const chapters = Object.keys(estructuraData[libroId]).map(Number).sort((a, b) => a - b);
+      const current = Number(capituloId);
+      const maxChapter = chapters[chapters.length - 1];
+      btnChapterPrev.disabled = current <= chapters[0];
+      btnChapterNext.disabled = current >= maxChapter;
+    }
+
+    function goToChapter(chapterNum) {
+      const libroId = leerLibroSelect.value;
+      if (!libroId || !estructuraData[libroId]) return;
+      const chapters = Object.keys(estructuraData[libroId]).map(Number).sort((a, b) => a - b);
+      if (!chapters.includes(chapterNum)) return;
+      leerCapituloSelect.value = chapterNum;
+      const wrapper = document.querySelector('.custom-select[data-for="leer-capituloSelect"]');
+      if (wrapper && wrapper._syncFromSelect) wrapper._syncFromSelect();
+      btnLeer.click();
+    }
+
+    btnChapterPrev.addEventListener("click", function () {
+      const capituloId = leerCapituloSelect.value;
+      if (!capituloId) return;
+      goToChapter(Number(capituloId) - 1);
+    });
+
+    btnChapterNext.addEventListener("click", function () {
+      const capituloId = leerCapituloSelect.value;
+      if (!capituloId) return;
+      goToChapter(Number(capituloId) + 1);
+    });
+
+    updateChapterButtons();
+    leerLibroSelect.addEventListener("change", updateChapterButtons);
+    leerCapituloSelect.addEventListener("change", updateChapterButtons);
+    btnLeer.addEventListener("click", function () {
+      setTimeout(updateChapterButtons, 300);
     });
 
     estudioLibroSelect.addEventListener("change", function () {
