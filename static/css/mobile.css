@@ -1,0 +1,284 @@
+/* ==========================================================================
+   Florilegio de la Fe — Mobile Experience Layer
+   Rama: gabriel-responsive-movil
+   Bottom dock flotante (estilo WhatsApp) + refinamientos responsive.
+   Se carga después de custom.css: solo actúa bajo 992px salvo indicación.
+   ========================================================================== */
+
+:root {
+    --fm-nav-height: 64px;
+    --fm-nav-gap: 14px;
+    --fm-primary: #800020;
+    --fm-primary-soft: rgba(128, 0, 32, 0.12);
+    --fm-cream: #f7f3ed;
+    --fm-nav-bg: rgba(247, 243, 237, 0.92);
+    --fm-nav-border: rgba(128, 0, 32, 0.08);
+    --fm-nav-ink: #5c5145;
+    --fm-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.dark,
+.uc-dark {
+    --fm-nav-bg: rgba(22, 20, 24, 0.88);
+    --fm-nav-border: rgba(255, 255, 255, 0.08);
+    --fm-nav-ink: #b9b0a6;
+    --fm-primary-soft: rgba(233, 221, 210, 0.14);
+}
+
+/* El dock solo existe en móvil/tablet */
+.fm-bottom-nav {
+    display: none;
+}
+
+@media (max-width: 991.98px) {
+
+    /* ----------------------------------------------------------------
+       1. Bottom dock flotante
+       ---------------------------------------------------------------- */
+    .fm-bottom-nav {
+        position: fixed;
+        left: 50%;
+        bottom: calc(var(--fm-nav-gap) + var(--fm-safe-bottom));
+        transform: translateX(-50%);
+        width: min(430px, calc(100% - 24px));
+        height: var(--fm-nav-height);
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 6px;
+        background: var(--fm-nav-bg);
+        -webkit-backdrop-filter: blur(18px) saturate(1.6);
+        backdrop-filter: blur(18px) saturate(1.6);
+        border: 1px solid var(--fm-nav-border);
+        border-radius: 999px;
+        box-shadow: 0 10px 34px rgba(26, 15, 10, 0.18), 0 2px 8px rgba(26, 15, 10, 0.08);
+        z-index: 998;
+        transition: transform 0.35s cubic-bezier(0.32, 0.72, 0.28, 1), opacity 0.3s ease;
+        will-change: transform;
+        animation: fm-nav-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: 0.15s;
+    }
+
+    @keyframes fm-nav-in {
+        from {
+            transform: translateX(-50%) translateY(140%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* Oculto al bajar scroll o al abrir teclado */
+    .fm-bottom-nav.fm-nav-hidden {
+        transform: translateX(-50%) translateY(calc(100% + var(--fm-nav-gap) + var(--fm-safe-bottom) + 10px));
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /* ----------------------------------------------------------------
+       2. Items: círculo + etiqueta
+       ---------------------------------------------------------------- */
+    .fm-nav-item {
+        flex: 1 1 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        text-decoration: none !important;
+        color: var(--fm-nav-ink);
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+    }
+
+    .fm-nav-icon {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 1.3rem;
+        line-height: 1;
+        color: inherit;
+        background: transparent;
+        transition: background 0.25s ease, color 0.25s ease, transform 0.18s ease;
+    }
+
+    .fm-nav-label {
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 10.5px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    .fm-nav-item:hover,
+    .fm-nav-item:focus-visible {
+        color: var(--fm-primary);
+    }
+
+    .fm-nav-item:active .fm-nav-icon {
+        transform: scale(0.82);
+    }
+
+    /* Estado activo: círculo relleno suave (estilo WhatsApp/Material 3) */
+    .fm-nav-item.active {
+        color: var(--fm-primary);
+    }
+
+    .dark .fm-nav-item.active,
+    .uc-dark .fm-nav-item.active {
+        color: #e9ddd2;
+    }
+
+    .fm-nav-item.active .fm-nav-icon {
+        background: var(--fm-primary-soft);
+        animation: fm-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes fm-pop {
+        0% { transform: scale(0.7); }
+        60% { transform: scale(1.12); }
+        100% { transform: scale(1); }
+    }
+
+    /* ----------------------------------------------------------------
+       3. FAB central elevado — "Estudio"
+       ---------------------------------------------------------------- */
+    .fm-nav-fab {
+        flex: 0 0 72px;
+    }
+
+    .fm-nav-fab .fm-nav-icon {
+        width: 56px;
+        height: 56px;
+        margin-top: -34px;
+        font-size: 1.5rem;
+        color: #fff !important;
+        background: linear-gradient(145deg, #9a0f31 0%, #800020 60%, #5e0018 100%);
+        border: 4px solid var(--fm-cream);
+        box-shadow: 0 8px 20px rgba(128, 0, 32, 0.38), 0 2px 6px rgba(0, 0, 0, 0.15);
+        transition: transform 0.2s ease, box-shadow 0.25s ease;
+    }
+
+    .dark .fm-nav-fab .fm-nav-icon,
+    .uc-dark .fm-nav-fab .fm-nav-icon {
+        border-color: #1a181c;
+    }
+
+    .fm-nav-fab.active .fm-nav-icon {
+        background: linear-gradient(145deg, #b01438 0%, #93062a 60%, #6d001d 100%);
+        box-shadow: 0 10px 26px rgba(128, 0, 32, 0.5), 0 2px 6px rgba(0, 0, 0, 0.18);
+    }
+
+    .fm-nav-fab:active .fm-nav-icon {
+        transform: scale(0.9);
+    }
+
+    .fm-nav-fab .fm-nav-label {
+        margin-top: 1px;
+        font-weight: 700;
+    }
+
+    /* ----------------------------------------------------------------
+       4. Convivencia con el resto del layout
+       ---------------------------------------------------------------- */
+
+    /* El footer respira para que el dock no tape el último contenido */
+    #uc-footer .footer-outer {
+        padding-bottom: calc(var(--fm-nav-height) + var(--fm-nav-gap) + 40px + var(--fm-safe-bottom)) !important;
+    }
+
+    /* Botón "subir" por encima del dock */
+    .backtotop-wrap {
+        bottom: calc(var(--fm-nav-height) + var(--fm-nav-gap) + 12px + var(--fm-safe-bottom)) !important;
+    }
+
+    /* ----------------------------------------------------------------
+       5. Barra superior en móvil: marca + acciones (la navegación
+          vive abajo). Se oculta la hamburguesa: el menú completo
+          se abre desde el dock.
+       ---------------------------------------------------------------- */
+    div#mobile-menu-toggle {
+        display: none !important;
+    }
+
+    .uc-navbar .sticky-logo {
+        display: block !important;
+    }
+
+    .uc-navbar .sticky-logo img {
+        width: 110px !important;
+    }
+
+    /* Objetivos táctiles cómodos en la barra superior */
+    .uc-navbar-right .uc-navbar-item > a,
+    .uc-navbar-right .search-toggle {
+        min-width: 44px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* ----------------------------------------------------------------
+       6. Arreglos responsive globales
+       ---------------------------------------------------------------- */
+
+    /* El panel de lectura bíblica tenía base fija de 840px y desbordaba */
+    .bible-reading-panel {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    /* Footer inferior apilado y centrado */
+    .footer-bottom {
+        flex-direction: column !important;
+        gap: 14px;
+        text-align: center;
+    }
+
+    /* Gutters laterales un poco más generosos */
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    /* Feedback táctil en tarjetas */
+    .post-card-featured:active,
+    .post-card-vertical:active,
+    .post-card-grid:active,
+    .category-card:active,
+    .related-post-item:active {
+        transform: scale(0.98);
+        transition: transform 0.15s ease;
+    }
+
+    /* Evitar desbordes horizontales en contenido largo */
+    .theology-content img,
+    .theology-content iframe,
+    .theology-content table {
+        max-width: 100%;
+    }
+
+    .theology-content table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+/* Accesibilidad: sin animaciones si el usuario lo pide */
+@media (prefers-reduced-motion: reduce) {
+    .fm-bottom-nav,
+    .fm-nav-icon,
+    .fm-nav-item.active .fm-nav-icon {
+        animation: none !important;
+        transition: none !important;
+    }
+}

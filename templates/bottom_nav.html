@@ -1,0 +1,97 @@
+{% load static %}
+{% with url_name=request.resolver_match.url_name %}
+<!-- Bottom Nav móvil (estilo WhatsApp) start -->
+<nav id="fm-bottom-nav" class="fm-bottom-nav" aria-label="Navegación principal móvil">
+  <a
+    class="fm-nav-item {% if url_name == 'index' %}active{% endif %}"
+    href="/"
+    aria-label="Inicio"
+  >
+    <span class="fm-nav-icon"><i class="icon unicon-home"></i></span>
+    <span class="fm-nav-label">Inicio</span>
+  </a>
+  <a
+    class="fm-nav-item {% if url_name == 'article_list' or url_name == 'article_detail' %}active{% endif %}"
+    href="{% url 'article_list' %}"
+    aria-label="Artículos"
+  >
+    <span class="fm-nav-icon"><i class="icon unicon-book"></i></span>
+    <span class="fm-nav-label">Artículos</span>
+  </a>
+  <a
+    class="fm-nav-item fm-nav-fab {% if url_name == 'estudios' or url_name == 'mis_estudios' or url_name == 'palabra_detalle' %}active{% endif %}"
+    href="{% url 'estudios' %}"
+    aria-label="Estudio bíblico"
+  >
+    <span class="fm-nav-icon"><i class="icon unicon-notebook"></i></span>
+    <span class="fm-nav-label">Estudio</span>
+  </a>
+  <a
+    class="fm-nav-item {% if url_name == 'essay_list' or url_name == 'essay_detail' %}active{% endif %}"
+    href="{% url 'essay_list' %}"
+    aria-label="Ensayos"
+  >
+    <span class="fm-nav-icon"><i class="icon unicon-edit"></i></span>
+    <span class="fm-nav-label">Ensayos</span>
+  </a>
+  <a
+    class="fm-nav-item {% if url_name == 'madres_maestras' or url_name == 'madre_maestra_detail' or url_name == 'apoyo' or url_name == 'contact' or url_name == 'profile' or url_name == 'planes' %}active{% endif %}"
+    href="#uc-menu-panel"
+    data-uc-toggle
+    aria-label="Abrir menú completo"
+  >
+    <span class="fm-nav-icon"><i class="icon unicon-menu"></i></span>
+    <span class="fm-nav-label">Menú</span>
+  </a>
+</nav>
+
+<script>
+  (function () {
+    var nav = document.getElementById("fm-bottom-nav");
+    if (!nav) return;
+
+    // Ocultar al bajar, mostrar al subir o cerca del inicio
+    var lastY = window.pageYOffset || 0;
+    var ticking = false;
+    function onScroll() {
+      var y = window.pageYOffset || 0;
+      if (y < 80) {
+        nav.classList.remove("fm-nav-hidden");
+      } else if (y > lastY + 8) {
+        nav.classList.add("fm-nav-hidden");
+      } else if (y < lastY - 8) {
+        nav.classList.remove("fm-nav-hidden");
+      }
+      lastY = y;
+      ticking = false;
+    }
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (!ticking) {
+          window.requestAnimationFrame(onScroll);
+          ticking = true;
+        }
+      },
+      { passive: true }
+    );
+
+    // Ocultar cuando se abre el teclado (foco en campos de texto)
+    var fieldSel = 'input, textarea, select, [contenteditable="true"]';
+    document.addEventListener("focusin", function (e) {
+      if (e.target && e.target.matches && e.target.matches(fieldSel)) {
+        nav.classList.add("fm-nav-hidden");
+      }
+    });
+    document.addEventListener("focusout", function () {
+      setTimeout(function () {
+        var el = document.activeElement;
+        if (!el || !el.matches || !el.matches(fieldSel)) {
+          nav.classList.remove("fm-nav-hidden");
+        }
+      }, 120);
+    });
+  })();
+</script>
+<!-- Bottom Nav móvil end -->
+{% endwith %}

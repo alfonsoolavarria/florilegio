@@ -1,7 +1,7 @@
 {% load static %}
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>{% block title %}Florilegio de la Fe{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}Florilegio de la Fe es un sitio web para profundizar en la intimidad con Dios a través de artículos de teología, historia y biografías.{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}teología, fe, cristianos, Dios, evangelio, palabra de Dios, biblia, estudio bíblico, historia de la iglesia, biografías cristianas{% endblock %}">
@@ -48,6 +48,7 @@
     <!-- include main style -->
     <link rel="stylesheet" href="{% static 'css/demo-four.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mobile.css' %}">
 
     <!-- include scripts -->
     <script src="{% static 'js/uni-core-bundle.min.js' %}"></script>
