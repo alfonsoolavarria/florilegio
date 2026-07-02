@@ -2,7 +2,7 @@
    Estrategia: red primero con respaldo de caché (siempre fresco online,
    funcional offline con lo ya visitado). */
 
-var CACHE = "florilegio-v1";
+var CACHE = "florilegio-v2";
 
 self.addEventListener("install", function (e) {
   self.skipWaiting();
@@ -42,7 +42,15 @@ self.addEventListener("fetch", function (e) {
       .catch(function () {
         return caches.match(req).then(function (hit) {
           if (hit) return hit;
-          if (req.mode === "navigate") return caches.match("/");
+          if (req.mode === "navigate") {
+            return caches.match("/").then(function (home) {
+              if (home) return home;
+              return new Response(
+                "<!doctype html><html lang='es'><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><body style='font-family:sans-serif;background:#f7f3ed;display:flex;min-height:100vh;align-items:center;justify-content:center;text-align:center;padding:2rem'><div><h2 style='color:#800020'>Sin conexión</h2><p>Vuelve a intentarlo cuando tengas internet.</p></div></body></html>",
+                { headers: { "Content-Type": "text/html; charset=utf-8" } }
+              );
+            });
+          }
           return Response.error();
         });
       })
