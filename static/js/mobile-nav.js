@@ -120,7 +120,37 @@
   );
 
   /* ------------------------------------------------------------------
-     4. Háptica sutil en el dock (solo Android/Chrome)
+     4. Estudios (móvil): al pulsar Leer/Estudiar, desplazar
+        automáticamente hasta el contenido cuando termine de cargar
+     ------------------------------------------------------------------ */
+  function autoScrollOnLoad(btnId, targetId) {
+    var btn = document.getElementById(btnId);
+    var target = document.getElementById(targetId);
+    if (!btn || !target) return;
+    if (!window.matchMedia("(max-width: 991.98px)").matches) return;
+    btn.addEventListener("click", function () {
+      var initial = target.textContent.trim().length;
+      var tries = 0;
+      var iv = setInterval(function () {
+        tries++;
+        var len = target.textContent.trim().length;
+        if (len > initial + 200 || (len > 400 && len !== initial)) {
+          clearInterval(iv);
+          setTimeout(function () {
+            var y = target.getBoundingClientRect().top + window.pageYOffset - 80;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }, 300);
+        } else if (tries > 40) {
+          clearInterval(iv);
+        }
+      }, 250);
+    });
+  }
+  autoScrollOnLoad("btn-leer", "leer-container");
+  autoScrollOnLoad("btn-estudio", "interlinear-container");
+
+  /* ------------------------------------------------------------------
+     5. Háptica sutil en el dock (solo Android/Chrome)
      ------------------------------------------------------------------ */
   if ("vibrate" in navigator) {
     document.addEventListener(

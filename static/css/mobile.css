@@ -762,6 +762,65 @@
     .panel.border-all.p-5 {
         padding: 1.25rem !important;
     }
+
+    /* ----------------------------------------------------------------
+       11h. Estudios: lectura bíblica legible tipo app de Biblia
+            (el JS inyecta font-size 1.5rem inline y justificado,
+            pensado para el panel ancho de escritorio)
+       ---------------------------------------------------------------- */
+    .bible-chapter-text {
+        font-size: 1.125rem !important;
+        line-height: 1.8 !important;
+        text-align: left !important;
+        font-family: var(--font-serif, 'EB Garamond', Georgia, serif) !important;
+    }
+
+    .bible-chapter-text p {
+        text-align: left !important;
+    }
+
+    /* El panel de lectura era grid [32px | texto | 32px]: las flechas
+       laterales robaban ancho. En móvil el texto ocupa todo y las
+       flechas pasan a ser dos botones grandes bajo la lectura */
+    .bible-reading-panel {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0 0.75rem !important;
+    }
+
+    #leer-container {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+
+    .chapter-nav-prev,
+    .chapter-nav-next {
+        grid-row: 3 !important;
+        margin: 1.25rem 0 0 0 !important;
+        width: 100% !important;
+        height: 48px !important;
+        border-radius: 12px !important;
+        justify-self: stretch;
+    }
+
+    .chapter-nav-prev {
+        grid-column: 1 !important;
+    }
+
+    .chapter-nav-next {
+        grid-column: 2 !important;
+    }
+
+    /* El panel de contexto no necesita ser sticky apilado */
+    .context-panel-bg {
+        position: static !important;
+        max-height: none !important;
+    }
+
+    /* Paneles de la página de estudio más compactos */
+    .estudio-sidebar .panel,
+    #study-section .panel {
+        border-radius: 16px;
+    }
 }
 
 /* Accesibilidad: sin animaciones si el usuario lo pide */
