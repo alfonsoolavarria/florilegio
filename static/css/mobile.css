@@ -821,6 +821,79 @@
     #study-section .panel {
         border-radius: 16px;
     }
+
+    /* ----------------------------------------------------------------
+       11i. App shell PWA: las apps no tienen footer de escritorio
+       ---------------------------------------------------------------- */
+    #uc-footer {
+        display: none !important;
+    }
+
+    /* El espacio para el dock ahora lo da el wrapper, no el footer */
+    #wrapper {
+        padding-bottom: calc(var(--fm-nav-height) + var(--fm-nav-gap) + 32px + var(--fm-safe-bottom));
+    }
+
+    /* Hero de la home limpio: sin foto de fondo, solo marca sobre crema */
+    .hero-brand-section--home {
+        background-image: none !important;
+    }
+
+    .hero-brand-section {
+        padding-bottom: 3rem !important;
+    }
+
+    .hero-brand-section::before,
+    .hero-brand-section::after,
+    .hero-brand-section--home::after {
+        display: none !important;
+    }
+
+    /* Drawer (menú lateral) con aire de app, scrolleable */
+    #uc-menu-panel .uc-offcanvas-bar {
+        width: min(320px, 88vw);
+        height: 100dvh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: calc(1.5rem + var(--fm-safe-bottom)) !important;
+    }
+
+    .fm-drawer-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #a89a8a;
+        margin: 1.25rem 0 0.5rem;
+        list-style: none;
+    }
+
+    .fm-drawer-legal {
+        padding-left: 0;
+    }
+
+    .fm-drawer-legal a {
+        display: block;
+        padding: 0.45rem 0;
+        font-size: 0.95rem;
+        color: #6c6155;
+    }
+
+    .dark .fm-drawer-legal a,
+    .uc-dark .fm-drawer-legal a {
+        color: #b9b0a6;
+    }
+}
+
+/* Modo instalado (PWA standalone): respetar la barra de estado */
+@media all and (display-mode: standalone) {
+    .uc-top-navbar {
+        padding-top: calc(8px + env(safe-area-inset-top, 0px)) !important;
+    }
+
+    #uc-menu-panel .uc-offcanvas-bar {
+        padding-top: env(safe-area-inset-top, 0px);
+    }
 }
 
 /* Accesibilidad: sin animaciones si el usuario lo pide */

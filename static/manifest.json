@@ -1,0 +1,55 @@
+{
+  "name": "Florilegio de la Fe",
+  "short_name": "Florilegio",
+  "description": "Estudio bíblico, artículos de teología, historia de la iglesia y biografías cristianas.",
+  "lang": "es",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7f3ed",
+  "theme_color": "#f7f3ed",
+  "icons": [
+    {
+      "src": "/static/images/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/images/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/images/icons/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/static/images/icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Estudio bíblico",
+      "url": "/estudios/",
+      "icons": [{ "src": "/static/images/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Artículos",
+      "url": "/articulos/",
+      "icons": [{ "src": "/static/images/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Ensayos",
+      "url": "/ensayos/",
+      "icons": [{ "src": "/static/images/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

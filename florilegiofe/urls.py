@@ -45,6 +45,15 @@ def robots_txt(request):
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
+
+def service_worker(request):
+    # El SW debe servirse desde la raíz para tener scope "/" (PWA)
+    from django.template.loader import render_to_string
+    js = render_to_string("sw.js")
+    response = HttpResponse(js, content_type="application/javascript")
+    response["Service-Worker-Allowed"] = "/"
+    return response
+
 urlpatterns = [
     # Importar versiones bíblicas desde JSON (admin) — antes que admin.site.urls
     path("admin/bible-import/", admin_bible_import, name="admin_bible_import"),
@@ -106,6 +115,7 @@ urlpatterns = [
     # SEO
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
     path("robots.txt", robots_txt, name="robots_txt"),
+    path("sw.js", service_worker, name="service_worker"),
 ]
 
 from django.conf import settings

@@ -5,7 +5,16 @@
     <title>{% block title %}Florilegio de la Fe{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}Florilegio de la Fe es un sitio web para profundizar en la intimidad con Dios a través de artículos de teología, historia y biografías.{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}teología, fe, cristianos, Dios, evangelio, palabra de Dios, biblia, estudio bíblico, historia de la iglesia, biografías cristianas{% endblock %}">
-    <meta name="theme-color" content="#2757fd">
+    <meta name="theme-color" content="#f7f3ed">
+
+    <!-- PWA -->
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/icons/apple-touch-icon.png' %}">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Florilegio">
+    <meta name="application-name" content="Florilegio">
 
     {% block canonical %}{% endblock %}
     <link rel="shortcut icon" href="{% static 'images/ff.ico' %}" type="image/x-icon">

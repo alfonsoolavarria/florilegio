@@ -150,7 +150,23 @@
   autoScrollOnLoad("btn-estudio", "interlinear-container");
 
   /* ------------------------------------------------------------------
-     5. Háptica sutil en el dock (solo Android/Chrome)
+     5. PWA: registrar el service worker (offline + instalable)
+     ------------------------------------------------------------------ */
+  if (
+    "serviceWorker" in navigator &&
+    (location.protocol === "https:" ||
+      location.hostname === "localhost" ||
+      location.hostname === "127.0.0.1")
+  ) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("/sw.js").catch(function () {
+        /* sin SW: la web sigue funcionando igual */
+      });
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     6. Háptica sutil en el dock (solo Android/Chrome)
      ------------------------------------------------------------------ */
   if ("vibrate" in navigator) {
     document.addEventListener(
