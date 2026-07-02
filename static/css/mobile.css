@@ -518,6 +518,252 @@
     }
 }
 
+/* ==========================================================================
+   11. Reestructuración por página — layout de app, no escritorio encogido
+   ========================================================================== */
+@media (max-width: 991.98px) {
+
+    /* ----------------------------------------------------------------
+       11a. Ritmo vertical de app: las secciones respiran menos
+       ---------------------------------------------------------------- */
+    .py-6 {
+        padding-top: 2.25rem !important;
+        padding-bottom: 2.25rem !important;
+    }
+
+    .py-7 {
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.5rem !important;
+    }
+
+    .mt-9 {
+        margin-top: 3rem !important;
+    }
+
+    .section-header,
+    .uc-section-header {
+        margin-bottom: 1.5rem !important;
+    }
+
+    .hero-brand-section {
+        padding-bottom: 6.5rem !important;
+    }
+
+    /* ----------------------------------------------------------------
+       11b. Destacados (home) y Artículos Recientes (artículos):
+            de columna interminable a carrusel deslizable con snap
+       ---------------------------------------------------------------- */
+    .featured-grid-layout,
+    .article-grid-layout {
+        display: grid !important;
+        grid-auto-flow: column;
+        grid-auto-columns: 82%;
+        gap: 0.75rem;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: 1rem;
+        padding: 0.25rem 0.25rem 0.75rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .featured-grid-layout::-webkit-scrollbar,
+    .article-grid-layout::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Los envoltorios de columnas desaparecen: las tarjetas son
+       hijas directas del carrusel */
+    .featured-grid-left,
+    .featured-grid-right,
+    .featured-grid-bottom-row,
+    .article-grid-left,
+    .article-grid-right,
+    .article-grid-bottom-row {
+        display: contents !important;
+    }
+
+    .featured-grid-layout article,
+    .article-grid-layout article {
+        scroll-snap-align: center;
+        height: auto;
+    }
+
+    /* Todas las imágenes del carrusel con la misma proporción */
+    .featured-grid-layout .ratio,
+    .article-grid-layout .ratio {
+        --bs-aspect-ratio: 62.5% !important;
+    }
+
+    .featured-grid-layout h3,
+    .article-grid-layout h3 {
+        font-size: 1.1rem !important;
+    }
+
+    /* ----------------------------------------------------------------
+       11c. Explora por Temas / Categorías: rejilla compacta 2 columnas
+            (eran 7 tarjetas gigantes apiladas)
+       ---------------------------------------------------------------- */
+    .category-grid-section .row > div,
+    .row:has(> div > .category-card) > div {
+        width: 50% !important;
+    }
+
+    .category-card {
+        padding: 1rem 0.5rem !important;
+        min-height: 112px;
+        border-radius: 14px !important;
+    }
+
+    /* Fuera la marca de agua gigante de fondo */
+    .category-card .z-n1 {
+        display: none !important;
+    }
+
+    .category-card .category-icon {
+        margin-bottom: 0.4rem !important;
+    }
+
+    .category-card .category-icon i {
+        font-size: 1.6rem !important;
+    }
+
+    .category-card h4 {
+        font-size: 1rem !important;
+        margin-bottom: 0.1rem !important;
+        text-align: center;
+    }
+
+    /* ----------------------------------------------------------------
+       11d. Últimas Publicaciones: filas compactas tipo app
+       ---------------------------------------------------------------- */
+    .post-card-horizontal {
+        gap: 0.75rem !important;
+    }
+
+    .post-card-horizontal .featured-image {
+        width: 108px !important;
+        flex: 0 0 108px;
+        border-radius: 12px !important;
+    }
+
+    .post-card-horizontal h3 {
+        font-size: 1.05rem !important;
+        line-height: 1.35;
+    }
+
+    .post-card-horizontal {
+        padding-bottom: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .latest-grid {
+        gap: 0 !important;
+    }
+
+    /* La caja de newsletter no necesita ser sticky apilada */
+    .latest-articles-section aside {
+        position: static !important;
+    }
+
+    /* ----------------------------------------------------------------
+       11e. Ensayos: tarjetas más compactas (imagen menos dominante)
+       ---------------------------------------------------------------- */
+    .essay-row .ratio {
+        --bs-aspect-ratio: 45% !important;
+    }
+
+    .essay-row figure {
+        max-height: 180px;
+        overflow: hidden;
+    }
+
+    .essay-row .essay-excerpt {
+        font-size: 0.95rem;
+    }
+
+    /* ----------------------------------------------------------------
+       11f. Madres Maestras: jerarquía contenida y testimonios
+            deslizables en horizontal
+       ---------------------------------------------------------------- */
+    .mm-display-lg {
+        font-size: clamp(1.9rem, 7vw, 2.5rem) !important;
+    }
+
+    .mm-headline-md {
+        font-size: 1.35rem !important;
+    }
+
+    .mm-body-lg {
+        font-size: 1.05rem !important;
+    }
+
+    .mm-btn-primary,
+    .mm-btn-outline {
+        min-height: 48px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .row:has(.mm-card-testimonial) {
+        display: grid !important;
+        grid-auto-flow: column;
+        grid-auto-columns: 82%;
+        gap: 0.75rem;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: 1rem;
+        padding-bottom: 0.75rem;
+        scrollbar-width: none;
+        flex-wrap: nowrap !important;
+    }
+
+    .row:has(.mm-card-testimonial)::-webkit-scrollbar {
+        display: none;
+    }
+
+    .row:has(.mm-card-testimonial) > div {
+        width: auto !important;
+        scroll-snap-align: center;
+    }
+
+    .row:has(.mm-card-testimonial) .mm-card-testimonial {
+        height: 100%;
+    }
+
+    /* ----------------------------------------------------------------
+       11g. Apoyo: botones de importe en color de marca (eran magenta
+            del tema por defecto) y panel más compacto
+       ---------------------------------------------------------------- */
+    .amt-btn,
+    .freq-btn {
+        border-color: rgba(128, 0, 32, 0.35) !important;
+        color: #800020 !important;
+        background: transparent !important;
+        min-height: 46px;
+    }
+
+    .amt-btn.active,
+    .freq-btn.active {
+        background: #800020 !important;
+        border-color: #800020 !important;
+        color: #fff !important;
+    }
+
+    .dark .amt-btn,
+    .dark .freq-btn,
+    .uc-dark .amt-btn,
+    .uc-dark .freq-btn {
+        color: #e9ddd2 !important;
+        border-color: rgba(233, 221, 210, 0.35) !important;
+    }
+
+    .panel.border-all.p-5 {
+        padding: 1.25rem !important;
+    }
+}
+
 /* Accesibilidad: sin animaciones si el usuario lo pide */
 @media (prefers-reduced-motion: reduce) {
     .fm-bottom-nav,
