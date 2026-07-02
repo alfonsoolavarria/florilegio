@@ -208,12 +208,39 @@
         display: none !important;
     }
 
+    /* Caja del logo acotada: el kit infla su ancho intrínseco
+       (img block dentro de <a> inline) y desbordaba 342px la página */
     .uc-navbar .sticky-logo {
         display: block !important;
+        width: 110px !important;
+        max-width: 110px !important;
+        overflow: hidden;
+    }
+
+    .uc-navbar .sticky-logo a {
+        display: block;
     }
 
     .uc-navbar .sticky-logo img {
         width: 110px !important;
+    }
+
+    /* Blindaje: la barra superior nunca puede exceder el viewport */
+    .uc-navbar-left,
+    .uc-navbar-right {
+        min-width: 0 !important;
+        max-width: 100%;
+    }
+
+    .uc-top-navbar,
+    .uc-navbar {
+        overflow-x: clip;
+    }
+
+    /* Y la página tampoco: se acabó el scroll lateral fantasma */
+    html,
+    body {
+        overflow-x: clip;
     }
 
     /* Objetivos táctiles cómodos en la barra superior */
@@ -273,11 +300,231 @@
     }
 }
 
+/* ==========================================================================
+   7. Navegación instantánea — View Transitions entre páginas
+      Sin flash blanco: la página antigua se funde con la nueva y el
+      dock y la cabecera permanecen estables durante el cambio.
+   ========================================================================== */
+@view-transition {
+    navigation: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    ::view-transition-old(root) {
+        animation: fm-vt-out 0.16s ease both;
+    }
+    ::view-transition-new(root) {
+        animation: fm-vt-in 0.22s ease both;
+    }
+    @keyframes fm-vt-out {
+        to {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+    }
+    @keyframes fm-vt-in {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+    }
+}
+
+/* El dock y la cabecera no parpadean entre páginas */
+#fm-bottom-nav {
+    view-transition-name: fm-dock;
+}
+.uc-header {
+    view-transition-name: fm-header;
+}
+::view-transition-group(fm-dock),
+::view-transition-group(fm-header) {
+    animation-duration: 0s;
+}
+
+/* ==========================================================================
+   8. Barra de progreso superior (solo navegaciones lentas)
+   ========================================================================== */
+#fm-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    z-index: 10000;
+    background: linear-gradient(90deg, #9a0f31, #800020);
+    transform: scaleX(0);
+    transform-origin: left;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#fm-progress.running {
+    opacity: 1;
+    animation: fm-progress-run 1.4s cubic-bezier(0.2, 0.6, 0.3, 1) forwards;
+}
+
+@keyframes fm-progress-run {
+    0% { transform: scaleX(0); }
+    60% { transform: scaleX(0.7); }
+    100% { transform: scaleX(0.92); }
+}
+
+/* ==========================================================================
+   9. Ripple táctil
+   ========================================================================== */
+.btn,
+.fm-nav-item,
+.pagination-btn,
+.pagination-num {
+    position: relative;
+    overflow: hidden;
+    touch-action: manipulation;
+}
+
+/* El FAB sobresale del dock: su ripple no debe recortarse raro */
+.fm-nav-item.fm-nav-fab {
+    overflow: visible;
+}
+
+.fm-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.18;
+    transform: scale(0);
+    animation: fm-ripple-grow 0.45s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes fm-ripple-grow {
+    to {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+/* ==========================================================================
+   10. Overhaul de layout móvil global
+   ========================================================================== */
+@media (max-width: 991.98px) {
+
+    /* Sin zoom accidental ni highlight gris al tocar */
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+        -webkit-text-size-adjust: 100%;
+    }
+
+    a,
+    button {
+        touch-action: manipulation;
+    }
+
+    /* Jerarquía tipográfica fluida */
+    h1, .h1 {
+        font-size: clamp(1.9rem, 7vw, 2.6rem) !important;
+        line-height: 1.15;
+    }
+
+    h2, .h2 {
+        font-size: clamp(1.5rem, 5.5vw, 2rem) !important;
+        line-height: 1.2;
+    }
+
+    h3, .h3 {
+        font-size: clamp(1.25rem, 4.5vw, 1.6rem) !important;
+    }
+
+    /* Lectura: en columnas estrechas el justificado crea "ríos" */
+    .theology-content {
+        text-align: left !important;
+        font-size: 1.25rem !important;
+        line-height: 1.75;
+    }
+
+    .theology-content p {
+        margin-bottom: 1.5rem;
+    }
+
+    /* Letra capital más contenida en móvil */
+    .theology-content > div > p:first-of-type::first-letter {
+        font-size: 3.8rem;
+        margin: 0.35rem 0.5rem 0 0;
+    }
+
+    /* Formularios cómodos: 16px evita el auto-zoom de iOS */
+    input,
+    select,
+    textarea,
+    .form-control {
+        font-size: 16px !important;
+    }
+
+    .form-control:not(.form-control-sm),
+    .form-select {
+        min-height: 48px;
+        border-radius: 12px;
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+    }
+
+    /* Botones con objetivo táctil correcto */
+    .btn:not(.btn-sm):not(.rounded-circle) {
+        min-height: 46px;
+        border-radius: 12px;
+    }
+
+    /* Sliders: en móvil se desliza con el dedo, fuera flechas
+       (además desbordaban el viewport con left/right negativos) */
+    .slider-btn {
+        display: none !important;
+    }
+
+    .swiper-parent .panel {
+        padding: 0 !important;
+    }
+
+    /* Búsqueda expandida a todo el ancho disponible */
+    .expanding-search-form.active .search-input {
+        width: min(58vw, 260px);
+    }
+
+    /* El pie con menos aire muerto en pantallas pequeñas */
+    #uc-footer {
+        margin-top: 3rem !important;
+    }
+
+    .footer-logo img {
+        width: 180px !important;
+    }
+
+    /* Guardas anti-desborde horizontal */
+    #wrapper img,
+    #wrapper video,
+    #wrapper iframe {
+        max-width: 100%;
+        height: auto;
+    }
+
+    #wrapper pre,
+    #wrapper code {
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+}
+
 /* Accesibilidad: sin animaciones si el usuario lo pide */
 @media (prefers-reduced-motion: reduce) {
     .fm-bottom-nav,
     .fm-nav-icon,
-    .fm-nav-item.active .fm-nav-icon {
+    .fm-nav-item.active .fm-nav-icon,
+    .fm-ripple,
+    #fm-progress.running {
         animation: none !important;
         transition: none !important;
     }
