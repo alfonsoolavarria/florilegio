@@ -27,9 +27,85 @@
 {% endblock %}
 
 {% block content %}
+<!-- ============ HOME DE APP (solo Modo Joven en móvil) ============ -->
+<div class="fm-app-home">
+  <header class="fm-ah-top">
+    <div>
+      <p class="fm-ah-saludo" id="fm-ah-saludo">Hola</p>
+      <p class="fm-ah-fecha" id="fm-ah-fecha"></p>
+    </div>
+    <img class="fm-ah-flor" src="{% static 'images/icons/icon-192.png' %}" alt="Florilegio" width="46" height="46">
+  </header>
+
+  <section class="fm-ah-verso" aria-label="Versículo del día">
+    <p class="fm-ah-verso-etiqueta">Versículo del día</p>
+    <blockquote class="fm-ah-verso-texto" id="fm-ah-verso-texto">«Lámpara es a mis pies tu palabra, y lumbrera a mi camino.»</blockquote>
+    <p class="fm-ah-verso-ref" id="fm-ah-verso-ref">Salmos 119:105</p>
+    <a class="fm-ah-verso-cta" href="{% url 'estudios' %}">Abrir la Biblia</a>
+  </section>
+
+  <section class="fm-ah-acciones" aria-label="Accesos rápidos">
+    <a href="{% url 'estudios' %}" class="fm-ah-tile">
+      <i class="icon unicon-notebook" aria-hidden="true"></i>
+      <span>Leer la Biblia</span>
+    </a>
+    <a href="{% url 'mis_estudios' %}" class="fm-ah-tile">
+      <i class="icon unicon-edit" aria-hidden="true"></i>
+      <span>Mis estudios</span>
+    </a>
+    <a href="{% url 'article_list' %}" class="fm-ah-tile">
+      <i class="icon unicon-book" aria-hidden="true"></i>
+      <span>Artículos</span>
+    </a>
+    <a href="{% url 'madres_maestras' %}" class="fm-ah-tile">
+      <i class="icon unicon-pedestrian-family" aria-hidden="true"></i>
+      <span>Madres</span>
+    </a>
+  </section>
+
+  {% if featured_articles %}
+  <section class="fm-ah-sec" aria-label="Destacados">
+    <div class="fm-ah-sec-head">
+      <h2>Destacados</h2>
+      <a href="{% url 'article_list' %}">Ver todo</a>
+    </div>
+    <div class="fm-ah-rail">
+      {% for article in featured_articles %}
+      <a class="fm-ah-card" href="{% url 'article_detail' article.slug %}">
+        <figure><img loading="lazy" src="{{ article.image.url }}" alt=""></figure>
+        <span class="fm-ah-card-cat">{{ article.category }}</span>
+        <h3>{{ article.title }}</h3>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if latest_articles %}
+  <section class="fm-ah-sec" aria-label="Publicaciones recientes">
+    <div class="fm-ah-sec-head">
+      <h2>Recientes</h2>
+      <a href="{% url 'essay_list' %}">Ensayos</a>
+    </div>
+    <div class="fm-ah-lista">
+      {% for article in latest_articles|slice:":6" %}
+      <a class="fm-ah-fila" href="{% url 'article_detail' article.slug %}">
+        <img loading="lazy" src="{{ article.image.url }}" alt="">
+        <div>
+          <span>{{ article.category }}</span>
+          <h3>{{ article.title }}</h3>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</div>
+<!-- ============ FIN HOME DE APP ============ -->
+
 <!-- Section: Hero Brand -->
 <div
-  class="hero-brand-section hero-brand-section--home panel overflow-hidden bg-gray-25 dark:bg-gray-900"
+  class="fm-classic-home hero-brand-section hero-brand-section--home panel overflow-hidden bg-gray-25 dark:bg-gray-900"
 >
   <div class="container py-6 lg:py-9">
       <div class="row justify-center text-center">
@@ -56,7 +132,7 @@
 </div>
 
 <!-- Section start: Featured Articles Grid -->
-<div class="featured-grid-section py-6 lg:py-9">
+<div class="fm-classic-home featured-grid-section py-6 lg:py-9">
   <div class="container max-w-lg">
     <div class="section-header text-center mb-5">
       <h2 class="h3 fw-bold">Destacados</h2>
@@ -127,7 +203,7 @@
 </div>
 
 <!-- Section 2: Categories Grid -->
-<div class="category-grid-section py-6 lg:py-7">
+<div class="fm-classic-home category-grid-section py-6 lg:py-7">
   <div class="container max-w-lg">
     <div class="section-header text-center mb-6">
       <h2 class="h3 fw-bold">Explora por Temas</h2>
@@ -185,7 +261,7 @@
 
 <!-- Section 3: Latest Articles & Newsletter -->
 <div
-  class="latest-articles-section py-4 lg:py-6 bg-gray-25 dark:bg-gray-100 dark:bg-opacity-5"
+  class="fm-classic-home latest-articles-section py-4 lg:py-6 bg-gray-25 dark:bg-gray-100 dark:bg-opacity-5"
 >
   <div class="container max-w-lg">
     <div class="row g-6 lg:g-9">

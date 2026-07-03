@@ -1,179 +1,416 @@
 /* ==========================================================================
-   Florilegio — MODO JOVEN v2 (unisex)
-   Activado con la clase .fm-joven en <html>. Convive con el Clásico.
-   Dirección: oscuro-primero, tipografía grande y contundente, un solo
-   acento ámbar con brillo sutil. Referencias: Spotify/Discord (oscuro +
-   un acento), Glorify/Hallow (fe con estética de app de bienestar).
+   Florilegio — MODO JOVEN v3 · "Cuaderno de estudio"
+   Activado con .fm-joven en <html>. Convive con el Clásico (intacto).
+   Identidad: papel claro, tinta verdosa, verde salvia como único acento
+   y amarillo subrayador como gesto característico (subrayar la Palabra).
+   Tipografía: Bricolage Grotesque (titulares/UI) + EB Garamond (lectura).
    Solo actúa en móvil/tablet (≤991px).
    ========================================================================== */
 
 .fm-joven {
-    --jv-bg: #101014;
-    --jv-surface: #1a1a20;
-    --jv-surface-2: #22222a;
-    --jv-line: rgba(255, 255, 255, 0.09);
-    --jv-ink: #ece9e2;
-    --jv-muted: #98948b;
-    --jv-accent: #e8b04b;
-    --jv-accent-ink: #171310;
-    --jv-radius: 18px;
-    --jv-font: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --jv-papel: #fbfaf7;
+    --jv-superficie: #ffffff;
+    --jv-tinta: #22271f;
+    --jv-tenue: #6f7568;
+    --jv-salvia: #3f6b4f;
+    --jv-salvia-oscuro: #2e523b;
+    --jv-hoja: #e8efe6;
+    --jv-marcador: #f9e27d;
+    --jv-linea: #e4e2da;
+    --jv-radio: 20px;
+    --jv-display: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif;
+}
+
+/* La home de app no existe fuera del Modo Joven móvil */
+.fm-app-home {
+    display: none;
 }
 
 @media (max-width: 991.98px) {
 
     /* ----------------------------------------------------------------
-       1. Base oscura: tinta, superficies y tipografía contundente
+       0. Conmutación de arquitectura: home de app vs home clásica
+       ---------------------------------------------------------------- */
+    .fm-joven .fm-app-home {
+        display: block;
+    }
+
+    .fm-joven .fm-classic-home {
+        display: none !important;
+    }
+
+    /* ----------------------------------------------------------------
+       1. Base: papel, tinta y titulares con carácter
        ---------------------------------------------------------------- */
     .fm-joven body {
-        background-color: var(--jv-bg) !important;
-        color: var(--jv-ink);
-        font-family: var(--jv-font);
+        background-color: var(--jv-papel) !important;
+        color: var(--jv-tinta);
     }
 
     .fm-joven h1, .fm-joven h2, .fm-joven h3,
     .fm-joven h4, .fm-joven h5,
     .fm-joven .h1, .fm-joven .h2, .fm-joven .h3,
     .fm-joven .h4, .fm-joven .h5 {
-        font-family: var(--jv-font) !important;
+        font-family: var(--jv-display) !important;
         font-weight: 700 !important;
-        letter-spacing: -0.03em;
-        color: #f6f4ef;
+        letter-spacing: -0.015em;
+        color: var(--jv-tinta);
     }
 
-    .fm-joven h1 a, .fm-joven h2 a, .fm-joven h3 a,
-    .fm-joven h4 a, .fm-joven h5 a, .fm-joven h6 a {
-        color: #f6f4ef !important;
-    }
-
-    /* Recolor de las utilidades de texto del kit sobre fondo oscuro */
-    .fm-joven .text-dark,
-    .fm-joven .text-gray-900,
-    .fm-joven .text-gray-800 {
-        color: #f0eee8 !important;
-    }
-
-    .fm-joven .text-gray-700,
     .fm-joven .text-gray-600,
     .fm-joven .text-gray-500,
     .fm-joven .text-gray-400 {
-        color: var(--jv-muted) !important;
+        color: var(--jv-tenue) !important;
     }
 
-    .fm-joven p {
-        color: inherit;
-    }
-
-    /* Superficies del kit → oscuras */
-    .fm-joven .bg-white {
-        background-color: var(--jv-surface) !important;
-    }
-
-    .fm-joven .bg-gray-25,
-    .fm-joven .bg-gray-50,
-    .fm-joven .bg-gray-100 {
-        background-color: #15151a !important;
-    }
-
-    .fm-joven .border,
-    .fm-joven .border-all,
-    .fm-joven .border-top,
-    .fm-joven .border-bottom {
-        border-color: var(--jv-line) !important;
-    }
-
-    /* Títulos de sección: bold + regla ámbar (editorial, no infantil) */
+    /* Titulares de sección: subrayado de marcador amarillo */
     .fm-joven .section-header h2,
     .fm-joven .uc-section-header h2 {
-        color: #f6f4ef !important;
+        position: relative;
+        display: inline-block;
+        z-index: 1;
     }
 
-    .fm-joven .section-header h2::after {
+    .fm-joven .section-header h2::after,
+    .fm-joven .uc-section-header h2::after {
         content: "";
-        display: block;
-        width: 44px;
-        height: 3px;
-        border-radius: 2px;
-        background: var(--jv-accent);
-        margin: 10px auto 0;
+        position: absolute;
+        left: -5px;
+        right: -5px;
+        bottom: 1px;
+        height: 0.42em;
+        background: var(--jv-marcador);
+        border-radius: 3px;
+        transform: skewX(-8deg) rotate(-0.6deg);
+        z-index: -1;
+        opacity: 0.85;
     }
 
-    .fm-joven .section-header:not(.text-center) h2::after {
-        margin-left: 0;
-    }
-
-    /* La lectura larga sigue en serif, en blanco cálido */
+    /* La lectura larga permanece en serif sobre papel */
     .fm-joven .theology-content,
     .fm-joven .bible-chapter-text {
         font-family: var(--font-serif, 'EB Garamond', Georgia, serif) !important;
-        color: #e6e1d6 !important;
-    }
-
-    .fm-joven .theology-content h1,
-    .fm-joven .theology-content h2,
-    .fm-joven .theology-content h3 {
-        color: #f6f4ef !important;
+        color: #2b2f27 !important;
     }
 
     /* ----------------------------------------------------------------
-       2. Barra superior: tinta glass, logo en blanco
+       2. HOME DE APP — arquitectura propia
+       ---------------------------------------------------------------- */
+    .fm-joven .fm-app-home {
+        padding: 1rem 1.1rem 0;
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
+    /* Cabecera: saludo + fecha + flor */
+    .fm-joven .fm-ah-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.5rem 0.1rem 1.1rem;
+    }
+
+    .fm-joven .fm-ah-saludo {
+        font-family: var(--jv-display);
+        font-size: 1.7rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin: 0;
+        line-height: 1.1;
+    }
+
+    .fm-joven .fm-ah-fecha {
+        margin: 2px 0 0;
+        font-size: 0.85rem;
+        color: var(--jv-tenue);
+        text-transform: capitalize;
+    }
+
+    .fm-joven .fm-ah-flor {
+        border-radius: 14px;
+        border: 1px solid var(--jv-linea);
+    }
+
+    /* Versículo del día: el héroe */
+    .fm-joven .fm-ah-verso {
+        background: var(--jv-superficie);
+        border: 1px solid var(--jv-linea);
+        border-radius: var(--jv-radio);
+        padding: 1.35rem 1.25rem 1.2rem;
+        box-shadow: 0 6px 24px rgba(63, 107, 79, 0.08);
+    }
+
+    .fm-joven .fm-ah-verso-etiqueta {
+        margin: 0 0 0.6rem;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--jv-salvia);
+    }
+
+    .fm-joven .fm-ah-verso-texto {
+        margin: 0;
+        font-family: var(--font-serif, 'EB Garamond', Georgia, serif);
+        font-size: 1.45rem;
+        line-height: 1.5;
+        color: var(--jv-tinta);
+        background-image: linear-gradient(transparent 68%, rgba(249, 226, 125, 0.75) 68%, rgba(249, 226, 125, 0.75) 94%, transparent 94%);
+        background-position: 0 0.18em;
+        display: inline;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+    }
+
+    .fm-joven .fm-ah-verso-ref {
+        margin: 0.8rem 0 0;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--jv-tenue);
+    }
+
+    .fm-joven .fm-ah-verso-cta {
+        display: inline-flex;
+        align-items: center;
+        margin-top: 0.9rem;
+        padding: 0.6rem 1.2rem;
+        background: var(--jv-salvia);
+        color: #fff !important;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        text-decoration: none !important;
+        font-family: var(--jv-display);
+    }
+
+    .fm-joven .fm-ah-verso-cta:active {
+        transform: scale(0.96);
+        background: var(--jv-salvia-oscuro);
+    }
+
+    /* Accesos rápidos: mosaico 2×2 */
+    .fm-joven .fm-ah-acciones {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.7rem;
+        margin-top: 0.9rem;
+    }
+
+    .fm-joven .fm-ah-tile {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        background: var(--jv-hoja);
+        border-radius: 16px;
+        padding: 0.95rem 1rem;
+        text-decoration: none !important;
+        color: var(--jv-tinta) !important;
+        font-family: var(--jv-display);
+        font-weight: 700;
+        font-size: 0.92rem;
+        border: 1px solid transparent;
+    }
+
+    .fm-joven .fm-ah-tile i {
+        font-size: 1.25rem;
+        color: var(--jv-salvia);
+    }
+
+    .fm-joven .fm-ah-tile:active {
+        transform: scale(0.97);
+        border-color: rgba(63, 107, 79, 0.35);
+    }
+
+    /* Cabecera de sección: título + enlace "ver todo" */
+    .fm-joven .fm-ah-sec {
+        margin-top: 1.9rem;
+    }
+
+    .fm-joven .fm-ah-sec-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 0.85rem;
+    }
+
+    .fm-joven .fm-ah-sec-head h2 {
+        font-size: 1.35rem;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+        display: inline-block;
+    }
+
+    .fm-joven .fm-ah-sec-head h2::after {
+        content: "";
+        position: absolute;
+        left: -4px;
+        right: -4px;
+        bottom: 1px;
+        height: 0.4em;
+        background: var(--jv-marcador);
+        border-radius: 3px;
+        transform: skewX(-8deg);
+        z-index: -1;
+        opacity: 0.85;
+    }
+
+    .fm-joven .fm-ah-sec-head a {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--jv-salvia) !important;
+        text-decoration: none !important;
+    }
+
+    /* Rail horizontal de destacados */
+    .fm-joven .fm-ah-rail {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 66%;
+        gap: 0.75rem;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 0.5rem;
+        scrollbar-width: none;
+        margin-inline: -1.1rem;
+        padding-inline: 1.1rem;
+    }
+
+    .fm-joven .fm-ah-rail::-webkit-scrollbar {
+        display: none;
+    }
+
+    .fm-joven .fm-ah-card {
+        scroll-snap-align: start;
+        text-decoration: none !important;
+        color: var(--jv-tinta) !important;
+    }
+
+    .fm-joven .fm-ah-card figure {
+        margin: 0 0 0.55rem;
+        aspect-ratio: 16 / 11;
+        border-radius: 16px;
+        overflow: hidden;
+        background: var(--jv-hoja);
+        border: 1px solid var(--jv-linea);
+    }
+
+    .fm-joven .fm-ah-card figure img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .fm-joven .fm-ah-card-cat {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--jv-salvia);
+    }
+
+    .fm-joven .fm-ah-card h3 {
+        font-size: 1.02rem;
+        line-height: 1.3;
+        margin: 0.15rem 0 0;
+    }
+
+    /* Lista de recientes: filas limpias */
+    .fm-joven .fm-ah-lista {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .fm-joven .fm-ah-fila {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.7rem 0;
+        border-bottom: 1px solid var(--jv-linea);
+        text-decoration: none !important;
+        color: var(--jv-tinta) !important;
+    }
+
+    .fm-joven .fm-ah-fila:last-child {
+        border-bottom: none;
+    }
+
+    .fm-joven .fm-ah-fila img {
+        width: 62px;
+        height: 62px;
+        border-radius: 14px;
+        object-fit: cover;
+        flex: 0 0 62px;
+        background: var(--jv-hoja);
+    }
+
+    .fm-joven .fm-ah-fila span {
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--jv-salvia);
+    }
+
+    .fm-joven .fm-ah-fila h3 {
+        font-size: 0.98rem;
+        line-height: 1.3;
+        margin: 0.1rem 0 0;
+    }
+
+    .fm-joven .fm-ah-fila:active {
+        opacity: 0.7;
+    }
+
+    /* ----------------------------------------------------------------
+       3. Barra superior: papel limpio
        ---------------------------------------------------------------- */
     .fm-joven .uc-top-navbar {
-        background: rgba(16, 16, 20, 0.86) !important;
-        -webkit-backdrop-filter: blur(16px);
-        backdrop-filter: blur(16px);
-        border-bottom: 1px solid var(--jv-line) !important;
-    }
-
-    .fm-joven .uc-navbar .sticky-logo img,
-    .fm-joven #uc-menu-panel .uc-logo img,
-    .fm-joven .hero-brand-section .uc-logo img {
-        filter: invert(1) brightness(1.15);
-    }
-
-    .fm-joven .uc-navbar-right .search-toggle,
-    .fm-joven .uc-navbar-right a {
-        color: var(--jv-ink) !important;
+        background: rgba(251, 250, 247, 0.9) !important;
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--jv-linea) !important;
     }
 
     /* ----------------------------------------------------------------
-       3. Dock: casi negro, activo en ámbar, FAB sólido de contraste
+       4. Dock: papel flotante, activo salvia, FAB salvia sólido
        ---------------------------------------------------------------- */
     .fm-joven .fm-bottom-nav {
-        background: rgba(20, 20, 25, 0.92);
-        border: 1px solid var(--jv-line);
-        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55);
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid var(--jv-linea);
+        box-shadow: 0 12px 34px rgba(34, 39, 31, 0.16);
     }
 
     .fm-joven .fm-nav-item {
-        color: var(--jv-muted);
+        color: var(--jv-tenue);
     }
 
     .fm-joven .fm-nav-item.active {
-        color: var(--jv-accent);
+        color: var(--jv-salvia);
     }
 
     .fm-joven .fm-nav-item.active .fm-nav-icon {
-        background: rgba(232, 176, 75, 0.14);
-        color: var(--jv-accent);
+        background: var(--jv-hoja);
+        color: var(--jv-salvia);
     }
 
     .fm-joven .fm-nav-fab .fm-nav-icon,
     .fm-joven .fm-nav-item.fm-nav-fab.active .fm-nav-icon {
-        background: var(--jv-accent);
-        color: var(--jv-accent-ink) !important;
-        border-color: var(--jv-bg);
-        box-shadow: 0 8px 24px rgba(232, 176, 75, 0.35);
+        background: var(--jv-salvia);
+        color: #fff !important;
+        border-color: var(--jv-papel);
+        box-shadow: 0 8px 22px rgba(63, 107, 79, 0.4);
         animation: none;
     }
 
     .fm-joven .fm-nav-fab .fm-nav-label {
-        color: var(--jv-accent);
+        color: var(--jv-salvia);
         font-weight: 700;
     }
 
     /* ----------------------------------------------------------------
-       4. Tarjetas: superficies oscuras, borde fino, sin sombras dulces
+       5. Resto de páginas: tarjetas papel, chips hoja, botones salvia
        ---------------------------------------------------------------- */
     .fm-joven .post-card-featured,
     .fm-joven .post-card-vertical,
@@ -183,80 +420,51 @@
     .fm-joven .category-card,
     .fm-joven .panel.border,
     .fm-joven .panel.border-all {
-        background: var(--jv-surface) !important;
-        border: 1px solid var(--jv-line) !important;
-        border-radius: var(--jv-radius) !important;
-        box-shadow: none !important;
+        background: var(--jv-superficie) !important;
+        border: 1px solid var(--jv-linea) !important;
+        border-radius: var(--jv-radio) !important;
+        box-shadow: 0 4px 18px rgba(34, 39, 31, 0.05) !important;
     }
 
-    .fm-joven .post-card-featured:active,
-    .fm-joven .post-card-vertical:active,
-    .fm-joven .post-card-grid:active,
-    .fm-joven .essay-row:active,
-    .fm-joven .category-card:active {
-        transform: scale(0.97);
-        transition: transform 0.12s ease;
-    }
-
-    /* Chips de categoría: contorno fino + ámbar, mayúsculas pequeñas */
     .fm-joven .fs-7.text-primary.text-uppercase {
         display: inline-block;
         width: fit-content;
-        color: var(--jv-accent) !important;
-        border: 1px solid rgba(232, 176, 75, 0.4);
-        background: transparent;
-        padding: 2px 10px;
+        background: var(--jv-hoja);
+        color: var(--jv-salvia) !important;
+        padding: 3px 10px;
         border-radius: 999px;
-        font-weight: 600;
-        font-size: 0.68rem !important;
+        font-weight: 700;
+        font-size: 0.66rem !important;
         letter-spacing: 0.08em;
     }
 
-    /* "Leer más" y enlaces de acción en ámbar */
     .fm-joven .uc-link {
-        color: var(--jv-accent) !important;
+        color: var(--jv-salvia) !important;
         font-weight: 600;
     }
 
-    /* Temas: tiles oscuros con icono ámbar */
     .fm-joven .category-card .category-icon i {
-        color: var(--jv-accent) !important;
+        color: var(--jv-salvia) !important;
     }
 
-    .fm-joven .category-card h4 {
-        color: #f0eee8 !important;
-    }
-
-    .fm-joven .category-card:hover,
-    .fm-joven .category-card:active {
-        border-color: rgba(232, 176, 75, 0.45) !important;
-    }
-
-    /* Últimas publicaciones: filas con separador fino (estilo lista) */
-    .fm-joven .post-card-horizontal {
-        border-bottom: 1px solid var(--jv-line);
-    }
-
-    /* ----------------------------------------------------------------
-       5. Botones: ámbar sólido con texto oscuro (máximo contraste)
-       ---------------------------------------------------------------- */
     .fm-joven .btn-primary,
     .fm-joven .mm-btn-primary,
     .fm-joven #btn-leer,
     .fm-joven #btn-estudio {
-        background: var(--jv-accent) !important;
-        color: var(--jv-accent-ink) !important;
+        background: var(--jv-salvia) !important;
+        color: #fff !important;
         border: none !important;
         border-radius: 999px !important;
-        font-family: var(--jv-font);
+        font-family: var(--jv-display);
         font-weight: 700;
-        box-shadow: 0 6px 20px rgba(232, 176, 75, 0.25);
+        box-shadow: 0 6px 18px rgba(63, 107, 79, 0.25);
     }
 
     .fm-joven .btn-primary:active,
     .fm-joven #btn-leer:active,
     .fm-joven #btn-estudio:active {
         transform: scale(0.97);
+        background: var(--jv-salvia-oscuro) !important;
     }
 
     .fm-joven .btn:not(.btn-sm):not(.rounded-circle) {
@@ -266,193 +474,114 @@
     .fm-joven .amt-btn,
     .fm-joven .freq-btn {
         background: transparent !important;
-        border: 1px solid var(--jv-line) !important;
-        color: var(--jv-ink) !important;
+        border: 1.5px solid var(--jv-linea) !important;
+        color: var(--jv-tinta) !important;
         border-radius: 999px !important;
     }
 
     .fm-joven .amt-btn.active,
     .fm-joven .freq-btn.active {
-        background: var(--jv-accent) !important;
-        border-color: var(--jv-accent) !important;
-        color: var(--jv-accent-ink) !important;
-    }
-
-    /* Formularios oscuros */
-    .fm-joven .form-control,
-    .fm-joven .form-select,
-    .fm-joven input,
-    .fm-joven select,
-    .fm-joven textarea {
-        background-color: var(--jv-surface-2) !important;
-        color: var(--jv-ink) !important;
-        border: 1px solid var(--jv-line) !important;
-    }
-
-    .fm-joven .form-control::placeholder {
-        color: var(--jv-muted);
-    }
-
-    /* Selects personalizados de Estudios */
-    .fm-joven .custom-select,
-    .fm-joven .custom-select-dropdown {
-        background-color: var(--jv-surface-2) !important;
-        color: var(--jv-ink) !important;
-        border-color: var(--jv-line) !important;
-    }
-
-    .fm-joven .custom-select *,
-    .fm-joven .custom-select-dropdown * {
-        color: inherit;
+        background: var(--jv-salvia) !important;
+        border-color: var(--jv-salvia) !important;
+        color: #fff !important;
     }
 
     /* ----------------------------------------------------------------
-       6. Hero de la home: titular grande a la izquierda, sin adornos
+       6. Estudios: papel de lectura con marcador
        ---------------------------------------------------------------- */
-    .fm-joven .hero-brand-section {
-        background: var(--jv-bg) !important;
-        padding-bottom: 2.5rem !important;
-    }
-
-    .fm-joven .hero-brand-section .hero-logo {
-        max-width: 190px !important;
-    }
-
-    .fm-joven #typewriter-text {
-        text-align: left !important;
-        padding: 0 1.25rem;
-        font-family: var(--jv-font) !important;
-        font-size: 1.55rem !important;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        color: #f6f4ef !important;
-        font-style: normal;
-    }
-
-    .fm-joven .hero-brand-section p {
-        color: var(--jv-ink) !important;
-        font-family: var(--jv-font);
-    }
-
-    /* ----------------------------------------------------------------
-       7. Drawer y páginas interiores
-       ---------------------------------------------------------------- */
-    .fm-joven #uc-menu-panel .uc-offcanvas-bar {
-        background: #141419 !important;
-        border-right: 1px solid var(--jv-line);
-    }
-
-    .fm-joven #uc-menu-panel a {
-        color: var(--jv-ink) !important;
-    }
-
-    .fm-joven .uc-nav a .icon {
-        color: var(--jv-accent) !important;
-    }
-
-    .fm-joven .close-menu-btn {
-        color: var(--jv-ink) !important;
-    }
-
-    .fm-joven .fm-drawer-label {
-        color: #6e6a63;
-    }
-
-    .fm-joven .fm-drawer-legal a {
-        color: var(--jv-muted);
-    }
-
-    /* Estudios: lectura en negro cálido tipo OLED */
     .fm-joven .estudio-sidebar .panel,
     .fm-joven .bible-reading-panel,
     .fm-joven .context-panel-bg {
-        background: var(--jv-surface) !important;
-        border: 1px solid var(--jv-line) !important;
-        border-radius: var(--jv-radius) !important;
+        background: var(--jv-superficie) !important;
+        border: 1px solid var(--jv-linea) !important;
+        border-radius: var(--jv-radio) !important;
     }
 
     .fm-joven .bible-chapter-text sup,
     .fm-joven .bible-verse-item sup {
-        color: var(--jv-accent) !important;
+        color: var(--jv-salvia) !important;
+    }
+
+    /* Versículo enfocado: subrayador amarillo, como en un cuaderno */
+    .fm-joven #leer-container .bg-primary,
+    .fm-joven #interlinear-container .bg-primary {
+        background: var(--jv-marcador) !important;
+        color: var(--jv-tinta) !important;
     }
 
     .fm-joven .chapter-nav-btn {
-        background: var(--jv-surface-2) !important;
-        border: 1px solid var(--jv-line) !important;
+        background: var(--jv-hoja) !important;
+        border: 1px solid var(--jv-linea) !important;
         border-radius: 999px !important;
-        color: var(--jv-accent);
-    }
-
-    .fm-joven .bible-label {
-        color: var(--jv-muted) !important;
+        color: var(--jv-salvia);
     }
 
     .fm-joven .mode-selector-btn.active {
-        color: var(--jv-accent) !important;
-        border-bottom-color: var(--jv-accent) !important;
+        color: var(--jv-salvia) !important;
+        border-bottom-color: var(--jv-salvia) !important;
     }
 
     .fm-joven .context-tab.active {
-        color: var(--jv-accent) !important;
+        color: var(--jv-salvia) !important;
     }
 
-    /* Madres: neutralizar los rosas del diseño propio de la página */
+    /* Madres: sustituir los rosas propios de la página */
     .fm-joven .mm-text-primary,
     .fm-joven .mm-category-icon {
-        color: var(--jv-accent) !important;
+        color: var(--jv-salvia) !important;
     }
 
     .fm-joven .mm-btn-outline {
-        border-color: var(--jv-line) !important;
-        color: var(--jv-ink) !important;
+        border-color: var(--jv-salvia) !important;
+        color: var(--jv-salvia) !important;
         border-radius: 999px !important;
     }
 
     /* ----------------------------------------------------------------
-       8. Detalles: progreso, ripple, paginación, newsletter
+       7. Detalles: progreso, paginación, newsletter, drawer
        ---------------------------------------------------------------- */
     .fm-joven #fm-progress {
-        background: var(--jv-accent);
-    }
-
-    .fm-joven .fm-ripple {
-        opacity: 0.16;
-    }
-
-    .fm-joven .pagination-num,
-    .fm-joven .pagination-btn {
-        color: var(--jv-ink);
-        border-color: var(--jv-line);
+        background: var(--jv-salvia);
     }
 
     .fm-joven .pagination-num.active {
-        background: var(--jv-accent);
-        color: var(--jv-accent-ink);
+        background: var(--jv-salvia);
+        color: #fff;
     }
 
     .fm-joven .panel.bg-primary {
-        background: linear-gradient(150deg, #241d12, #1a1a20 70%) !important;
-        border: 1px solid rgba(232, 176, 75, 0.35) !important;
-        border-radius: var(--jv-radius) !important;
+        background: var(--jv-salvia) !important;
+        border-radius: var(--jv-radio) !important;
     }
 
     .fm-joven .btn-white {
-        background: var(--jv-accent) !important;
-        color: var(--jv-accent-ink) !important;
+        background: var(--jv-marcador) !important;
+        color: var(--jv-tinta) !important;
         border-radius: 999px !important;
         font-weight: 700;
     }
 
     .fm-joven .keyword-highlight-box {
-        background: var(--jv-surface-2);
-        border-left-color: var(--jv-accent);
+        background: var(--jv-hoja);
+        border-left-color: var(--jv-salvia);
         border-radius: 12px;
-        color: var(--jv-ink);
     }
 
     .fm-joven .reading-progress-bar {
-        background: var(--jv-accent);
+        background: var(--jv-salvia);
         box-shadow: none;
+    }
+
+    .fm-joven #uc-menu-panel .uc-offcanvas-bar {
+        background: var(--jv-papel) !important;
+    }
+
+    .fm-joven .uc-nav a .icon {
+        color: var(--jv-salvia) !important;
+    }
+
+    .fm-joven .fm-drawer-label {
+        color: #a5a294;
     }
 
     /* Interruptor de tema en el drawer */
@@ -474,9 +603,9 @@
     }
 
     .fm-joven .fm-theme-toggle {
-        border: 1px solid rgba(232, 176, 75, 0.5);
-        background: rgba(232, 176, 75, 0.1);
-        color: var(--jv-accent);
+        border: none;
+        background: var(--jv-salvia);
+        color: #fff;
         border-radius: 999px;
     }
 

@@ -150,6 +150,72 @@
   autoScrollOnLoad("btn-estudio", "interlinear-container");
 
   /* ------------------------------------------------------------------
+     4b. Home de app (Modo Joven): saludo, fecha y versículo del día
+     ------------------------------------------------------------------ */
+  var versoTexto = document.getElementById("fm-ah-verso-texto");
+  if (versoTexto && document.documentElement.classList.contains("fm-joven")) {
+    var saludoEl = document.getElementById("fm-ah-saludo");
+    var fechaEl = document.getElementById("fm-ah-fecha");
+    var refEl = document.getElementById("fm-ah-verso-ref");
+
+    var ahora = new Date();
+    var h = ahora.getHours();
+    if (saludoEl) {
+      saludoEl.textContent = h < 12 ? "Buenos días" : h < 20 ? "Buenas tardes" : "Buenas noches";
+    }
+    if (fechaEl) {
+      fechaEl.textContent = ahora.toLocaleDateString("es-ES", {
+        weekday: "long",
+        day: "numeric",
+        month: "long"
+      });
+    }
+
+    var VERSOS = [
+      { r: "Salmos 119:105", l: 19, c: 119, v: 105 },
+      { r: "Juan 3:16", l: 43, c: 3, v: 16 },
+      { r: "Filipenses 4:13", l: 50, c: 4, v: 13 },
+      { r: "Jeremías 29:11", l: 24, c: 29, v: 11 },
+      { r: "Romanos 8:28", l: 45, c: 8, v: 28 },
+      { r: "Isaías 41:10", l: 23, c: 41, v: 10 },
+      { r: "Proverbios 3:5", l: 20, c: 3, v: 5 },
+      { r: "Salmos 46:1", l: 19, c: 46, v: 1 },
+      { r: "Mateo 11:28", l: 40, c: 11, v: 28 },
+      { r: "Josué 1:9", l: 6, c: 1, v: 9 },
+      { r: "Salmos 23:1", l: 19, c: 23, v: 1 },
+      { r: "2 Timoteo 1:7", l: 55, c: 1, v: 7 }
+    ];
+    var dia = Math.floor(Date.now() / 86400000);
+    var pick = VERSOS[dia % VERSOS.length];
+
+    fetch("/api/versiculo/?tipo=biblia&version=nbla&libro=" + pick.l + "&capitulo=" + pick.c + "&versiculo=" + pick.v)
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        var d = j && j.data;
+        var texto = null;
+        if (Array.isArray(d) && d.length) {
+          var it = null;
+          for (var i = 0; i < d.length; i++) {
+            if (String(d[i].versiculo) === String(pick.v)) { it = d[i]; break; }
+          }
+          it = it || d[0];
+          texto = it && it.texto;
+        }
+        if (texto) {
+          var limpio = String(texto)
+            .replace(/\/n|\bpar\b/g, " ")
+            .replace(/[¶«»]/g, "")
+            .replace(/\s+/g, " ")
+            .trim()
+            .replace(/[.\s]+$/, ".");
+          versoTexto.textContent = "«" + limpio + "»";
+          if (refEl) refEl.textContent = pick.r + " · NBLA";
+        }
+      })
+      .catch(function () { /* se queda el versículo por defecto */ });
+  }
+
+  /* ------------------------------------------------------------------
      5. Interruptor de tema Clásico / Joven (persistente)
      ------------------------------------------------------------------ */
   var themeToggle = document.getElementById("fm-theme-toggle");
