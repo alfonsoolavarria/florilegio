@@ -150,7 +150,38 @@
   autoScrollOnLoad("btn-estudio", "interlinear-container");
 
   /* ------------------------------------------------------------------
-     5. PWA: registrar el service worker (offline + instalable)
+     5. Interruptor de tema Clásico / Joven (persistente)
+     ------------------------------------------------------------------ */
+  var themeToggle = document.getElementById("fm-theme-toggle");
+  var themeText = document.getElementById("fm-theme-toggle-text");
+
+  function refreshThemeToggle() {
+    if (!themeText) return;
+    themeText.textContent = document.documentElement.classList.contains("fm-joven")
+      ? "Volver al modo Clásico"
+      : "Probar el modo Joven";
+  }
+
+  if (themeToggle) {
+    refreshThemeToggle();
+    themeToggle.addEventListener("click", function () {
+      var cambiar = function () {
+        var joven = document.documentElement.classList.toggle("fm-joven");
+        try {
+          localStorage.setItem("fm-theme", joven ? "joven" : "clasico");
+        } catch (err) {}
+        refreshThemeToggle();
+      };
+      if (document.startViewTransition) {
+        document.startViewTransition(cambiar);
+      } else {
+        cambiar();
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     6. PWA: registrar el service worker (offline + instalable)
      ------------------------------------------------------------------ */
   if (
     "serviceWorker" in navigator &&

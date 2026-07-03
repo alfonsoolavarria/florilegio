@@ -34,7 +34,10 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tema elegido (Clásico/Joven) antes de pintar, sin parpadeo -->
+    <script>try{if(localStorage.getItem('fm-theme')==='joven'){document.documentElement.classList.add('fm-joven')}}catch(e){}</script>
 
     <!-- Open Graph Tags -->
     <meta property="og:locale" content="es_ES">
@@ -70,6 +73,7 @@
     <link rel="stylesheet" href="{% static 'css/demo-four.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <link rel="stylesheet" href="{% static 'css/mobile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme-joven.css' %}">
 
     <!-- include scripts -->
     <script src="{% static 'js/uni-core-bundle.min.js' %}"></script>

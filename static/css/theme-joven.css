@@ -1,0 +1,374 @@
+/* ==========================================================================
+   Florilegio — MODO JOVEN ✨
+   Tema alternativo activado con la clase .fm-joven en <html>.
+   Convive con el modo Clásico: nada de este archivo se aplica sin ella.
+   Coral + violeta, esquinas XL, tipografía redonda, animaciones con rebote.
+   Solo actúa en móvil/tablet (≤991px).
+   ========================================================================== */
+
+.fm-joven {
+    --jv-a: #ff3d71;
+    --jv-b: #8b5cf6;
+    --jv-grad: linear-gradient(135deg, #ff3d71 0%, #b04ddb 55%, #8b5cf6 100%);
+    --jv-bg: #fdf7ff;
+    --jv-surface: #ffffff;
+    --jv-ink: #241b2f;
+    --jv-muted: #7a6f8a;
+    --jv-radius: 22px;
+    --jv-font: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    --jv-sombra: 0 10px 30px rgba(139, 92, 246, 0.12), 0 2px 8px rgba(255, 61, 113, 0.08);
+}
+
+.fm-joven.dark,
+.fm-joven.uc-dark {
+    --jv-bg: #150f1e;
+    --jv-surface: #221833;
+    --jv-ink: #f1eaf9;
+    --jv-muted: #a99cbd;
+    --jv-sombra: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 991.98px) {
+
+    /* ----------------------------------------------------------------
+       1. Base: fondo, tinta y tipografía redonda
+       ---------------------------------------------------------------- */
+    .fm-joven body {
+        background-color: var(--jv-bg) !important;
+        color: var(--jv-ink);
+        font-family: var(--jv-font);
+    }
+
+    .fm-joven h1,
+    .fm-joven h2,
+    .fm-joven h3,
+    .fm-joven h4,
+    .fm-joven h5,
+    .fm-joven .h1,
+    .fm-joven .h2,
+    .fm-joven .h3,
+    .fm-joven .h4,
+    .fm-joven .h5 {
+        font-family: var(--jv-font) !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.02em;
+    }
+
+    /* Títulos de sección con degradado */
+    .fm-joven .section-header h2,
+    .fm-joven .uc-section-header h2 {
+        background: var(--jv-grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent !important;
+        display: inline-block;
+    }
+
+    /* La lectura larga sigue en serif: legibilidad ante todo */
+    .fm-joven .theology-content,
+    .fm-joven .bible-chapter-text {
+        font-family: var(--font-serif, 'EB Garamond', Georgia, serif) !important;
+    }
+
+    /* ----------------------------------------------------------------
+       2. Barra superior: glass lila con acento degradado
+       ---------------------------------------------------------------- */
+    .fm-joven .uc-top-navbar {
+        background: rgba(253, 247, 255, 0.86) !important;
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+        border-bottom: none !important;
+        box-shadow: 0 1px 0 rgba(139, 92, 246, 0.15);
+    }
+
+    .fm-joven.dark .uc-top-navbar,
+    .fm-joven.uc-dark .uc-top-navbar {
+        background: rgba(21, 15, 30, 0.86) !important;
+    }
+
+    /* ----------------------------------------------------------------
+       3. Dock: glass blanco, activo en degradado, FAB animado
+       ---------------------------------------------------------------- */
+    .fm-joven .fm-bottom-nav {
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(139, 92, 246, 0.15);
+        box-shadow: 0 12px 40px rgba(139, 92, 246, 0.22), 0 2px 10px rgba(255, 61, 113, 0.1);
+    }
+
+    .fm-joven.dark .fm-bottom-nav,
+    .fm-joven.uc-dark .fm-bottom-nav {
+        background: rgba(34, 24, 51, 0.9);
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .fm-joven .fm-nav-item {
+        color: var(--jv-muted);
+    }
+
+    .fm-joven .fm-nav-item.active {
+        color: var(--jv-a);
+    }
+
+    .fm-joven .fm-nav-item.active .fm-nav-icon {
+        background: linear-gradient(135deg, rgba(255, 61, 113, 0.16), rgba(139, 92, 246, 0.16));
+        color: var(--jv-a);
+        animation: jv-bounce 0.5s cubic-bezier(0.28, 2.2, 0.5, 1);
+    }
+
+    @keyframes jv-bounce {
+        0% { transform: scale(0.5); }
+        55% { transform: scale(1.18); }
+        80% { transform: scale(0.94); }
+        100% { transform: scale(1); }
+    }
+
+    .fm-joven .fm-nav-fab .fm-nav-icon {
+        background: var(--jv-grad);
+        background-size: 220% 220%;
+        border-color: var(--jv-bg);
+        box-shadow: 0 10px 24px rgba(255, 61, 113, 0.42), 0 3px 8px rgba(139, 92, 246, 0.3);
+        animation: jv-fab-flow 5s ease infinite;
+    }
+
+    @keyframes jv-fab-flow {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+
+    .fm-joven .fm-nav-fab .fm-nav-label {
+        background: var(--jv-grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    /* El FAB mantiene su degradado también cuando está activo */
+    .fm-joven .fm-nav-item.fm-nav-fab.active .fm-nav-icon {
+        background: var(--jv-grad);
+        background-size: 220% 220%;
+        color: #fff !important;
+        animation: jv-fab-flow 5s ease infinite;
+    }
+
+    /* ----------------------------------------------------------------
+       4. Tarjetas y carruseles: esquinas XL y rebote al tocar
+       ---------------------------------------------------------------- */
+    .fm-joven .post-card-featured,
+    .fm-joven .post-card-vertical,
+    .fm-joven .post-card-grid,
+    .fm-joven .essay-row,
+    .fm-joven .mm-card,
+    .fm-joven .category-card,
+    .fm-joven .panel.border,
+    .fm-joven .panel.border-all {
+        border-radius: var(--jv-radius) !important;
+        border-color: rgba(139, 92, 246, 0.12) !important;
+        box-shadow: var(--jv-sombra) !important;
+        background: var(--jv-surface);
+    }
+
+    .fm-joven .post-card-featured:active,
+    .fm-joven .post-card-vertical:active,
+    .fm-joven .post-card-grid:active,
+    .fm-joven .essay-row:active,
+    .fm-joven .category-card:active {
+        transform: scale(0.96) rotate(-0.5deg);
+        transition: transform 0.12s ease;
+    }
+
+    /* Etiquetas de categoría como chips de color */
+    .fm-joven .fs-7.text-primary.text-uppercase {
+        display: inline-block;
+        background: linear-gradient(135deg, rgba(255, 61, 113, 0.14), rgba(139, 92, 246, 0.14));
+        color: var(--jv-a) !important;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        width: fit-content;
+    }
+
+    /* Categorías: pasteles rotando */
+    .fm-joven .category-card {
+        border: none !important;
+    }
+
+    .fm-joven .row > div:nth-child(4n + 1) .category-card {
+        background: linear-gradient(160deg, #fff0f4, #ffe3ec) !important;
+    }
+
+    .fm-joven .row > div:nth-child(4n + 2) .category-card {
+        background: linear-gradient(160deg, #f3edff, #e7dcff) !important;
+    }
+
+    .fm-joven .row > div:nth-child(4n + 3) .category-card {
+        background: linear-gradient(160deg, #fff4e8, #ffe8d1) !important;
+    }
+
+    .fm-joven .row > div:nth-child(4n) .category-card {
+        background: linear-gradient(160deg, #e8fbf3, #d4f5e7) !important;
+    }
+
+    .fm-joven.dark .row > div .category-card,
+    .fm-joven.uc-dark .row > div .category-card {
+        background: var(--jv-surface) !important;
+    }
+
+    .fm-joven .category-card .category-icon i {
+        background: var(--jv-grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent !important;
+    }
+
+    /* ----------------------------------------------------------------
+       5. Botones: píldoras con degradado
+       ---------------------------------------------------------------- */
+    .fm-joven .btn-primary,
+    .fm-joven .mm-btn-primary,
+    .fm-joven #btn-leer,
+    .fm-joven #btn-estudio {
+        background: var(--jv-grad) !important;
+        background-size: 200% 200%;
+        border: none !important;
+        border-radius: 999px !important;
+        font-weight: 700;
+        box-shadow: 0 6px 18px rgba(255, 61, 113, 0.3);
+    }
+
+    .fm-joven .btn-primary:active,
+    .fm-joven #btn-leer:active,
+    .fm-joven #btn-estudio:active {
+        transform: scale(0.96);
+    }
+
+    .fm-joven .btn:not(.btn-sm):not(.rounded-circle) {
+        border-radius: 999px !important;
+    }
+
+    .fm-joven .amt-btn,
+    .fm-joven .freq-btn {
+        border-color: rgba(139, 92, 246, 0.4) !important;
+        color: var(--jv-b) !important;
+        border-radius: 999px !important;
+    }
+
+    .fm-joven .amt-btn.active,
+    .fm-joven .freq-btn.active {
+        background: var(--jv-grad) !important;
+        border-color: transparent !important;
+        color: #fff !important;
+    }
+
+    /* ----------------------------------------------------------------
+       6. Hero de la home: burbujas de color flotando
+       ---------------------------------------------------------------- */
+    .fm-joven .hero-brand-section {
+        background:
+            radial-gradient(420px 300px at 12% 8%, rgba(255, 61, 113, 0.14), transparent 65%),
+            radial-gradient(380px 300px at 90% 30%, rgba(139, 92, 246, 0.16), transparent 65%),
+            radial-gradient(300px 260px at 50% 95%, rgba(255, 176, 32, 0.1), transparent 60%),
+            var(--jv-bg) !important;
+    }
+
+    .fm-joven .hero-brand-section p,
+    .fm-joven #typewriter-text {
+        font-family: var(--jv-font) !important;
+        font-weight: 700;
+        color: var(--jv-ink) !important;
+    }
+
+    /* ----------------------------------------------------------------
+       7. Drawer y estudio
+       ---------------------------------------------------------------- */
+    .fm-joven #uc-menu-panel .uc-offcanvas-bar {
+        background: var(--jv-bg) !important;
+        border-radius: 0 26px 26px 0;
+    }
+
+    .fm-joven .uc-nav a .icon {
+        color: var(--jv-a) !important;
+    }
+
+    .fm-joven .estudio-sidebar .panel,
+    .fm-joven .bible-reading-panel,
+    .fm-joven .context-panel-bg {
+        border-radius: var(--jv-radius) !important;
+        border-color: rgba(139, 92, 246, 0.14) !important;
+    }
+
+    .fm-joven .chapter-nav-btn {
+        border-radius: 999px !important;
+        border-color: rgba(139, 92, 246, 0.35) !important;
+        color: var(--jv-b);
+    }
+
+    /* Números de versículo en coral */
+    .fm-joven .bible-chapter-text sup,
+    .fm-joven .bible-verse-item sup {
+        color: var(--jv-a) !important;
+    }
+
+    /* ----------------------------------------------------------------
+       8. Detalles: progreso, ripple, paginación, newsletter
+       ---------------------------------------------------------------- */
+    .fm-joven #fm-progress {
+        background: var(--jv-grad);
+    }
+
+    .fm-joven .fm-ripple {
+        opacity: 0.28;
+    }
+
+    .fm-joven .pagination-num.active {
+        background: var(--jv-grad);
+    }
+
+    .fm-joven .panel.bg-primary {
+        background: var(--jv-grad) !important;
+        border-radius: var(--jv-radius) !important;
+    }
+
+    .fm-joven .keyword-highlight-box {
+        border-left-color: var(--jv-a);
+        background: linear-gradient(135deg, rgba(255, 61, 113, 0.07), rgba(139, 92, 246, 0.07));
+        border-radius: 14px;
+    }
+
+    /* Interruptor de tema en el drawer */
+    .fm-theme-toggle {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        min-height: 48px;
+        padding: 10px 14px;
+        border: 1.5px dashed rgba(128, 0, 32, 0.3);
+        border-radius: 14px;
+        background: transparent;
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: inherit;
+        cursor: pointer;
+        text-align: left;
+    }
+
+    .fm-joven .fm-theme-toggle {
+        border: none;
+        background: var(--jv-grad);
+        color: #fff;
+        border-radius: 999px;
+        box-shadow: 0 6px 18px rgba(255, 61, 113, 0.3);
+    }
+
+    .fm-theme-toggle:active {
+        transform: scale(0.97);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fm-joven .fm-nav-fab .fm-nav-icon,
+    .fm-joven .fm-nav-item.active .fm-nav-icon {
+        animation: none !important;
+    }
+}
