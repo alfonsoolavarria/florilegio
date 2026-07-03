@@ -295,12 +295,19 @@
 
   function splitText(title, text) {
     title.innerHTML = '';
-    var chars = Array.from(text);
-    chars.forEach(function(c) {
-      var span = document.createElement('span');
-      span.className = 'text-animation-unit';
-      span.textContent = c === ' ' ? '\u00A0' : c;
-      title.appendChild(span);
+    var words = text.split(' ');
+    words.forEach(function(w, wi) {
+      var wordSpan = document.createElement('span');
+      wordSpan.style.display = 'inline-block';
+      wordSpan.style.whiteSpace = 'nowrap';
+      Array.from(w).forEach(function(c) {
+        var span = document.createElement('span');
+        span.className = 'text-animation-unit';
+        span.textContent = c;
+        wordSpan.appendChild(span);
+      });
+      title.appendChild(wordSpan);
+      if (wi < words.length - 1) title.appendChild(document.createTextNode(' '));
     });
   }
 
