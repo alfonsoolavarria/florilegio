@@ -21,8 +21,9 @@
     --jv-display: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif;
 }
 
-/* La home de app no existe fuera del Modo Joven móvil */
-.fm-app-home {
+/* Las pantallas de app no existen fuera del Modo Joven móvil */
+.fm-app-home,
+.fm-app-list {
     display: none;
 }
 
@@ -611,6 +612,323 @@
 
     .fm-theme-toggle:active {
         transform: scale(0.97);
+    }
+
+    /* ----------------------------------------------------------------
+       8. PÁGINAS INTERIORES — arquitectura de app
+       ---------------------------------------------------------------- */
+
+    /* Feed de app (Artículos): sustituye a las secciones clásicas */
+    .fm-joven .fm-app-list {
+        display: block;
+        padding: 1rem 1.1rem 0;
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
+    .fm-joven .fm-classic-page {
+        display: none !important;
+    }
+
+    .fm-joven .fm-al-head h1 {
+        font-size: 1.7rem;
+        margin: 0.3rem 0 0;
+        position: relative;
+        display: inline-block;
+        z-index: 1;
+    }
+
+    .fm-joven .fm-al-head h1::after {
+        content: "";
+        position: absolute;
+        left: -5px;
+        right: -5px;
+        bottom: 2px;
+        height: 0.4em;
+        background: var(--jv-marcador);
+        border-radius: 3px;
+        transform: skewX(-8deg);
+        z-index: -1;
+        opacity: 0.85;
+    }
+
+    .fm-joven .fm-al-head p {
+        margin: 0.35rem 0 0;
+        font-size: 0.88rem;
+        color: var(--jv-tenue);
+    }
+
+    /* Chips de categorías deslizables */
+    .fm-joven .fm-al-chips {
+        display: flex;
+        gap: 0.5rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+        margin: 1rem -1.1rem 1.1rem;
+        padding: 2px 1.1rem;
+    }
+
+    .fm-joven .fm-al-chips::-webkit-scrollbar {
+        display: none;
+    }
+
+    .fm-joven .fm-al-chip {
+        flex: 0 0 auto;
+        padding: 0.5rem 1rem;
+        border-radius: 999px;
+        border: 1.5px solid var(--jv-linea);
+        background: var(--jv-superficie);
+        color: var(--jv-tinta) !important;
+        font-family: var(--jv-display);
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-decoration: none !important;
+        white-space: nowrap;
+    }
+
+    .fm-joven .fm-al-chip.active {
+        background: var(--jv-salvia);
+        border-color: var(--jv-salvia);
+        color: #fff !important;
+    }
+
+    .fm-joven .fm-al-chip:active {
+        transform: scale(0.95);
+    }
+
+    /* Primer artículo destacado del feed */
+    .fm-joven .fm-al-destacado {
+        display: block;
+        text-decoration: none !important;
+        color: var(--jv-tinta) !important;
+        background: var(--jv-superficie);
+        border: 1px solid var(--jv-linea);
+        border-radius: var(--jv-radio);
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+        box-shadow: 0 6px 24px rgba(34, 39, 31, 0.06);
+    }
+
+    .fm-joven .fm-al-destacado figure {
+        margin: 0;
+        aspect-ratio: 16 / 9;
+        background: var(--jv-hoja);
+    }
+
+    .fm-joven .fm-al-destacado figure img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .fm-joven .fm-al-destacado-body {
+        padding: 0.9rem 1rem 1.1rem;
+    }
+
+    .fm-joven .fm-al-destacado-body span {
+        font-size: 0.64rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--jv-salvia);
+    }
+
+    .fm-joven .fm-al-destacado-body h2 {
+        font-size: 1.25rem;
+        line-height: 1.25;
+        margin: 0.25rem 0 0;
+    }
+
+    .fm-joven .fm-al-destacado:active {
+        transform: scale(0.98);
+    }
+
+    .fm-joven .fm-al-vacio {
+        text-align: center;
+        color: var(--jv-tenue);
+        padding: 2.5rem 0;
+    }
+
+    /* Paginación de app */
+    .fm-joven .fm-al-pag {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 1.4rem 0 0.5rem;
+    }
+
+    .fm-joven .fm-al-pag a {
+        padding: 0.55rem 1.1rem;
+        border-radius: 999px;
+        background: var(--jv-hoja);
+        color: var(--jv-salvia) !important;
+        font-family: var(--jv-display);
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-decoration: none !important;
+    }
+
+    .fm-joven .fm-al-pag em {
+        font-style: normal;
+        font-size: 0.8rem;
+        color: var(--jv-tenue);
+    }
+
+    /* Cabeceras de páginas que conservan su hero (Ensayos, Estudios):
+       compactas, a la izquierda, sin aire de portada de escritorio */
+    .fm-joven .hero-brand-section {
+        background: var(--jv-papel) !important;
+        padding-bottom: 0 !important;
+    }
+
+    .fm-joven .hero-brand-section .container {
+        padding-top: 1.1rem !important;
+        padding-bottom: 0.4rem !important;
+    }
+
+    .fm-joven .hero-brand-section .row.justify-center {
+        justify-content: flex-start !important;
+    }
+
+    .fm-joven .hero-brand-section .text-center,
+    .fm-joven .hero-brand-section h1,
+    .fm-joven .hero-brand-section p {
+        text-align: left !important;
+    }
+
+    .fm-joven .hero-brand-section h1 {
+        font-size: 1.7rem !important;
+        position: relative;
+        display: inline-block;
+        z-index: 1;
+    }
+
+    .fm-joven .hero-brand-section h1::after {
+        content: "";
+        position: absolute;
+        left: -5px;
+        right: -5px;
+        bottom: 2px;
+        height: 0.4em;
+        background: var(--jv-marcador);
+        border-radius: 3px;
+        transform: skewX(-8deg);
+        z-index: -1;
+        opacity: 0.85;
+    }
+
+    .fm-joven .hero-brand-section p {
+        font-size: 0.92rem !important;
+        font-style: normal !important;
+        color: var(--jv-tenue) !important;
+        margin-top: 0.3rem !important;
+    }
+
+    /* Cabeceras uc-section (Apoyo, Contacto): mismo tratamiento */
+    .fm-joven .uc-section-header {
+        text-align: left !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    .fm-joven .uc-section-header h1,
+    .fm-joven .uc-section-header h2 {
+        position: relative;
+        display: inline-block;
+        z-index: 1;
+        font-size: 1.7rem !important;
+    }
+
+    .fm-joven .uc-section-header h1::after,
+    .fm-joven .uc-section-header h2::after {
+        content: "";
+        position: absolute;
+        left: -5px;
+        right: -5px;
+        bottom: 2px;
+        height: 0.4em;
+        background: var(--jv-marcador);
+        border-radius: 3px;
+        transform: skewX(-8deg);
+        z-index: -1;
+        opacity: 0.85;
+    }
+
+    /* Estudios: pestañas Lectura/Estudiar como control segmentado */
+    .fm-joven .mode-selector-btn {
+        border: 1.5px solid var(--jv-linea) !important;
+        border-radius: 999px !important;
+        padding: 0.55rem 1.15rem !important;
+        font-family: var(--jv-display) !important;
+        font-weight: 700 !important;
+        font-size: 0.8rem !important;
+        letter-spacing: 0.02em !important;
+        background: var(--jv-superficie) !important;
+        color: var(--jv-tenue) !important;
+        border-bottom: 1.5px solid var(--jv-linea) !important;
+    }
+
+    .fm-joven .mode-selector-btn.active {
+        background: var(--jv-salvia) !important;
+        border-color: var(--jv-salvia) !important;
+        color: #fff !important;
+    }
+
+    /* Ensayos: filas de feed limpias */
+    .fm-joven .essay-row {
+        margin-bottom: 0.9rem;
+    }
+
+    .fm-joven .essay-row .essay-excerpt {
+        color: var(--jv-tenue);
+    }
+
+    .fm-joven .essay-date {
+        color: var(--jv-tenue) !important;
+    }
+
+    .fm-joven .essay-title-link,
+    .fm-joven .essay-row h2,
+    .fm-joven .essay-row h3 {
+        font-family: var(--jv-display) !important;
+        color: var(--jv-tinta) !important;
+    }
+
+    .fm-joven .search-input-essay {
+        background: var(--jv-superficie) !important;
+        border: 1.5px solid var(--jv-linea) !important;
+        border-radius: 999px !important;
+    }
+
+    /* Detalle de artículo/ensayo: lectura de app */
+    .fm-joven .reading-progress-container {
+        height: 3px;
+    }
+
+    .fm-joven .author-box {
+        background: var(--jv-superficie) !important;
+        border: 1px solid var(--jv-linea) !important;
+        border-radius: var(--jv-radio) !important;
+    }
+
+    .fm-joven .sidebar-widget-title {
+        border-bottom: none;
+        position: relative;
+        display: inline-block;
+        z-index: 1;
+    }
+
+    .fm-joven .sidebar-widget-title::after {
+        content: "";
+        position: absolute;
+        left: -4px;
+        right: -4px;
+        bottom: 2px;
+        height: 0.4em;
+        background: var(--jv-marcador);
+        border-radius: 3px;
+        transform: skewX(-8deg);
+        z-index: -1;
+        opacity: 0.85;
     }
 }
 

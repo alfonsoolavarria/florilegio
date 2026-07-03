@@ -12,8 +12,60 @@
 {% endblock %}
 
 {% block content %}
+<!-- ============ FEED DE APP (solo Modo Joven en móvil) ============ -->
+<div class="fm-app-list">
+  <header class="fm-al-head">
+    <h1>Artículos</h1>
+    <p>{% if selected_category %}{{ selected_category.name }} · {{ page_obj.paginator.count }} artículo{{ page_obj.paginator.count|pluralize }}{% else %}Teología, historia y biografías{% endif %}</p>
+  </header>
+
+  <div class="fm-al-chips" role="tablist" aria-label="Categorías">
+    <a href="?" class="fm-al-chip {% if not selected_category %}active{% endif %}">Todos</a>
+    {% for cat in categories %}
+    <a href="?categoria={{ cat.id }}" class="fm-al-chip {% if selected_category.id == cat.id %}active{% endif %}">{{ cat.name }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="fm-al-feed">
+    {% for article in page_obj %}
+      {% if forloop.first %}
+      <a class="fm-al-destacado" href="{% url 'article_detail' article.slug %}">
+        <figure><img loading="lazy" src="{{ article.image.url }}" alt=""></figure>
+        <div class="fm-al-destacado-body">
+          <span>{{ article.category }}</span>
+          <h2>{{ article.title }}</h2>
+        </div>
+      </a>
+      {% else %}
+      <a class="fm-ah-fila" href="{% url 'article_detail' article.slug %}">
+        <img loading="lazy" src="{{ article.image.url }}" alt="">
+        <div>
+          <span>{{ article.category }}</span>
+          <h3>{{ article.title }}</h3>
+        </div>
+      </a>
+      {% endif %}
+    {% empty %}
+      <p class="fm-al-vacio">No hay artículos en esta categoría todavía.</p>
+    {% endfor %}
+  </div>
+
+  {% if page_obj.has_other_pages %}
+  <nav class="fm-al-pag" aria-label="Paginación">
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&categoria={{ selected_category.id }}{% endif %}">Anteriores</a>
+    {% else %}<span></span>{% endif %}
+    <em>{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</em>
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}{% if selected_category %}&categoria={{ selected_category.id }}{% endif %}">Siguientes</a>
+    {% else %}<span></span>{% endif %}
+  </nav>
+  {% endif %}
+</div>
+<!-- ============ FIN FEED DE APP ============ -->
+
 <!-- Section: Header -->
-<div class="hero-brand-section panel overflow-hidden bg-gray-25 dark:bg-gray-900">
+<div class="fm-classic-page hero-brand-section panel overflow-hidden bg-gray-25 dark:bg-gray-900">
     <div class="container py-4 lg:py-6">
         <div class="row justify-center text-center">
             <div class="col-12 col-md-8"> 
@@ -32,7 +84,7 @@
 </div>
 
 <!-- Section: Article Grid -->
-<div class="article-grid-section py-6 lg:py-9">
+<div class="fm-classic-page article-grid-section py-6 lg:py-9">
     <div class="container max-w-lg">
         <div class="section-header text-center mb-5">
             <h2 class="h3 fw-bold">
@@ -149,7 +201,7 @@
 </div>
 
 <!-- Section: Categories Selection -->
-<div class="category-grid-section py-6 lg:py-8 bg-gray-25 dark:bg-gray-100 dark:bg-opacity-5">
+<div class="fm-classic-page category-grid-section py-6 lg:py-8 bg-gray-25 dark:bg-gray-100 dark:bg-opacity-5">
     <div class="container max-w-lg">
         <div class="section-header text-center mb-5">
             <h2 class="h3 fw-bold">Explora por Categorías</h2>
