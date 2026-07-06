@@ -8,16 +8,16 @@
    ========================================================================== */
 
 .fm-joven {
-    --jv-papel: #fbfaf7;
+    --jv-papel: #ffffff;
     --jv-superficie: #ffffff;
-    --jv-tinta: #22271f;
-    --jv-tenue: #6f7568;
+    --jv-tinta: #1c211a;
+    --jv-tenue: #737a70;
     --jv-salvia: #3f6b4f;
     --jv-salvia-oscuro: #2e523b;
-    --jv-hoja: #e8efe6;
+    --jv-hoja: #f0f4ee;
     --jv-marcador: #f9e27d;
-    --jv-linea: #e4e2da;
-    --jv-radio: 20px;
+    --jv-linea: #ececec;
+    --jv-radio: 18px;
     --jv-display: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif;
 }
 
@@ -131,6 +131,68 @@
     .fm-joven .fm-ah-flor {
         border-radius: 14px;
         border: 1px solid var(--jv-linea);
+    }
+
+    /* Historias (temas) al estilo Instagram: burbujas con anillo */
+    .fm-joven .fm-ah-stories {
+        display: flex;
+        gap: 0.9rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+        margin: 0 -1.1rem 1.1rem;
+        padding: 2px 1.1rem 4px;
+    }
+
+    .fm-joven .fm-ah-stories::-webkit-scrollbar {
+        display: none;
+    }
+
+    .fm-joven .fm-ah-story {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        width: 68px;
+        text-decoration: none !important;
+    }
+
+    .fm-joven .fm-ah-story-ring {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: conic-gradient(from 210deg, var(--jv-salvia), #7fb08f, var(--jv-marcador), var(--jv-salvia));
+        padding: 2.5px;
+    }
+
+    .fm-joven .fm-ah-story-circulo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: var(--jv-superficie);
+        border: 2.5px solid var(--jv-superficie);
+        color: var(--jv-salvia);
+        font-size: 1.35rem;
+    }
+
+    .fm-joven .fm-ah-story-nombre {
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: var(--jv-tinta);
+        max-width: 68px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .fm-joven .fm-ah-story:active .fm-ah-story-ring {
+        transform: scale(0.92);
     }
 
     /* Versículo del día: el héroe */
@@ -747,6 +809,71 @@
         text-align: center;
         color: var(--jv-tenue);
         padding: 2.5rem 0;
+    }
+
+    /* Posts del feed al estilo Instagram: imagen a sangre completa,
+       texto debajo, separados por espacio y línea fina */
+    .fm-joven .fm-post {
+        margin: 0 -1.1rem 1.1rem;
+        border-bottom: 1px solid var(--jv-linea);
+        padding-bottom: 1.1rem;
+    }
+
+    .fm-joven .fm-post:last-child {
+        border-bottom: none;
+    }
+
+    .fm-joven .fm-post-media {
+        display: block;
+        aspect-ratio: 4 / 3;
+        background: var(--jv-hoja);
+        overflow: hidden;
+    }
+
+    .fm-joven .fm-post-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .fm-joven .fm-post-body {
+        padding: 0.75rem 1.1rem 0;
+    }
+
+    .fm-joven .fm-post-cat {
+        font-size: 0.64rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--jv-salvia);
+    }
+
+    .fm-joven .fm-post-body h2 {
+        font-size: 1.2rem;
+        line-height: 1.28;
+        margin: 0.25rem 0 0.35rem;
+    }
+
+    .fm-joven .fm-post-body h2 a {
+        color: var(--jv-tinta) !important;
+        text-decoration: none !important;
+    }
+
+    .fm-joven .fm-post-leer {
+        font-family: var(--jv-display);
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: var(--jv-salvia) !important;
+        text-decoration: none !important;
+    }
+
+    /* Tap instantáneo estilo Instagram: atenuación inmediata */
+    .fm-joven .fm-post-media:active,
+    .fm-joven .fm-ah-fila:active,
+    .fm-joven .fm-ah-card:active,
+    .fm-joven .fm-post-body h2 a:active {
+        opacity: 0.6;
+        transition: opacity 0.05s ease;
     }
 
     /* Paginación de app */

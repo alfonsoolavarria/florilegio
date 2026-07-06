@@ -50,20 +50,50 @@
     var nav = document.getElementById("fm-bottom-nav");
     if (!nav) return;
 
-    // Ocultar al bajar, mostrar al subir o cerca del inicio
+    // Ocultar al bajar, mostrar al subir o cerca del inicio.
+    // Guardas anti-tap-fantasma: nunca ocultar mientras hay un dedo
+    // sobre el dock, e ignorar el rebote elástico de iOS (overscroll),
+    // que dispara scrolls falsos justo cuando el usuario toca.
     var lastY = window.pageYOffset || 0;
     var ticking = false;
+    var navTouching = false;
+    var navTouchTimer = null;
+
+    nav.addEventListener(
+      "pointerdown",
+      function () {
+        navTouching = true;
+        clearTimeout(navTouchTimer);
+      },
+      { passive: true }
+    );
+    ["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) {
+      nav.addEventListener(
+        ev,
+        function () {
+          clearTimeout(navTouchTimer);
+          navTouchTimer = setTimeout(function () {
+            navTouching = false;
+          }, 450);
+        },
+        { passive: true }
+      );
+    });
+
     function onScroll() {
+      ticking = false;
+      if (navTouching) return;
       var y = window.pageYOffset || 0;
-      if (y < 80) {
+      var maxY = Math.max(0, (document.documentElement.scrollHeight || 0) - window.innerHeight);
+      if (y < 0 || y > maxY) return;
+      if (y < 80 || y >= maxY - 4) {
         nav.classList.remove("fm-nav-hidden");
-      } else if (y > lastY + 8) {
+      } else if (y > lastY + 16) {
         nav.classList.add("fm-nav-hidden");
-      } else if (y < lastY - 8) {
+      } else if (y < lastY - 10) {
         nav.classList.remove("fm-nav-hidden");
       }
       lastY = y;
-      ticking = false;
     }
     window.addEventListener(
       "scroll",

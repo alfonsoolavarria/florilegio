@@ -28,23 +28,16 @@
 
   <div class="fm-al-feed">
     {% for article in page_obj %}
-      {% if forloop.first %}
-      <a class="fm-al-destacado" href="{% url 'article_detail' article.slug %}">
-        <figure><img loading="lazy" src="{{ article.image.url }}" alt=""></figure>
-        <div class="fm-al-destacado-body">
-          <span>{{ article.category }}</span>
-          <h2>{{ article.title }}</h2>
+      <article class="fm-post">
+        <a class="fm-post-media" href="{% url 'article_detail' article.slug %}">
+          <img loading="lazy" src="{{ article.image.url }}" alt="{{ article.title }}">
+        </a>
+        <div class="fm-post-body">
+          <span class="fm-post-cat">{{ article.category }}</span>
+          <h2><a href="{% url 'article_detail' article.slug %}">{{ article.title }}</a></h2>
+          <a class="fm-post-leer" href="{% url 'article_detail' article.slug %}">Leer más</a>
         </div>
-      </a>
-      {% else %}
-      <a class="fm-ah-fila" href="{% url 'article_detail' article.slug %}">
-        <img loading="lazy" src="{{ article.image.url }}" alt="">
-        <div>
-          <span>{{ article.category }}</span>
-          <h3>{{ article.title }}</h3>
-        </div>
-      </a>
-      {% endif %}
+      </article>
     {% empty %}
       <p class="fm-al-vacio">No hay artículos en esta categoría todavía.</p>
     {% endfor %}
