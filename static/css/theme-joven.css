@@ -1,22 +1,24 @@
 /* ==========================================================================
    Florilegio — MODO JOVEN v3 · "Cuaderno de estudio"
    Activado con .fm-joven en <html>. Convive con el Clásico (intacto).
-   Identidad: papel claro, tinta verdosa, verde salvia como único acento
-   y amarillo subrayador como gesto característico (subrayar la Palabra).
+   Identidad: papel claro, tinta sepia, canela como único acento
+   y miel de arena como subrayado característico (subrayar la Palabra).
    Tipografía: Bricolage Grotesque (titulares/UI) + EB Garamond (lectura).
    Solo actúa en móvil/tablet (≤991px).
    ========================================================================== */
 
+/* Paleta anclada al logo: la tinta de la flor es #3c3b39 (sepia
+   cálido) sobre crema #f7f3ed. Acento canela/nogal y miel de arena. */
 .fm-joven {
     --jv-papel: #ffffff;
     --jv-superficie: #ffffff;
-    --jv-tinta: #1c211a;
-    --jv-tenue: #737a70;
-    --jv-salvia: #3f6b4f;
-    --jv-salvia-oscuro: #2e523b;
-    --jv-hoja: #f0f4ee;
-    --jv-marcador: #f9e27d;
-    --jv-linea: #ececec;
+    --jv-tinta: #2b2723;
+    --jv-tenue: #7d746a;
+    --jv-salvia: #85603f;          /* canela (acento único) */
+    --jv-salvia-oscuro: #6b4c30;   /* canela tostada */
+    --jv-hoja: #f4eee3;            /* arena, hermana del crema de marca */
+    --jv-marcador: #f0dcba;        /* miel suave para subrayados */
+    --jv-linea: #eeebe5;
     --jv-radio: 18px;
     --jv-display: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif;
 }
@@ -164,7 +166,7 @@
         width: 64px;
         height: 64px;
         border-radius: 50%;
-        background: conic-gradient(from 210deg, var(--jv-salvia), #7fb08f, var(--jv-marcador), var(--jv-salvia));
+        background: conic-gradient(from 210deg, var(--jv-salvia), #c9a97e, var(--jv-marcador), var(--jv-salvia));
         padding: 2.5px;
     }
 
@@ -201,7 +203,7 @@
         border: 1px solid var(--jv-linea);
         border-radius: var(--jv-radio);
         padding: 1.35rem 1.25rem 1.2rem;
-        box-shadow: 0 6px 24px rgba(63, 107, 79, 0.08);
+        box-shadow: 0 6px 24px rgba(133, 96, 63, 0.08);
     }
 
     .fm-joven .fm-ah-verso-etiqueta {
@@ -219,7 +221,7 @@
         font-size: 1.45rem;
         line-height: 1.5;
         color: var(--jv-tinta);
-        background-image: linear-gradient(transparent 68%, rgba(249, 226, 125, 0.75) 68%, rgba(249, 226, 125, 0.75) 94%, transparent 94%);
+        background-image: linear-gradient(transparent 68%, rgba(240, 220, 186, 0.85) 68%, rgba(240, 220, 186, 0.85) 94%, transparent 94%);
         background-position: 0 0.18em;
         display: inline;
         box-decoration-break: clone;
@@ -282,7 +284,7 @@
 
     .fm-joven .fm-ah-tile:active {
         transform: scale(0.97);
-        border-color: rgba(63, 107, 79, 0.35);
+        border-color: rgba(133, 96, 63, 0.35);
     }
 
     /* Cabecera de sección: título + enlace "ver todo" */
@@ -442,7 +444,7 @@
     .fm-joven .fm-bottom-nav {
         background: rgba(255, 255, 255, 0.92);
         border: 1px solid var(--jv-linea);
-        box-shadow: 0 12px 34px rgba(34, 39, 31, 0.16);
+        box-shadow: 0 12px 34px rgba(43, 39, 35, 0.16);
     }
 
     .fm-joven .fm-nav-item {
@@ -463,7 +465,7 @@
         background: var(--jv-salvia);
         color: #fff !important;
         border-color: var(--jv-papel);
-        box-shadow: 0 8px 22px rgba(63, 107, 79, 0.4);
+        box-shadow: 0 8px 22px rgba(133, 96, 63, 0.4);
         animation: none;
     }
 
@@ -486,7 +488,7 @@
         background: var(--jv-superficie) !important;
         border: 1px solid var(--jv-linea) !important;
         border-radius: var(--jv-radio) !important;
-        box-shadow: 0 4px 18px rgba(34, 39, 31, 0.05) !important;
+        box-shadow: 0 4px 18px rgba(43, 39, 35, 0.05) !important;
     }
 
     .fm-joven .fs-7.text-primary.text-uppercase {
@@ -520,7 +522,7 @@
         border-radius: 999px !important;
         font-family: var(--jv-display);
         font-weight: 700;
-        box-shadow: 0 6px 18px rgba(63, 107, 79, 0.25);
+        box-shadow: 0 6px 18px rgba(133, 96, 63, 0.25);
     }
 
     .fm-joven .btn-primary:active,
@@ -768,7 +770,7 @@
         border-radius: var(--jv-radio);
         overflow: hidden;
         margin-bottom: 0.5rem;
-        box-shadow: 0 6px 24px rgba(34, 39, 31, 0.06);
+        box-shadow: 0 6px 24px rgba(43, 39, 35, 0.06);
     }
 
     .fm-joven .fm-al-destacado figure {
