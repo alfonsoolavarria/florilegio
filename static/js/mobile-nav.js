@@ -216,35 +216,9 @@
   }
 
   /* ------------------------------------------------------------------
-     5. Interruptor de tema Clásico / Joven (persistente)
+     5. (retirado) El conmutador Clásico/Joven ya no existe: el Modo
+        Joven está siempre activo en móvil.
      ------------------------------------------------------------------ */
-  var themeToggle = document.getElementById("fm-theme-toggle");
-  var themeText = document.getElementById("fm-theme-toggle-text");
-
-  function refreshThemeToggle() {
-    if (!themeText) return;
-    themeText.textContent = document.documentElement.classList.contains("fm-joven")
-      ? "Volver al modo Clásico"
-      : "Probar el modo Joven";
-  }
-
-  if (themeToggle) {
-    refreshThemeToggle();
-    themeToggle.addEventListener("click", function () {
-      var cambiar = function () {
-        var joven = document.documentElement.classList.toggle("fm-joven");
-        try {
-          localStorage.setItem("fm-theme", joven ? "joven" : "clasico");
-        } catch (err) {}
-        refreshThemeToggle();
-      };
-      if (document.startViewTransition) {
-        document.startViewTransition(cambiar);
-      } else {
-        cambiar();
-      }
-    });
-  }
 
   /* ------------------------------------------------------------------
      6. PWA: registrar el service worker (offline + instalable)
